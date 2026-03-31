@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background-color: var(--color-bg-page);
+}
+
+#root {
+  min-height: 100vh;
+  background-color: var(--color-bg-page);
+}
+
+body {
+  margin: 0;
+  font-family: 'TikTok Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+@font-face {
+  font-family: 'Helvetica Neue Regular';
+  src: url('https://framerusercontent.com/assets/Jpz4cp1ymPZ257bFISNAe4E29U.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Humane Light';
+  src: url('https://framerusercontent.com/assets/pKpl4dHVAD7yxHaC8CrYfcXvyKI.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Thunder Semi Bold LC';
+  src: url('https://framerusercontent.com/assets/yidYinMnddWqTx3XfzlVmgBRk.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  /* Default (Light) Mode */
+  --color-bg-page: #FFFFFF;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F5F5F5;
+  --color-bg-tertiary: #EBEBEB;
+  --color-bg-inverse: #000000;
+  
+  --color-text-primary: #333333;
+  --color-text-secondary: #555555;
+  --color-text-muted: #999999;
+  --color-text-disabled: #BBBBBB;
+  --color-text-inverse: #FFFFFF;
+  
+  --color-border-default: #DBDBDB;
+  --color-border-strong: #DDDDDD;
+  
+  --color-icon-primary: #333333;
+  --color-icon-secondary: #555555;
+  --color-icon-muted: #999999;
+  --color-icon-inverse: #FFFFFF;
+  --color-bg-icon: #111111;
+
+  /* Custom Logo invert handling for Dark Mode */
+  --logo-invert: none;
+}
+
+.dark {
+  /* Dark Mode Overrides */
+  --color-bg-page: #000000;
+  --color-bg-primary: #1A1A1A;
+  --color-bg-secondary: #222222;
+  --color-bg-tertiary: #2A2A2A;
+  --color-bg-inverse: #FFFFFF;
+  
+  --color-text-primary: #EAEAEA;
+  --color-text-secondary: #CCCCCC;
+  --color-text-muted: #888888;
+  --color-text-disabled: #666666;
+  --color-text-inverse: #000000;
+  
+  --color-border-default: #333333;
+  --color-border-strong: #444444;
+  
+  --color-icon-primary: #EAEAEA;
+  --color-icon-secondary: #CCCCCC;
+  --color-icon-muted: #888888;
+  --color-icon-inverse: #000000;
+  --color-bg-icon: #EEEEEE;
+
+  /* Custom Logo invert handling */
+  --logo-invert: invert(1);
+}
+
+.clients-logo-nike {
+  filter: var(--logo-invert);
+}
+
+/* App.tsx Layout Styles */
+.radar-svg {
+  opacity: 0.8;
+}
+
+.dark .radar-svg {
+  opacity: 1;
+}
+
+.dock-icon {
+  background-color: transparent;
+  box-shadow: none;
+  color: #000000;
+}
+
+.dark .dock-icon {
+  color: #ffffff;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-border {
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #8b00ff,
+    #ff0000
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s infinite linear;
+}
+
+.shimmer-glow {
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #8b00ff,
+    #ff0000
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s infinite linear;
+  filter: blur(10px);
+}
+
+.project-card-lite:hover .shimmer-border {
+  opacity: 1 !important;
+}
+
+.project-card-lite:hover .shimmer-glow {
+  opacity: 0.6 !important;
+}
+
+.dark .shimmer-border, .dark .shimmer-glow {
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #8b00ff,
+    #ff0000
+  );
+  background-size: 200% 100%;
+}
+
+.dock-switch {
+  position: relative;
+}
+
+.dock-switch::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 99em;
+  background-color: color-mix(in srgb, var(--dock-glass) 36%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--dock-light) calc(var(--dock-reflex-light) * 10%), transparent),
+    inset 2px 1px 0px -1px color-mix(in srgb, var(--dock-light) calc(var(--dock-reflex-light) * 90%), transparent),
+    inset -1.5px -1px 0px -1px color-mix(in srgb, var(--dock-light) calc(var(--dock-reflex-light) * 80%), transparent),
+    inset -2px -6px 1px -5px color-mix(in srgb, var(--dock-light) calc(var(--dock-reflex-light) * 60%), transparent),
+    inset -1px 2px 3px -1px color-mix(in srgb, var(--dock-dark) calc(var(--dock-reflex-dark) * 20%), transparent),
+    inset 0px -4px 1px -2px color-mix(in srgb, var(--dock-dark) calc(var(--dock-reflex-dark) * 10%), transparent),
+    0px 3px 6px 0px color-mix(in srgb, var(--dock-dark) calc(var(--dock-reflex-dark) * 8%), transparent);
+  transition:
+    background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+    box-shadow 400ms cubic-bezier(1, 0, 0.4, 1),
+    transform 400ms cubic-bezier(1, 0, 0.4, 1);
+}
+
+.dock-switch[data-active="project"]::after {
+  transform: translateX(100%);
+}
+
+.dock-switch-option {
+  position: relative;
+  z-index: 1;
+}
+
+.dock-switch[data-active="dashboard"] .dock-switch-option:last-child:hover {
+  color: #000000 !important;
+}
+
+.dock-switch[data-active="project"] .dock-switch-option:first-child:hover {
+  color: #000000 !important;
+}
+
+.dock-icon:hover {
+  opacity: 0.6;
+}
+
+.dock-switch[data-active="dashboard"] .dock-switch-option:first-child {
+  color: #000000;
+}
+
+.dock-switch[data-active="project"] .dock-switch-option:last-child {
+  color: #000000;
+}
+
+.dark .dock-switch[data-active="dashboard"] .dock-switch-option:first-child {
+  color: #ffffff;
+}
+
+.dark .dock-switch[data-active="project"] .dock-switch-option:last-child {
+  color: #ffffff;
+}
+
+.dark .dock-switch[data-active="dashboard"] .dock-switch-option:last-child:hover {
+  color: #ffffff !important;
+}
+
+.dark .dock-switch[data-active="project"] .dock-switch-option:first-child:hover {
+  color: #ffffff !important;
+}
+
+:root {
+  --dock-glass: #bbbbbc;
+  --dock-light: #ffffff;
+  --dock-dark: #000000;
+  --dock-reflex-light: 1;
+  --dock-reflex-dark: 1;
+  --dock-saturation: 150%;
+}
+
+.dark {
+  --dock-glass: #bbbbbc;
+  --dock-light: #ffffff;
+  --dock-dark: #000000;
+  --dock-reflex-light: 0.3;
+  --dock-reflex-dark: 2;
+  --dock-saturation: 150%;
+}
+.page-wrapper {
+  @apply flex flex-col items-center min-h-screen lg:h-screen p-2;
+}
+
+.app-container {
+  @apply flex flex-col lg:flex-row items-center gap-2 flex-1 justify-center w-full min-h-0;
+}
+
+@media (max-width: 1024px) {
+  .app-container {
+    @apply !flex-none !h-auto !justify-start;
+  }
+}
+
+.left-column, .right-column {
+  @apply flex flex-col gap-2 flex-1 h-auto lg:h-full w-full lg:w-auto;
+}
+
+@media (max-width: 1024px) {
+  .left-column, .right-column {
+    @apply !flex-none !h-auto;
+  }
+}
+
+.bio-globe-row, .bottom-row {
+  @apply flex flex-row gap-2 shrink-0 items-stretch;
+}
+
+.name-row, .top-row {
+  @apply flex-1 relative lg:min-h-0 w-full;
+}
+
+@media (max-width: 1200px) {
+  .name-row, .top-row {
+    @apply max-h-[400px];
+  }
+}
+
+@media (max-width: 1024px) {
+  .name-row, .top-row {
+    @apply !min-h-[420px] !h-[420px] flex-none;
+  }
+}
+
+@media (max-width: 600px) {
+  .name-row, .top-row {
+    @apply !min-h-[360px] !h-[360px];
+  }
+}
+
+@media (max-width: 480px) {
+  .name-row, .top-row {
+    @apply !min-h-[264px] !h-[264px];
+  }
+}
+
+.top-row {
+  @apply flex flex-row gap-2;
+}
+
+.social-wrapper, .statistic-wrapper, .clock-wrapper, .clients-wrapper {
+  @apply flex flex-col min-w-0;
+}
+
+.social-wrapper, .statistic-wrapper {
+  @apply flex-1;
+}
+
+.clock-wrapper, .clients-wrapper {
+  @apply shrink-0;
+}
+
+.current-switch-wrapper {
+  @apply flex-1 flex flex-col gap-2 min-w-0;
+}
+
+.current-at-box {
+  @apply flex-1 flex flex-col min-h-0;
+}
+
+.mode-switch-label {
+  @apply max-[600px]:!text-[8px];
+}
+
+.mode-switch-box {
+  @apply w-full shrink-0;
+}

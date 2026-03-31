@@ -1,0 +1,44 @@
+{
+  "name": "unframer-vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
+  "stackblitz": {
+    "startCommand": "STACKBLITZ_DEMO_EXAMPLE=src/App.tsx npm run framer && npm run dev"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "framer": "unframer 65748388c4c5aa05 --outDir src/framer"
+  },
+  "dependencies": {
+    "@motionone/dom": "^10.18.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "classnames": "^2.5.1",
+    "cobe": "^0.6.5",
+    "framer-motion": "^12.29.2",
+    "leva": "^0.10.1",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "^6.30.3",
+    "three": "^0.182.0",
+    "typewriter-effect": "^2.22.0",
+    "unframer": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "tesseract.js": "^7.0.0",
+    "typescript": "latest",
+    "vite": "^5.4.11"
+  }
+}
