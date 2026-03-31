@@ -53,14 +53,12 @@ export default function NameBox() {
 					style={nameBoxStyles.tagsContainer as React.CSSProperties}
 				>
 					{[
-						"User Experience",
-						"UI",
-						"TUI",
+						"UI/UX",
+						"Design Engineer",
 						"Speculative Design",
 						"Branding",
 						"Product Manage",
 						"Web design",
-						"Innotaive IxD method",
 					].map((text, index) => (
 						<div
 							key={index}
