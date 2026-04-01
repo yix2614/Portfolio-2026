@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=TikTok+Sans:wght@400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Doto:wght@900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -297,6 +295,99 @@ body {
   .left-column, .right-column {
     @apply !flex-none !h-auto;
   }
+}
+
+.geist-surface {
+  background: color-mix(in srgb, var(--color-bg-secondary) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-default) 70%, transparent);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.geist-prose {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.7;
+  font-family: var(--font-tiktok);
+}
+
+.geist-prose h1,
+.geist-prose h2,
+.geist-prose h3 {
+  margin: 32px 0 16px;
+  font-weight: 600;
+}
+
+.geist-prose h1 {
+  font-size: 28px;
+}
+
+.geist-prose h2 {
+  font-size: 22px;
+}
+
+.geist-prose h3 {
+  font-size: 18px;
+}
+
+.geist-prose img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px 0;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-border-default) 60%, transparent);
+  background: var(--color-bg-primary);
+}
+
+.geist-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  background: var(--color-bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.geist-prose th,
+.geist-prose td {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border-default) 70%, transparent);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+.geist-prose th {
+  background: color-mix(in srgb, var(--color-bg-tertiary) 70%, transparent);
+  text-align: left;
+  font-weight: 600;
+}
+
+.geist-prose a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.geist-prose blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 3px solid color-mix(in srgb, var(--color-border-default) 80%, transparent);
+  color: var(--color-text-secondary);
+  background: color-mix(in srgb, var(--color-bg-secondary) 60%, transparent);
+  border-radius: 10px;
+}
+
+.geist-prose ul,
+.geist-prose ol {
+  padding-left: 18px;
+  margin: 10px 0;
+}
+
+.geist-prose hr {
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--color-border-default) 70%, transparent);
+  margin: 16px 0;
 }
 
 .bio-globe-row, .bottom-row {

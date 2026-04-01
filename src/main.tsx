@@ -7,6 +7,7 @@ import App from './App'
 import VibeCodingPage from './vibe-coding/VibeCodingPage'
 import TiktokWebPage from './tiktokweb/TiktokWebPage'
 import { applyTheme, getInitialTheme } from './utils/theme'
+import { Analytics } from '@vercel/analytics/react'
 
 const favicon32 = new URL('../favicon_io/favicon-32x32.png', import.meta.url).href
 const favicon16 = new URL('../favicon_io/favicon-16x16.png', import.meta.url).href
@@ -42,12 +43,15 @@ ensureLink('link[rel="manifest"]', 'manifest').href = webManifest
 applyTheme(getInitialTheme());
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/project" element={<App />} />
-      <Route path="/vibe-coding" element={<VibeCodingPage />} />
-      <Route path="/tiktokweb" element={<TiktokWebPage />} />
-    </Routes>
-  </BrowserRouter>
+  <>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/project" element={<App />} />
+        <Route path="/vibe-coding" element={<VibeCodingPage />} />
+        <Route path="/tiktokweb" element={<TiktokWebPage />} />
+      </Routes>
+    </BrowserRouter>
+    <Analytics />
+  </>
 )
