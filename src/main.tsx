@@ -7,6 +7,7 @@ import App from './App'
 import VibeCodingPage from './vibe-coding/VibeCodingPage'
 import TiktokWebPage from './tiktokweb/TiktokWebPage'
 import { applyTheme, getInitialTheme } from './utils/theme'
+import { inject } from '@vercel/analytics'
 
 const favicon32 = new URL('../favicon_io/favicon-32x32.png', import.meta.url).href
 const favicon16 = new URL('../favicon_io/favicon-16x16.png', import.meta.url).href
@@ -40,6 +41,9 @@ ensureLink('link[rel="manifest"]', 'manifest').href = webManifest
 
 // Initialize theme before rendering
 applyTheme(getInitialTheme());
+
+// Initialize Vercel Analytics
+inject();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
