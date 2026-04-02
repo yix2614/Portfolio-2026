@@ -155,11 +155,11 @@ export const socialBoxStyles = {
     fontFamily: '"Helvetica Neue Regular", "Helvetica Neue Regular Placeholder", sans-serif',
     fontSize: "clamp(8px, 5cqw, 18px)",
     color: "rgba(255, 255, 255, 0.7)", // Fixed white with opacity
-    textDecoration: "line-through",
     textTransform: "capitalize",
     margin: 0,
     cursor: "pointer",
     whiteSpace: "nowrap",
+    transition: "color 0.2s ease", // Add transition for hover
   } as CSSProperties,
   // Social Icons (Bottom Center)
   socialIcons: {

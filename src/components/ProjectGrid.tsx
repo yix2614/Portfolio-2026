@@ -623,7 +623,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
           exit={{ scale: 0, opacity: 0 }}
         >
           <div style={projectGridStyles.cursorTag}>
-            {(hoveredManualIndex >= 0 && hoveredManualIndex <= 3) ? "Coming soon" : "View Project"}
+            {(hoveredManualIndex >= 0 && hoveredManualIndex <= 3) ? "View Project" : "View Project"}
           </div>
           {(hoveredManualIndex >= 0 && hoveredManualIndex <= 3) && (
             <div style={projectGridStyles.cursorTag}>
