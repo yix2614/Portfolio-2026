@@ -125,10 +125,7 @@ const ProjectCard = React.memo(({
               playsInline
               preload="metadata"
               crossOrigin="anonymous"
-              onLoadedData={(e) => {
-                const video = e.currentTarget;
-                video.play().catch(() => {});
-              }}
+              // Removed inline onLoadedData play() call to prevent infinite loop/render issues
               style={{
                 width: "100%",
                 height: "100%",
@@ -385,6 +382,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774903555/ttcomcover_f9qmat.jpg"
                   title="TikTok.com Product Iteration"
                   subtitle="Design Engineering / Full-Stack / Data Analysis"
+                  onClick={() => window.location.href = '/tiktokweb'}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[2] || 0) + 0.1 }}>
@@ -418,10 +416,11 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}
-                style={{ flex: 1, display: "flex" }}
+                style={{ flex: 1, display: "flex", cursor: "pointer" }}
                 onMouseEnter={() => setHoveredManualIndex(0)}
                 onMouseLeave={() => setHoveredManualIndex(null)}
                 onMouseMove={handleMouseMove}
+                onClick={() => window.location.href = '/tiktokweb'}
               >
                 <div style={projectGridStyles.card}>
                   <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
@@ -454,10 +453,11 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.45, delay: (randomDelays[5] || 0) + 0.1 }}
-                    style={projectGridStyles.card}
+                    style={{ ...projectGridStyles.card, cursor: "pointer" }}
                     onMouseEnter={() => setHoveredManualIndex(1)}
                     onMouseLeave={() => setHoveredManualIndex(null)}
                     onMouseMove={handleMouseMove}
+                    onClick={() => window.location.href = '/tiktokweb'}
                   >
                     <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column" }}>
                       <div 
@@ -468,7 +468,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                         }}
                       />
                       <div style={{ ...projectGridStyles.cardCover, aspectRatio: "1.3 / 1", position: "relative", zIndex: 1 }}>
-                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774908949/Scene-9_1_a8odck.mp4" autoPlay muted loop playsInline preload="auto" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774908949/Scene-9_1_a8odck.mp4" autoPlay muted loop playsInline preload="metadata" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                       <div 
                         className="shimmer-border"
@@ -480,17 +480,18 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                       />
                     </div>
                     <div style={projectGridStyles.cardInfo}>
-                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>AI Search</div>
+                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>Design System</div>
                     </div>
                   </motion.div>
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.45, delay: (randomDelays[6] || 0) + 0.1 }}
-                    style={projectGridStyles.card}
+                    style={{ ...projectGridStyles.card, cursor: "pointer" }}
                     onMouseEnter={() => setHoveredManualIndex(2)}
                     onMouseLeave={() => setHoveredManualIndex(null)}
                     onMouseMove={handleMouseMove}
+                    onClick={() => window.location.href = '/tiktokweb'}
                   >
                     <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column" }}>
                       <div 
@@ -501,7 +502,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                         }}
                       />
                       <div style={{ ...projectGridStyles.cardCover, aspectRatio: "1.3 / 1", position: "relative", zIndex: 1 }}>
-                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4" autoPlay muted loop playsInline preload="auto" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4" autoPlay muted loop playsInline preload="metadata" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                       <div 
                         className="shimmer-border"
@@ -513,7 +514,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                       />
                     </div>
                     <div style={projectGridStyles.cardInfo}>
-                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>Design System</div>
+                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>AI Search</div>
                     </div>
                   </motion.div>
                 </div>
@@ -521,10 +522,11 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}
-                  style={{ ...projectGridStyles.card, flex: 1 }}
+                  style={{ ...projectGridStyles.card, flex: 1, cursor: "pointer" }}
                   onMouseEnter={() => setHoveredManualIndex(3)}
                   onMouseLeave={() => setHoveredManualIndex(null)}
                   onMouseMove={handleMouseMove}
+                  onClick={() => window.location.href = '/tiktokweb'}
                 >
                   <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
                     <div 

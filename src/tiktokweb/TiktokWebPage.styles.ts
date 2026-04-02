@@ -165,7 +165,7 @@ export const tiktokWebPageStyles = {
   cardImage: {
     width: "100%",
     height: "auto",
-    aspectRatio: "372 / 206", // Original Figma size ratio
+    aspectRatio: "auto", // Let the video dictate the natural ratio
     backgroundColor: "#333", // Placeholder
     borderRadius: "8px",
     objectFit: "cover",
@@ -220,15 +220,15 @@ export const tiktokWebPageStyles = {
   } as CSSProperties,
   contentSection: {
     width: "100vw",
-    margin: "0",
-    padding: "160px 0",
+    margin: 0,
+    padding: "120px 0",
     fontSize: "14px",
-    lineHeight: "1.6",
+    lineHeight: 1.6,
     color: "var(--color-text-primary)",
     boxSizing: "border-box",
     position: "relative",
     zIndex: 2,
-    backgroundColor: "var(--color-bg-page)",
+    backgroundColor: "var(--color-bg-page)"
   } as CSSProperties,
   contentInner: {
     width: "840px",
