@@ -144,7 +144,7 @@ const TiktokWebPage = () => {
 
   React.useEffect(() => {
     const updateCardVisibility = () => {
-      setIsCardHidden(window.scrollY >= window.innerHeight);
+      setIsCardHidden(window.scrollY >= 1200);
     };
 
     updateCardVisibility();
