@@ -71,7 +71,7 @@ const springConfig = {
   damping: 79,
 };
 
-const Dock2: React.FC = () => {
+const Dock2: React.FC<{ hiddenLabels?: string[] }> = ({ hiddenLabels = [] }) => {
   const items: DockItemProps[] = [
     { icon: <HomeIcon />, label: "Home", link: "/" },
     { icon: <ProjectIcon />, label: "Project", link: "/project", hidden: true },
@@ -144,7 +144,7 @@ const Dock2: React.FC = () => {
       </div>
       <div style={dock2GlassStyles}>
         <div style={dock2ButtonsStyles}>
-          {items.filter((item) => !item.hidden).map((item, index) => {
+          {items.filter((item) => !item.hidden && !hiddenLabels.includes(item.label)).map((item, index) => {
             const isHovered = hoveredIndex === index;
             return (
               <motion.div
@@ -173,7 +173,10 @@ const Dock2: React.FC = () => {
                 >
                   {isHovered && item.tooltip && <div style={dock2TooltipStyles}>{item.tooltip}</div>}
                   <motion.div
-                    style={dock2IconContainerStyles}
+                    style={{
+                      ...dock2IconContainerStyles,
+                      color: isDark ? "#FFFFFF" : "#000000"
+                    }}
                     animate={{ borderRadius: isHovered ? 200 : 25, opacity: isHovered ? 0.6 : 1 }}
                     initial={{ backgroundColor: "transparent" }}
                     transition={springConfig}

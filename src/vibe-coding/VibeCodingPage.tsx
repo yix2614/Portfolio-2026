@@ -5,12 +5,12 @@ import { Text, useVideoTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useControls, Leva } from 'leva';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
-import Dock from '../components/Dock';
-import ProjectOverlay from '../components/ProjectOverlay';
+import Dock2 from '../tiktokweb/Dock2';
+import { applyTheme, getInitialTheme } from '../utils/theme';
 
 const ArrowIcon = () => (
   <svg width="14" height="14" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 37.1716L22 5C22 4.44772 22.4477 4 23 4H25C25.5523 4 26 4.44771 26 5L26 37.1716L37.8787 25.2929C38.2692 24.9024 38.9024 24.9024 39.2929 25.2929L40.7071 26.7071C41.0976 27.0976 41.0976 27.7308 40.7071 28.1213L25.4142 43.4142C25.0391 43.7893 24.5304 44 24 44C23.4696 44 22.9609 43.7893 22.5858 43.4142L7.29289 28.1213C6.90237 27.7308 6.90237 27.0976 7.29289 26.7071L8.70711 25.2929C9.09763 24.9024 9.7308 24.9024 10.1213 25.2929L22 37.1716Z" fill="#333333"/>
+    <path d="M22 37.1716L22 5C22 4.44772 22.4477 4 23 4H25C25.5523 4 26 4.44771 26 5L26 37.1716L37.8787 25.2929C38.2692 24.9024 38.9024 24.9024 39.2929 25.2929L40.7071 26.7071C41.0976 27.0976 41.0976 27.7308 40.7071 28.1213L25.4142 43.4142C25.0391 43.7893 24.5304 44 24 44C23.4696 44 22.9609 43.7893 22.5858 43.4142L7.29289 28.1213C6.90237 27.7308 6.90237 27.0976 7.29289 26.7071L8.70711 25.2929C9.09763 24.9024 9.7308 24.9024 10.1213 25.2929L22 37.1716Z" fill="currentColor"/>
   </svg>
 );
 
@@ -367,6 +367,16 @@ const slides = [
     type: 'video'
   },
   {
+    id: 4,
+    title: 'TT Incentive Component',
+    subtitle: 'Visual Experiment',
+    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/drop.mp4',
+    date: 'Apr 2, 2026',
+    version: 'Concept V1.0',
+    type: 'video',
+    cursorTag: 'Coming soon'
+  },
+  {
     id: 3,
     title: 'UG hiring',
     subtitle: 'Hiring Journey',
@@ -382,9 +392,66 @@ const VibeCodingPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHeroTransitioning, setIsHeroTransitioning] = useState(false);
   const [aspectRatios, setAspectRatios] = useState<Record<string, number>>({});
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const wheelLockRef = useRef(0);
   const transitionTypeRef = useRef<null | 'hero' | 'slide'>(null);
   const pendingHeroRef = useRef(false);
+  useEffect(() => {
+    applyTheme(getInitialTheme());
+    if (!document.getElementById('instrument-font')) {
+      const link = document.createElement('link');
+      link.id = 'instrument-font';
+      link.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+  }, []);
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
+  useEffect(() => {
+    const assets = slides.map((slide) => slide.videoUrl);
+    const total = assets.length;
+    if (total === 0) {
+      setLoadingProgress(100);
+      setIsLoading(false);
+      return;
+    }
+    let loaded = 0;
+    const handleDone = () => {
+      loaded += 1;
+      const nextProgress = Math.round((loaded / total) * 100);
+      setLoadingProgress(nextProgress);
+      if (loaded >= total) {
+        setTimeout(() => setIsLoading(false), 120);
+      }
+    };
+    assets.forEach((url) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true;
+      const onLoaded = () => {
+        video.removeEventListener('loadedmetadata', onLoaded);
+        video.removeEventListener('error', onError);
+        handleDone();
+      };
+      const onError = () => {
+        video.removeEventListener('loadedmetadata', onLoaded);
+        video.removeEventListener('error', onError);
+        handleDone();
+      };
+      video.addEventListener('loadedmetadata', onLoaded);
+      video.addEventListener('error', onError);
+      video.src = url;
+      video.load();
+    });
+  }, []);
   const handleAspectRatio = useCallback((videoUrl: string, ratio: number) => {
     setAspectRatios((prev) => (prev[videoUrl] === ratio ? prev : { ...prev, [videoUrl]: ratio }));
   }, []);
@@ -442,7 +509,7 @@ const VibeCodingPage = () => {
   const handleDragEnd = (event: any, info: any) => {
     const threshold = 50;
     if (!canNavigate()) {
-      if (info.offset.y > threshold && !isHeroMode && currentIndex <= 1) {
+      if (info.offset.y > threshold && !isHeroMode && currentIndex === 0) {
         pendingHeroRef.current = true;
       }
       return;
@@ -457,7 +524,7 @@ const VibeCodingPage = () => {
   const handleWheel = (event: React.WheelEvent) => {
     if (Math.abs(event.deltaY) < 20) return;
     if (!canNavigate()) {
-      if (event.deltaY < 0 && !isHeroMode && currentIndex <= 1) {
+      if (event.deltaY < 0 && !isHeroMode && currentIndex === 0) {
         pendingHeroRef.current = true;
       }
       return;
@@ -522,7 +589,43 @@ const VibeCodingPage = () => {
   };
 
   return (
-    <div style={{ ...vibeCodingPageStyles.container, overflow: 'hidden' }} className="vibe-coding-page" onWheel={handleWheel}>
+    <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "var(--color-bg-page)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 99999
+      }}>
+        <div style={{
+          width: "360px",
+          height: "6px",
+          backgroundColor: "var(--color-bg-secondary)",
+          borderRadius: "999px",
+          overflow: "hidden"
+        }}>
+          <div style={{
+            height: "100%",
+            width: `${loadingProgress}%`,
+            backgroundColor: "var(--color-text-primary)",
+            transition: "width 0.08s linear"
+          }} />
+        </div>
+      </div>
+    )}
+    {!isLoading && (
+    <div
+      style={{
+        ...vibeCodingPageStyles.container,
+        backgroundColor: isDark ? '#1A1A1A' : 'var(--color-bg-page)',
+        overflow: 'hidden'
+      }}
+      className="vibe-coding-page"
+      onWheel={handleWheel}
+    >
       
       {/* Background Text Layer (VIBE CODING) - Visible in Hero Mode */}
       <AnimatePresence>
@@ -548,6 +651,7 @@ const VibeCodingPage = () => {
               <div
                 style={{
                   ...vibeCodingPageStyles.textOverlay,
+                  color: isDark ? '#FFFFFF' : 'var(--color-text-primary)',
                   display: 'flex',
                   alignItems: 'stretch',
                   gap: '16px'
@@ -596,6 +700,7 @@ const VibeCodingPage = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: '#F05C00',
+                  color: 'var(--color-text-primary)',
                   borderRadius: '999px',
                   width: '22px',
                   height: '22px',
@@ -628,7 +733,7 @@ const VibeCodingPage = () => {
                   fontFamily: '"Helvetica Neue", "Helvetica Neue Regular", sans-serif',
                   fontSize: '16px',
                   fontWeight: 400,
-                  color: '#333333',
+                  color: 'var(--color-text-primary)',
                   margin: 0
                 }}
               >
@@ -667,7 +772,7 @@ const VibeCodingPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3 }}
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', color: isDark ? '#FFFFFF' : 'var(--color-text-primary)' }}
                     >
                         <div>{currentSlide.title}</div>
                     </motion.div>
@@ -759,13 +864,14 @@ const VibeCodingPage = () => {
             dragSnapToOrigin
             onDragEnd={handleDragEnd}
         >
-            <AnimatePresence mode="popLayout" initial={false} onExitComplete={handleSlideExitComplete}>
+            <AnimatePresence mode="wait" initial={false} onExitComplete={handleSlideExitComplete}>
                 <motion.div
                     key={currentIndex}
-                    style={{ 
-                        width: '100%', 
-                        height: '100%', // Fill the container which now has explicit height animation
-                        // aspectRatio removed as container height is explicit
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
                     }}
                 >
                     <motion.div
@@ -782,7 +888,7 @@ const VibeCodingPage = () => {
                         }
                         transition={
                             shouldAnimateCard
-                                ? { duration: 0.75, ease: [0.22, 1, 0.36, 1] }
+                                ? { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
                                 : { duration: 0 }
                         }
                         style={{ width: '100%', height: '100%' }}
@@ -800,6 +906,7 @@ const VibeCodingPage = () => {
                             <Card3D
                                 videoSrc={currentSlide.videoUrl}
                                 onAspectRatio={(ratio) => handleAspectRatio(currentSlide.videoUrl, ratio)}
+                                cursorTag={currentSlide.cursorTag}
                             />
                         )}
                     </motion.div>
@@ -818,7 +925,7 @@ const VibeCodingPage = () => {
             transition={{ duration: 0.35, delay: 0.1 }}
                 style={{
                     position: 'absolute',
-                    bottom: '40px',
+                    bottom: '120px',
                     left: 0,
                     width: '100%',
                     display: 'flex',
@@ -836,7 +943,9 @@ const VibeCodingPage = () => {
                                 width: '6px',
                                 height: '6px',
                                 borderRadius: '50%',
-                                backgroundColor: i === currentIndex ? 'black' : '#d1d1d1',
+                                backgroundColor: i === currentIndex
+                                    ? (isDark ? '#FFFFFF' : '#000000')
+                                    : (isDark ? '#555555' : '#d1d1d1'),
                                 cursor: 'pointer',
                                 transition: 'all 0.3s ease',
                                 transform: i === currentIndex ? 'scale(1.2)' : 'scale(1)',
@@ -849,11 +958,18 @@ const VibeCodingPage = () => {
       </AnimatePresence>
 
     </div>
+    )}
+    {!isLoading && (
+      <div style={vibeCodingPageStyles.dockWrapper}>
+        <Dock2 hiddenLabels={["Tab"]} />
+      </div>
+    )}
+    </>
   );
 };
 
 // Shared Wrapper to provide 3D hover effects
-const CardWrapper = ({ children, isHeroMode }: { children: React.ReactNode, isHeroMode: boolean }) => {
+const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.ReactNode, isHeroMode: boolean, cursorTag?: string }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const [rotate, setRotate] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
@@ -914,7 +1030,7 @@ const CardWrapper = ({ children, isHeroMode }: { children: React.ReactNode, isHe
                         pointerEvents: 'none'
                     }}
                 >
-                    OPEN
+                    {cursorTag ?? 'OPEN'}
                 </motion.div>,
                 document.body
             )}
@@ -975,10 +1091,10 @@ const CardWrapper = ({ children, isHeroMode }: { children: React.ReactNode, isHe
 };
 
 // 3D Card Component for Mouse Tracking
-const Card3D = ({ videoSrc, onAspectRatio }: { videoSrc: string, onAspectRatio?: (ratio: number) => void }) => {
+const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAspectRatio?: (ratio: number) => void, cursorTag?: string }) => {
     // Reuse the wrapper for consistent behavior
     return (
-        <CardWrapper isHeroMode={false}>
+        <CardWrapper isHeroMode={false} cursorTag={cursorTag}>
              <video
                 key={videoSrc}
                 src={videoSrc}

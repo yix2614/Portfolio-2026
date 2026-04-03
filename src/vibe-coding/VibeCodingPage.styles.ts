@@ -4,7 +4,7 @@ export const vibeCodingPageStyles = {
   container: {
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-bg-page)',
     overflow: 'hidden', // Prevent scrolling
     position: 'relative',
     boxSizing: 'border-box',
@@ -20,7 +20,7 @@ export const vibeCodingPageStyles = {
     justifyContent: 'flex-start', // Left align
     alignItems: 'center',
     zIndex: 999,
-    color: 'black', 
+    color: 'var(--color-text-primary)',
     fontFamily: '"Doto", sans-serif', 
     fontSize: '12vh', 
     fontWeight: 900, 
@@ -51,23 +51,25 @@ export const vibeCodingPageStyles = {
     position: 'fixed',
     top: 0,
     left: 0,
-    width: '64px', // Rectangular width
-    height: '32px', // Rectangular height
-    backgroundColor: 'white', 
-    borderRadius: '16px', // Rounded corners
-    pointerEvents: 'none', 
+    width: 'fit-content',
+    minHeight: '32px',
+    padding: '0 14px',
+    backgroundColor: 'white',
+    borderRadius: '999px',
+    pointerEvents: 'none',
     zIndex: 9999,
-    display: 'flex',
+    display: 'inline-flex',
     justifyContent: 'center',
     alignItems: 'center',
-    mixBlendMode: 'difference', 
-    transform: 'translate(-50%, -50%)', 
-    transition: 'transform 0.1s ease-out, opacity 0.2s ease', 
-    color: 'black',
-    fontFamily: 'Helvetica, sans-serif', // Helvetica
-    fontWeight: '400', // Regular
+    mixBlendMode: 'difference',
+    transform: 'translate(-50%, -50%)',
+    transition: 'transform 0.1s ease-out, opacity 0.2s ease',
+    color: 'var(--color-text-primary)',
+    fontFamily: 'Helvetica, sans-serif',
+    fontWeight: '400',
     fontSize: '12px',
     textTransform: 'uppercase',
+    whiteSpace: 'nowrap'
   } as CSSProperties,
 
   // Text elements styles based on the image
@@ -80,7 +82,7 @@ export const vibeCodingPageStyles = {
     fontWeight: 900,
     fontSize: '6vw',
     lineHeight: '0.9',
-    color: 'black',
+    color: 'var(--color-text-primary)',
     textAlign: 'right',
     zIndex: 1,
   } as CSSProperties,
@@ -94,7 +96,7 @@ export const vibeCodingPageStyles = {
     fontWeight: 900,
     fontSize: '6vw',
     lineHeight: '0.9',
-    color: 'black',
+    color: 'var(--color-text-primary)',
     textAlign: 'left',
     zIndex: 1,
   } as CSSProperties,
@@ -126,17 +128,18 @@ export const vibeCodingPageStyles = {
     display: 'flex', 
     flexDirection: 'column', 
     gap: '0px', 
+    color: 'var(--color-text-primary)',
   } as CSSProperties,
 
   topNavSubtitle: {
-    fontFamily: 'Times New Roman, serif', 
+    fontFamily: '"Instrument Serif", serif', 
     fontWeight: 400, 
     fontSize: '40px', 
     textTransform: 'none', // Allow data to control case
     letterSpacing: '-2px', 
     lineHeight: 0.9, 
     fontStyle: 'italic', 
-    color: '#cccccc', 
+    color: 'var(--color-text-muted)', 
   } as CSSProperties,
 
   topNavInfo: {
@@ -150,7 +153,7 @@ export const vibeCodingPageStyles = {
     fontFamily: 'Helvetica, Arial, sans-serif', 
     fontSize: '12px',
     fontWeight: 400, 
-    color: '#cccccc', // Even lighter gray
+    color: 'var(--color-text-muted)', // Even lighter gray
   } as CSSProperties,
 
   // topNavRight removed
@@ -170,5 +173,12 @@ export const vibeCodingPageStyles = {
     zIndex: 20, // Ensure it's above the card
     marginBottom: '20px', 
     position: 'relative', // Ensure z-index works
+  } as CSSProperties,
+  dockWrapper: {
+    position: 'fixed',
+    left: '50%',
+    bottom: '8px',
+    transform: 'translateX(-50%)',
+    zIndex: 9999
   } as CSSProperties,
 };
