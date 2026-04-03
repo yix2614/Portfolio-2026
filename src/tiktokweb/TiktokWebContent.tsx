@@ -166,6 +166,152 @@ const ImgCard = ({ src, alt, badge, badgeColor }: { src: string, alt: string, ba
   </div>
 );
 
+// --- Pin Overlay Component ---
+const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) => {
+  const [pin, setPin] = useState(["", "", "", ""]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+    
+    const newPin = [...pin];
+    if (value.length > 1) {
+      const pasted = value.slice(0, 4).split("");
+      for (let i = 0; i < pasted.length; i++) {
+        if (index + i < 4) newPin[index + i] = pasted[i];
+      }
+      setPin(newPin);
+      const nextIndex = Math.min(index + pasted.length, 3);
+      inputRefs.current[nextIndex]?.focus();
+    } else {
+      newPin[index] = value;
+      setPin(newPin);
+      if (value !== "" && index < 3) {
+        inputRefs.current[index + 1]?.focus();
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && pin[index] === "" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  useEffect(() => {
+    if (pin.join("") === "2614") {
+      setTimeout(() => {
+        onSuccess();
+      }, 200);
+    }
+  }, [pin, onSuccess]);
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0, 0, 0, 0.4)",
+      backdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(10px)",
+      zIndex: 9999,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      animation: "fadeIn 0.3s ease"
+    }} onClick={onClose}>
+      <div 
+        style={{
+          backgroundColor: "var(--color-bg-page)",
+          padding: "32px",
+          borderRadius: "16px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "24px",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          border: "1px solid var(--color-border-default)"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Text h3 style={{ margin: 0, color: "var(--color-text-primary)", fontFamily: '"Instrument Serif", serif', fontSize: "32px" }}>Unlock Data</Text>
+        <div style={{ display: "flex", gap: "12px" }}>
+          {pin.map((digit, index) => (
+            <input
+              key={index}
+              ref={el => { inputRefs.current[index] = el; }}
+              type="password"
+              value={digit}
+              onChange={(e) => handleChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              style={{
+                width: "48px",
+                height: "64px",
+                fontSize: "24px",
+                textAlign: "center",
+                borderRadius: "8px",
+                border: "1px solid var(--color-border-default)",
+                backgroundColor: "var(--color-bg-secondary)",
+                color: "var(--color-text-primary)",
+                outline: "none"
+              }}
+              autoFocus={index === 0}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Locked Data Component ---
+const LockedData = ({ text, isUnlocked, onClick }: { text: string, isUnlocked: boolean, onClick: () => void }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const scrambled = React.useMemo(() => {
+    const chars = "!@#$%&*?";
+    return text.split('').map(c => /[0-9.]/.test(c) ? chars[Math.floor(Math.random() * chars.length)] : c).join('');
+  }, [text]);
+
+  if (isUnlocked) {
+    return <>{text}</>;
+  }
+
+  return (
+    <span 
+      style={{ position: "relative", cursor: "pointer", display: "inline-block" }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
+    >
+      <span style={{ fontFamily: "monospace" }}>{scrambled}</span>
+      {isHovered && (
+        <div style={{
+          position: "absolute",
+          bottom: "100%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          marginBottom: "8px",
+          backgroundColor: "var(--color-bg-page)",
+          color: "var(--color-text-primary)",
+          padding: "6px 10px",
+          borderRadius: "6px",
+          fontSize: "12px",
+          whiteSpace: "nowrap",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          border: "1px solid var(--color-border-default)",
+          zIndex: 10,
+          pointerEvents: "none",
+          fontWeight: 500
+        }}>
+          Click to unlock
+        </div>
+      )}
+    </span>
+  );
+};
+
 const TiktokWebContent = () => {
   const tableData = [
     {
@@ -235,6 +381,8 @@ const TiktokWebContent = () => {
   const [hoveredSection, setHoveredSection] = useState("");
   const [activeCoreVideo, setActiveCoreVideo] = useState("sidenav");
   const [activeFeatureTab, setActiveFeatureTab] = useState("like");
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [showPinOverlay, setShowPinOverlay] = useState(false);
 
   const sections = [
     { id: "section-context", title: "Context" },
@@ -705,7 +853,7 @@ const TiktokWebContent = () => {
 
         <TwoCol gap="20px" title="Some key results">
 <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", marginBottom: "8px" }}>
-              Since the launch of our Bug Dashboard, systematic design audits have directly driven growth across our core FYP and Preview metrics: PlayTime/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.1325%</mark>, Finish/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.1853%</mark>, Play/I: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.0198%</mark>, Preview VV/U: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.2441%</mark>.
+              Since the launch of our Bug Dashboard, systematic design audits have directly driven growth across our core FYP and Preview metrics: PlayTime/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1325%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Finish/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1853%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Play/I: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0198%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Preview VV/U: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2441%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>.
             </Text>
 </TwoCol>
 
@@ -964,14 +1112,14 @@ As a core pillar of Web architecture, our grid system is informed by <strong>Tik
 
          <TwoCol gap="20px" title="Some key results">
 <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", marginBottom: "8px" }}>
-              Within the <strong>Explore and Profile pages</strong>, VV per User increased by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.2069%</mark>, while Play Time per User grew by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.0038%</mark>.
+              Within the <strong>Explore and Profile pages</strong>, VV per User increased by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2069%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, while Play Time per User grew by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0038%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>.
             </Text>
             
             <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block" }}>
-              <strong>Search Results Performance</strong> Last 1-day Active Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.1479%</mark>
-              Last 1-day Active Days (Non-logged in): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.2605%</mark>
-              PlayDays/Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.0187%</mark>
-              Play Rate (New Users v1): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}>+0.0679%</mark>
+              <strong>Search Results Performance</strong> Last 1-day Active Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1479%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
+              Last 1-day Active Days (Non-logged in): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2605%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
+              PlayDays/Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0187%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
+              Play Rate (New Users v1): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0679%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
             </Text>
 </TwoCol>
 
@@ -1213,7 +1361,7 @@ Since our Web platform allows <strong>unauthenticated consumption</strong>, conv
 
          <TwoCol gap="20px" title="Frictionless Messaging">
 <PText>
-Current DM is a <strong>standalone page</strong> that interrupts the <strong>consumption flow</strong>, leading to a <strong>12.1% DAU drop-off</strong>. We are transitioning from <strong>Jump-to-Interact</strong> to <strong>In-feed Messaging</strong> to minimize churn and ensure social interaction <strong>complements</strong> the video experience.
+Current DM is a <strong>standalone page</strong> that interrupts the <strong>consumption flow</strong>, leading to a <strong><LockedData text="12.1%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /> DAU drop-off</strong>. We are transitioning from <strong>Jump-to-Interact</strong> to <strong>In-feed Messaging</strong> to minimize churn and ensure social interaction <strong>complements</strong> the video experience.
 </PText>
 </TwoCol>
         
@@ -1272,6 +1420,15 @@ Current DM is a <strong>standalone page</strong> that interrupts the <strong>con
         
 
       </div>
+      {showPinOverlay && (
+        <PinOverlay 
+          onClose={() => setShowPinOverlay(false)} 
+          onSuccess={() => {
+            setIsUnlocked(true);
+            setShowPinOverlay(false);
+          }} 
+        />
+      )}
     </>
   );
 };
