@@ -177,7 +177,7 @@ const AsciiScene = ({ videoUrl, isHeroMode, aspectRatio, onAspectRatio }: { vide
         // Video Setup
         const video = document.createElement('video');
         video.src = videoUrl;
-        video.crossOrigin = 'anonymous';
+        // video.crossOrigin = 'anonymous'; // Removed to prevent CORS errors on external resources
         video.muted = true;
         video.loop = false; 
         video.playbackRate = 1.0;
@@ -434,7 +434,7 @@ const VibeCodingPage = () => {
     };
     assets.forEach((url) => {
       const video = document.createElement('video');
-      video.crossOrigin = 'anonymous'; // Added for cross-origin videos
+      // video.crossOrigin = 'anonymous'; // Removed: causing strict CORS failures on normal videos
       video.preload = 'metadata';
       video.muted = true;
       video.playsInline = true; // Add this, iOS needs this
@@ -1125,7 +1125,8 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAs
                 loop
                 muted
                 playsInline
-                crossOrigin="anonymous" // Important for external videos
+                // Removed crossOrigin="anonymous" to allow standard video loading to succeed.
+                // If a specific external URL strictly requires it, handle it on a case-by-case basis.
                 onLoadedMetadata={(event) => {
                     const video = event.currentTarget;
                     if (video.videoWidth && video.videoHeight && onAspectRatio) {
