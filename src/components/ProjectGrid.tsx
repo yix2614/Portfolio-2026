@@ -16,6 +16,7 @@ const ProjectCard = React.memo(({
   cursorTag,
   overlayText,
   coverAspectRatio,
+  isDisabled,
   onClick
 }: { 
   isBig?: boolean; 
@@ -30,6 +31,7 @@ const ProjectCard = React.memo(({
   cursorTag?: string;
   overlayText?: string;
   coverAspectRatio?: string;
+  isDisabled?: boolean;
   onClick?: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -97,12 +99,15 @@ const ProjectCard = React.memo(({
       ref={cardRef}
       style={{
         ...cardStyle,
-        cursor: onClick ? "pointer" : "default"
+        cursor: onClick && !isDisabled ? "pointer" : "default",
+        opacity: isDisabled ? 0.2 : 1,
+        pointerEvents: isDisabled ? "none" : "auto",
+        transition: "opacity 0.2s ease"
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onMouseMove={handleMouseMove}
-      onClick={onClick}
+      onMouseEnter={!isDisabled ? () => setIsHovered(true) : undefined}
+      onMouseLeave={!isDisabled ? () => setIsHovered(false) : undefined}
+      onMouseMove={!isDisabled ? handleMouseMove : undefined}
+      onClick={!isDisabled ? onClick : undefined}
     >
       <div style={{ position: "relative", width: "100%", flex: coverFlex, display: "flex", flexDirection: "column" }}>
         <div 
@@ -403,13 +408,16 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
 
   const categories = useMemo(() => [
     { id: "All", count: "7" },
-    { id: "Filter not ready", count: "0", inactive: true },
-    { id: "Product", count: "4", hidden: true },
-    { id: "Creative", count: "4", hidden: true },
-    { id: "Tech", count: "4", hidden: true },
+    { id: "Product", count: "2" },
+    { id: "Tech", count: "2" },
+    { id: "Creative", count: "4" }
   ], []);
-  const visibleCategories = useMemo(() => categories.filter((cat) => !cat.hidden), [categories]);
+  const visibleCategories = useMemo(() => categories, [categories]);
   const isCompact = windowWidth <= 1024;
+  const isCardDisabled = useCallback((categoryIds: string[]) => {
+    if (activeCategory === "All") return false;
+    return !categoryIds.includes(activeCategory);
+  }, [activeCategory]);
 
   return (
     <section style={{ ...projectGridStyles.section, ...style }}>
@@ -440,61 +448,67 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
           >
             Selected work(s)
           </h1>
-          <div style={{
-            ...projectGridStyles.metaContainer,
-            width: "40%",
-            justifyContent: "flex-end"
-          }}>
+          {windowWidth >= 1024 && (
             <div style={{
-              ...projectGridStyles.tabsContainer,
-              flexWrap: "wrap",
-              gap: "8px"
+              ...projectGridStyles.metaContainer,
+              width: "40%",
+              justifyContent: "flex-end"
             }}>
-              {visibleCategories.map((cat) => {
-                const isActive = activeCategory === cat.id;
-                const tabBgColor = isDark ? "#FFFFFF" : "#000000";
-                const tabTextColor = isDark ? "#000000" : "#FFFFFF";
-                const isInactive = Boolean(cat.inactive);
-                
-                return (
-                  <motion.div
-                    key={cat.id}
-                    onClick={() => !isInactive && setActiveCategory(cat.id)}
-                    initial={false}
-                    animate={{
-                      opacity: isInactive ? 0.3 : (isActive ? 1 : 0.3),
-                    }}
-                    whileHover={{
-                      opacity: isInactive ? 0.3 : (isActive ? 1 : 0.4),
-                    }}
-                    style={{
-                      ...projectGridStyles.tabItem,
-                      cursor: isInactive ? "default" : "pointer",
-                      backgroundColor: tabBgColor,
-                    }}
-                  >
-                    <span
+              <div style={{
+                ...projectGridStyles.tabsContainer,
+                flexWrap: "wrap",
+                gap: "8px"
+              }}>
+                {visibleCategories.map((cat) => {
+                  const isActive = activeCategory === cat.id;
+                  const tabBgColor = isActive
+                    ? (isDark ? "#FFFFFF" : "#000000")
+                    : (isDark ? "#5A5A5A" : "#F6F6F6");
+                  const tabTextColor = isActive
+                    ? (isDark ? "#000000" : "#FFFFFF")
+                    : (isDark ? "#F0F0F0" : "#8A8A8A");
+                  const tabCountBgColor = isActive ? tabTextColor : "#FFFFFF";
+                  const tabCountTextColor = isActive ? tabBgColor : "#9A9A9A";
+                  return (
+                    <motion.div
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      initial={false}
+                      animate={{
+                        opacity: 1,
+                      }}
+                      whileHover={{
+                        opacity: 1,
+                      }}
                       style={{
-                        ...projectGridStyles.tabText,
-                        color: tabTextColor,
+                        ...projectGridStyles.tabItem,
+                        cursor: "pointer",
+                        backgroundColor: tabBgColor,
                       }}
                     >
-                      {cat.id}
-                    </span>
-                    <div
-                      style={{
-                        ...projectGridStyles.tabCount,
-                        backgroundColor: tabTextColor,
-                        color: tabBgColor,
-                      }}
-                    >
-                      {cat.count}
-                    </div>
-                  </motion.div>
-                );
-              })}
+                      <span
+                        style={{
+                          ...projectGridStyles.tabText,
+                          color: tabTextColor,
+                        }}
+                      >
+                        {cat.id}
+                      </span>
+                      <div
+                        style={{
+                          ...projectGridStyles.tabCount,
+                          backgroundColor: tabCountBgColor,
+                          color: tabCountTextColor,
+                        }}
+                      >
+                        {cat.count}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
 
         <div style={projectGridStyles.scrollContent}>
@@ -513,6 +527,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   onClick={() => window.location.href = '/tiktokweb'}
                   firstCursorTag="View Project"
                   cursorTag="TikTok.com"
+                  isDisabled={isCardDisabled(["Product", "Tech"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[2] || 0) + 0.1 }}>
@@ -523,6 +538,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   subtitle="" 
                   cursorTag="Vibing gallery"
                   onClick={() => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')}
+                  isDisabled={isCardDisabled(["Tech"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[3] || 0) + 0.1 }}>
@@ -531,6 +547,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   title="AI Search"
                   subtitle="Markdwon / Modularized UI / Web Design"
                   firstCursorTag="Coming soon"
+                  isDisabled={isCardDisabled(["Product"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}>
@@ -540,6 +557,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   subtitle="3D motion"
                   subtitleStyle={{ textAlign: "right", lineHeight: "19.2px" }}
                   firstCursorTag="Coming soon"
+                  isDisabled={isCardDisabled(["Creative"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}>
@@ -550,6 +568,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   firstCursorTag="View website"
                   coverAspectRatio="16 / 11"
                   onClick={() => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer')}
+                  isDisabled={isCardDisabled(["Creative"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[8] || 0) + 0.1 }}>
@@ -560,6 +579,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   firstCursorTag="View website"
                   coverAspectRatio="16 / 11"
                   onClick={() => window.open('https://nike.jp/running/shoeschart/', '_blank', 'noopener,noreferrer')}
+                  isDisabled={isCardDisabled(["Creative"])}
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[9] || 0) + 0.1 }}>
@@ -570,6 +590,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   firstCursorTag="View website"
                   coverAspectRatio="16 / 11"
                   onClick={() => window.open('https://ioconnectchina.googlecnapps.cn/2023/intl/en_cn/', '_blank', 'noopener,noreferrer')}
+                  isDisabled={isCardDisabled(["Creative"])}
                 />
               </motion.div>
             </div>
@@ -594,6 +615,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     onClick={() => window.location.href = '/tiktokweb'}
                     firstCursorTag="View Project"
                     cursorTag="TikTok.com"
+                    isDisabled={isCardDisabled(["Product", "Tech"])}
                   />
                 </motion.div>
                 <div style={{ flex: 1, display: "flex", gap: "8px" }}>
@@ -611,6 +633,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                         onClick={() => window.location.href = '/tiktokweb'}
                         firstCursorTag="View Project"
                         cursorTag="TikTok.com"
+                        isDisabled={isCardDisabled(["Product", "Tech"])}
                       />
                     </motion.div>
                     <motion.div 
@@ -626,6 +649,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                         onClick={() => window.location.href = '/tiktokweb'}
                         firstCursorTag="View Project"
                         cursorTag="TikTok.com"
+                        isDisabled={isCardDisabled(["Product", "Tech"])}
                       />
                     </motion.div>
                   </div>
@@ -644,6 +668,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                       onClick={() => window.location.href = '/tiktokweb'}
                       firstCursorTag="View Project"
                       cursorTag="TikTok.com"
+                      isDisabled={isCardDisabled(["Product", "Tech"])}
                     />
                   </motion.div>
                 </div>
@@ -665,7 +690,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     title: "Vibe Coding Gallery",
                     subtitle: "",
                     cursorTag: "Vibing gallery",
-                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Tech"])
                   }}
                   topSmallCardProps={{
                     videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774914422/20260330-164535_1_nechjv.mp4",
@@ -673,7 +699,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     subtitle: "TikTok Pro Component",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
                     cursorTag: "Vibing gallery",
-                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Tech"])
                   }}
                   bottomSmallCardProps={{
                     imageUrl: "https://res.cloudinary.com/dkjokhb4w/image/upload/v1774919613/vibe_qkwojg.jpg",
@@ -681,13 +708,15 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     subtitle: "Gallary Card",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
                     cursorTag: "Vibing gallery",
-                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Tech"])
                   }}
                   bigCardProps={{
                     videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4",
                     title: "AI Search",
                     subtitle: "Markdwon / Modularized UI / Web Design",
                     firstCursorTag: "Coming soon",
+                    isDisabled: isCardDisabled(["Product"])
                   }}
                 />
               </div>
@@ -708,27 +737,31 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     subtitle: "SEO / Branding / Web Design",
                     firstCursorTag: "View website",
                     coverAspectRatio: "16 / 11",
-                    onClick: () => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                   tallCardProps={{
                     imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD.jpg",
                     title: "Nike Shoe Finder",
                     subtitle: "",
-                    firstCursorTag: "Coming soon"
+                    firstCursorTag: "Coming soon",
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                   topSmallCardProps={{
                     videoUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/nikesf.mp4",
                     title: "",
                     subtitle: "3D motion",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
-                    firstCursorTag: "Coming soon"
+                    firstCursorTag: "Coming soon",
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                   bottomSmallCardProps={{
                     imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD_cover.jpg",
                     title: "",
                     subtitle: "Gamification / Creative UX",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
-                    firstCursorTag: "Coming soon"
+                    firstCursorTag: "Coming soon",
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                 />
               </div>
@@ -747,7 +780,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     subtitle: "Creative UX / Web Design",
                     firstCursorTag: "View website",
                     coverAspectRatio: "16 / 11",
-                    onClick: () => window.open('https://nike.jp/running/shoeschart/', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('https://nike.jp/running/shoeschart/', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                   rightCardProps={{
                     imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/google.jpg",
@@ -755,7 +789,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     subtitle: "Creative UX / O2O / Web Design",
                     firstCursorTag: "View website",
                     coverAspectRatio: "16 / 11",
-                    onClick: () => window.open('https://ioconnectchina.googlecnapps.cn/2023/intl/en_cn/', '_blank', 'noopener,noreferrer')
+                    onClick: () => window.open('https://ioconnectchina.googlecnapps.cn/2023/intl/en_cn/', '_blank', 'noopener,noreferrer'),
+                    isDisabled: isCardDisabled(["Creative"])
                   }}
                 />
               </div>
