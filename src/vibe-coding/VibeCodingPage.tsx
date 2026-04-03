@@ -177,7 +177,7 @@ const AsciiScene = ({ videoUrl, isHeroMode, aspectRatio, onAspectRatio }: { vide
         // Video Setup
         const video = document.createElement('video');
         video.src = videoUrl;
-        video.crossOrigin = 'anonymous'; // AsciiScene STRICTLY NEEDS this to read pixels into Canvas
+        video.crossOrigin = 'anonymous';
         video.muted = true;
         video.loop = false; 
         video.playbackRate = 1.0;
@@ -343,7 +343,7 @@ const slides = [
     id: 0,
     title: 'Vibe Coding',
     subtitle: 'Visual Experiment',
-    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/jimeng_gidwco.mp4',
+    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770603644/jimeng_gidwco.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V0.9',
     type: 'ascii'
@@ -423,57 +423,76 @@ const VibeCodingPage = () => {
       setIsLoading(false);
       return;
     }
-    let loaded = 0;
-    const handleDone = () => {
-      loaded += 1;
-      const nextProgress = Math.round((loaded / total) * 100);
-      setLoadingProgress(nextProgress);
-      if (loaded >= total) {
-        setTimeout(() => setIsLoading(false), 120);
+
+    const videoElements = assets.map(url => {
+      const video = document.createElement('video');
+      video.preload = 'auto';
+      video.muted = true;
+      video.src = url;
+      return video;
+    });
+
+    const updateProgress = () => {
+      let totalBuffered = 0;
+      let totalDuration = 0;
+      let loadedCount = 0;
+
+      videoElements.forEach(video => {
+        if (video.duration) {
+          totalDuration += video.duration;
+          if (video.buffered.length > 0) {
+            totalBuffered += video.buffered.end(video.buffered.length - 1);
+          }
+        }
+        if (video.readyState >= 3) { // HAVE_FUTURE_DATA or higher
+          loadedCount++;
+        }
+      });
+
+      if (totalDuration > 0) {
+        const percentage = Math.min(Math.round((totalBuffered / totalDuration) * 100), 100);
+        // Also consider the number of videos fully ready to ensure we don't stall
+        const finalProgress = Math.max(percentage, Math.round((loadedCount / total) * 100));
+        setLoadingProgress(finalProgress);
       }
     };
-    assets.forEach((url) => {
-      const video = document.createElement('video');
-      // video.crossOrigin = 'anonymous'; // Removed: causing strict CORS failures on normal videos
-      video.preload = 'metadata';
-      video.muted = true;
-      video.playsInline = true; // Add this, iOS needs this
-      
-      let isDone = false;
 
-      const onLoaded = () => {
-        if (isDone) return;
-        isDone = true;
-        video.removeEventListener('loadedmetadata', onLoaded);
-        video.removeEventListener('error', onError);
-        handleDone();
-      };
+    const handleDone = () => {
+      let allReady = true;
+      for (const video of videoElements) {
+        if (video.readyState < 3 && !video.error) {
+          allReady = false;
+          break;
+        }
+      }
       
-      const onError = () => {
-        if (isDone) return;
-        isDone = true;
-        video.removeEventListener('loadedmetadata', onLoaded);
-        video.removeEventListener('error', onError);
-        console.warn('Video failed to load metadata:', url);
-        handleDone(); // Proceed even if it errors to not block the whole page
-      };
-      
-      // Sometimes loadedmetadata never fires if the browser caches it weirdly or refuses to load
-      // Add a fallback timeout to force the loading screen to finish
-      setTimeout(() => {
-          if (!isDone) {
-            isDone = true;
-            video.removeEventListener('loadedmetadata', onLoaded);
-            video.removeEventListener('error', onError);
-            handleDone();
-          }
-      }, 5000); // 5 seconds max wait per video
+      if (allReady) {
+        setLoadingProgress(100);
+        setTimeout(() => setIsLoading(false), 300);
+      }
+    };
 
-      video.addEventListener('loadedmetadata', onLoaded);
-      video.addEventListener('error', onError);
-      video.src = url;
+    videoElements.forEach((video) => {
+      video.addEventListener('progress', updateProgress);
+      video.addEventListener('canplaythrough', handleDone);
+      video.addEventListener('error', handleDone); // Don't block on error
       video.load();
     });
+
+    // Fallback timeout in case videos take too long or get stuck
+    const fallbackTimeout = setTimeout(() => {
+      setLoadingProgress(100);
+      setIsLoading(false);
+    }, 8000); // 8 seconds max wait time
+
+    return () => {
+      clearTimeout(fallbackTimeout);
+      videoElements.forEach(video => {
+        video.removeEventListener('progress', updateProgress);
+        video.removeEventListener('canplaythrough', handleDone);
+        video.removeEventListener('error', handleDone);
+      });
+    };
   }, []);
   const handleAspectRatio = useCallback((videoUrl: string, ratio: number) => {
     setAspectRatios((prev) => (prev[videoUrl] === ratio ? prev : { ...prev, [videoUrl]: ratio }));
@@ -1125,8 +1144,6 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAs
                 loop
                 muted
                 playsInline
-                // Removed crossOrigin="anonymous" to allow standard video loading to succeed.
-                // If a specific external URL strictly requires it, handle it on a case-by-case basis.
                 onLoadedMetadata={(event) => {
                     const video = event.currentTarget;
                     if (video.videoWidth && video.videoHeight && onAspectRatio) {
