@@ -211,7 +211,8 @@ export const nameBoxStyles = {
 		flex: "none",
 		height: "100%",
 		position: "relative",
-		width: "var(--framer-aspect-ratio-supported, 191px)",
+		// Use height directly or a simpler flex approach to make it square
+		// width: "var(--framer-aspect-ratio-supported, 191px)", // Removed this
 	},
 	imageWrapper: {
 		position: "relative",

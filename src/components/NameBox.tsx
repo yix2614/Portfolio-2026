@@ -4,12 +4,13 @@ import { nameBoxStyles, nameBoxClasses } from "./NameBox.styles";
 export default function NameBox() {
 	// Simplified image handling
 	const imageSources = [
-		"https://framerusercontent.com/images/nVfg0wCczUhY25El2mKQ089ml4.png?scale-down-to=512",
-		"https://framerusercontent.com/images/sOByZuE8rzv585dBkDeRRD3VrjU.png?scale-down-to=512",
-		"https://framerusercontent.com/images/nObtdjVkEGRQitxzJa2fAiiQWG4.png",
-		"https://framerusercontent.com/images/06WZmP1XWROpiKFsq42ccuj9Uc.jpeg?scale-down-to=512",
-		"https://framerusercontent.com/images/7kh9I7Oz2smXPOduG5kIrQez9Jo.jpg?scale-down-to=512",
-		"https://framerusercontent.com/images/pYGWMum5kjSZ8FaqC6x6Zq3c5OQ.jpg?scale-down-to=512",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-1.png",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-2.png",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-3.png",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-4.jpg",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-5.jpg",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-6.jpg",
+		"https://f004.backblazeb2.com/file/xiangyi-assets/512-7.jpg",
 	];
 
 	const [currentImageIndex, setCurrentImageIndex] = React.useState(0);

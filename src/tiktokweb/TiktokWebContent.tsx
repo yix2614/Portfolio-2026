@@ -687,7 +687,7 @@ const TiktokWebContent = () => {
         {/* Divider */}
         <SectionDivider id="section-bug-fixing" />
 
-         <SectionHeader  subtitle="The foundations" title="Our Moat: System Robustness &amp; & Component Excellence" />
+         <SectionHeader  subtitle="The foundations" title="Our Moat: System Robustness & Component Excellence" />
 
         <div style={{ width: "100%" }}>
           <img

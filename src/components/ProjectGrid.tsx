@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import Lenis from "@studio-freight/lenis";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { projectGridStyles } from "./ProjectGrid.styles";
 
@@ -14,6 +15,7 @@ const ProjectCard = React.memo(({
   firstCursorTag = "View Project",
   cursorTag,
   overlayText,
+  coverAspectRatio,
   onClick
 }: { 
   isBig?: boolean; 
@@ -27,6 +29,7 @@ const ProjectCard = React.memo(({
   firstCursorTag?: string;
   cursorTag?: string;
   overlayText?: string;
+  coverAspectRatio?: string;
   onClick?: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -62,14 +65,21 @@ const ProjectCard = React.memo(({
   }, [videoUrl]);
 
   useEffect(() => {
+    if (!videoUrl) return;
     const video = videoRef.current;
     if (!video) return;
+
+    video.muted = true;
+
     if (isInView) {
-      video.play().catch(() => {});
+      const result = video.play();
+      if (result && typeof (result as Promise<void>).catch === "function") {
+        (result as Promise<void>).catch(() => {});
+      }
     } else {
       video.pause();
     }
-  }, [isInView]);
+  }, [videoUrl, isInView]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     mouseX.set(e.clientX);
@@ -79,7 +89,7 @@ const ProjectCard = React.memo(({
 
   const cardStyle = isBig ? projectGridStyles.bigCard : (isTall ? projectGridStyles.tallCard : projectGridStyles.card);
   
-  const coverAspectRatio = (isBig || isTall) ? "auto" : "1.3 / 1";
+  const coverAspectRatioValue = coverAspectRatio ?? ((isBig || isTall) ? "auto" : "1.3 / 1");
   const coverFlex = (isBig || isTall) ? 1 : "none";
 
   return (
@@ -105,7 +115,7 @@ const ProjectCard = React.memo(({
         <div 
           style={{ 
             ...projectGridStyles.cardCover, 
-            aspectRatio: coverAspectRatio,
+            aspectRatio: coverAspectRatioValue,
             flex: 1,
             backgroundImage: (!videoUrl && imageUrl) ? `url(${imageUrl})` : "none",
             backgroundSize: "cover",
@@ -124,8 +134,6 @@ const ProjectCard = React.memo(({
               loop
               playsInline
               preload="metadata"
-              crossOrigin="anonymous"
-              // Removed inline onLoadedData play() call to prevent infinite loop/render issues
               style={{
                 width: "100%",
                 height: "100%",
@@ -133,7 +141,7 @@ const ProjectCard = React.memo(({
                 position: "absolute",
                 top: 0,
                 left: 0,
-              opacity: 1,
+                opacity: 1,
               }}
             />
           )}
@@ -226,22 +234,142 @@ const ProjectCard = React.memo(({
   );
 });
 
+const BentoRow = ({
+  tallCardProps,
+  topSmallCardProps,
+  bottomSmallCardProps,
+  bigCardProps,
+  delays = [0.1, 0.2, 0.3, 0.4],
+}: {
+  tallCardProps: React.ComponentProps<typeof ProjectCard>;
+  topSmallCardProps: React.ComponentProps<typeof ProjectCard>;
+  bottomSmallCardProps: React.ComponentProps<typeof ProjectCard>;
+  bigCardProps: React.ComponentProps<typeof ProjectCard>;
+  delays?: number[];
+}) => {
+  return (
+    <>
+      <div style={{ flex: 1, display: "flex", gap: "8px" }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[0] }} style={{ flex: 1, display: "flex" }}>
+          <ProjectCard isTall {...tallCardProps} />
+        </motion.div>
+        <div style={projectGridStyles.gridColumn}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[1] }}>
+            <ProjectCard {...topSmallCardProps} />
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[2] }}>
+            <ProjectCard {...bottomSmallCardProps} />
+          </motion.div>
+        </div>
+      </div>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[3] }} style={{ flex: 1, display: "flex" }}>
+        <ProjectCard isBig {...bigCardProps} />
+      </motion.div>
+    </>
+  );
+};
+
+const BigLeftBentoRightRow = ({
+  bigCardProps,
+  tallCardProps,
+  topSmallCardProps,
+  bottomSmallCardProps,
+  delays = [0.1, 0.2, 0.3, 0.4],
+}: {
+  bigCardProps: React.ComponentProps<typeof ProjectCard>;
+  tallCardProps: React.ComponentProps<typeof ProjectCard>;
+  topSmallCardProps: React.ComponentProps<typeof ProjectCard>;
+  bottomSmallCardProps: React.ComponentProps<typeof ProjectCard>;
+  delays?: number[];
+}) => {
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: delays[0] }}
+        style={{ flex: 1, display: "flex" }}
+      >
+        <ProjectCard isBig {...bigCardProps} />
+      </motion.div>
+      <div style={{ flex: 1, display: "flex", gap: "8px" }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[1] }} style={{ flex: 1, display: "flex" }}>
+          <ProjectCard isTall {...tallCardProps} />
+        </motion.div>
+        <div style={projectGridStyles.gridColumn}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[2] }}>
+            <ProjectCard {...topSmallCardProps} />
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: delays[3] }}>
+            <ProjectCard {...bottomSmallCardProps} />
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const TwoBigRow = ({
+  leftCardProps,
+  rightCardProps,
+  delays = [0.1, 0.2],
+}: {
+  leftCardProps: React.ComponentProps<typeof ProjectCard>;
+  rightCardProps: React.ComponentProps<typeof ProjectCard>;
+  delays?: number[];
+}) => {
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: delays[0] }}
+        style={{ flex: 1, display: "flex" }}
+      >
+        <ProjectCard isBig {...leftCardProps} />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: delays[1] }}
+        style={{ flex: 1, display: "flex" }}
+      >
+        <ProjectCard isBig {...rightCardProps} />
+      </motion.div>
+    </>
+  );
+};
+
 const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: React.CSSProperties }) => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [hoveredManualIndex, setHoveredManualIndex] = useState<number | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothX = useSpring(mouseX, { damping: 20, stiffness: 300 });
-  const smoothY = useSpring(mouseY, { damping: 20, stiffness: 300 });
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.8,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.2,
+      touchMultiplier: 2,
+    });
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    mouseX.set(e.clientX);
-    mouseY.set(e.clientY);
-  };
+    lenisRef.current = lenis;
 
+    const raf = (time: number) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
   useEffect(() => {
     const handleThemeChange = () => {
       setIsDark(document.documentElement.classList.contains('dark'));
@@ -274,7 +402,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
   }, []);
 
   const categories = useMemo(() => [
-    { id: "All", count: "3" },
+    { id: "All", count: "7" },
     { id: "Filter not ready", count: "0", inactive: true },
     { id: "Product", count: "4", hidden: true },
     { id: "Creative", count: "4", hidden: true },
@@ -383,6 +511,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   title="TikTok.com Product Iteration"
                   subtitle="Design Engineering / Full-Stack / Data Analysis"
                   onClick={() => window.location.href = '/tiktokweb'}
+                  firstCursorTag="View Project"
+                  cursorTag="TikTok.com"
                 />
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[2] || 0) + 0.1 }}>
@@ -397,10 +527,49 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[3] || 0) + 0.1 }}>
                 <ProjectCard 
+                  videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4"
+                  title="AI Search"
+                  subtitle="Markdwon / Modularized UI / Web Design"
+                  firstCursorTag="Coming soon"
+                />
+              </motion.div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}>
+                <ProjectCard 
+                  videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/nikesf.mp4"
+                  title="Nike Shoe Finder"
+                  subtitle="3D motion"
+                  subtitleStyle={{ textAlign: "right", lineHeight: "19.2px" }}
+                  firstCursorTag="Coming soon"
+                />
+              </motion.div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}>
+                <ProjectCard 
                   imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774926600/downloadcover_heynsl.jpg"
                   title="TT Download Page"
                   subtitle="SEO / Branding / Web Design"
+                  firstCursorTag="View website"
+                  coverAspectRatio="16 / 11"
                   onClick={() => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer')}
+                />
+              </motion.div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[8] || 0) + 0.1 }}>
+                <ProjectCard 
+                  videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/kv_pc.mp4"
+                  title="Nike Shoe Chart"
+                  subtitle="Creative UX / Web Design"
+                  firstCursorTag="View website"
+                  coverAspectRatio="16 / 11"
+                  onClick={() => window.open('https://nike.jp/running/shoeschart/', '_blank', 'noopener,noreferrer')}
+                />
+              </motion.div>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[9] || 0) + 0.1 }}>
+                <ProjectCard 
+                  imageUrl="https://f004.backblazeb2.com/file/xiangyi-assets/google.jpg"
+                  title="Google I/O 2022 - 2023"
+                  subtitle="Creative UX / O2O / Web Design"
+                  firstCursorTag="View website"
+                  coverAspectRatio="16 / 11"
+                  onClick={() => window.open('https://ioconnectchina.googlecnapps.cn/2023/intl/en_cn/', '_blank', 'noopener,noreferrer')}
                 />
               </motion.div>
             </div>
@@ -411,227 +580,190 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                 flexDirection: "row",
                 marginTop: "0px"
               }}>
-                <>
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}
-                style={{ flex: 1, display: "flex", cursor: "pointer" }}
-                onMouseEnter={() => setHoveredManualIndex(0)}
-                onMouseLeave={() => setHoveredManualIndex(null)}
-                onMouseMove={handleMouseMove}
-                onClick={() => window.location.href = '/tiktokweb'}
-              >
-                <div style={projectGridStyles.card}>
-                  <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <div 
-                      className="shimmer-border"
-                      style={{
-                        ...projectGridStyles.shimmerGlow,
-                        opacity: hoveredManualIndex === 0 ? 0.6 : 0,
-                      }}
-                    />
-                    <div style={{ ...projectGridStyles.cardCover, flex: 1, aspectRatio: "auto", backgroundImage: "url(https://res.cloudinary.com/dkjokhb4w/image/upload/v1774903555/ttcomcover_f9qmat.jpg)", backgroundSize: "cover", backgroundPosition: "center", position: "relative", zIndex: 1 }} />
-                    <div 
-                      className="shimmer-border"
-                      style={{
-                        ...projectGridStyles.shimmerWrapper,
-                        opacity: hoveredManualIndex === 0 ? 1 : 0,
-                        zIndex: 2,
-                      }}
-                    />
-                  </div>
-                  <div style={projectGridStyles.cardInfo}>
-                    <div style={projectGridStyles.cardTitle}>TikTok.com Product Iteration</div>
-                    <div style={projectGridStyles.cardMeta}>Design Engineering / Full-Stack / Data Analysis</div>
-                  </div>
-                </div>
-              </motion.div>
-              <div style={{ flex: 1, display: "flex", gap: "8px" }}>
-                <div style={projectGridStyles.gridColumn}>
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.45, delay: (randomDelays[5] || 0) + 0.1 }}
-                    style={{ ...projectGridStyles.card, cursor: "pointer" }}
-                    onMouseEnter={() => setHoveredManualIndex(1)}
-                    onMouseLeave={() => setHoveredManualIndex(null)}
-                    onMouseMove={handleMouseMove}
-                    onClick={() => window.location.href = '/tiktokweb'}
-                  >
-                    <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column" }}>
-                      <div 
-                        className="shimmer-border"
-                        style={{
-                          ...projectGridStyles.shimmerGlow,
-                          opacity: hoveredManualIndex === 1 ? 0.6 : 0,
-                        }}
-                      />
-                      <div style={{ ...projectGridStyles.cardCover, aspectRatio: "1.3 / 1", position: "relative", zIndex: 1 }}>
-                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774908949/Scene-9_1_a8odck.mp4" autoPlay muted loop playsInline preload="metadata" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      </div>
-                      <div 
-                        className="shimmer-border"
-                        style={{
-                          ...projectGridStyles.shimmerWrapper,
-                          opacity: hoveredManualIndex === 1 ? 1 : 0,
-                          zIndex: 2,
-                        }}
-                      />
-                    </div>
-                    <div style={projectGridStyles.cardInfo}>
-                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>Design System</div>
-                    </div>
-                  </motion.div>
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.45, delay: (randomDelays[6] || 0) + 0.1 }}
-                    style={{ ...projectGridStyles.card, cursor: "pointer" }}
-                    onMouseEnter={() => setHoveredManualIndex(2)}
-                    onMouseLeave={() => setHoveredManualIndex(null)}
-                    onMouseMove={handleMouseMove}
-                    onClick={() => window.location.href = '/tiktokweb'}
-                  >
-                    <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column" }}>
-                      <div 
-                        className="shimmer-border"
-                        style={{
-                          ...projectGridStyles.shimmerGlow,
-                          opacity: hoveredManualIndex === 2 ? 0.6 : 0,
-                        }}
-                      />
-                      <div style={{ ...projectGridStyles.cardCover, aspectRatio: "1.3 / 1", position: "relative", zIndex: 1 }}>
-                        <video src="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4" autoPlay muted loop playsInline preload="metadata" crossOrigin="anonymous" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      </div>
-                      <div 
-                        className="shimmer-border"
-                        style={{
-                          ...projectGridStyles.shimmerWrapper,
-                          opacity: hoveredManualIndex === 2 ? 1 : 0,
-                          zIndex: 2,
-                        }}
-                      />
-                    </div>
-                    <div style={projectGridStyles.cardInfo}>
-                      <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>AI Search</div>
-                    </div>
-                  </motion.div>
-                </div>
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}
-                  style={{ ...projectGridStyles.card, flex: 1, cursor: "pointer" }}
-                  onMouseEnter={() => setHoveredManualIndex(3)}
-                  onMouseLeave={() => setHoveredManualIndex(null)}
-                  onMouseMove={handleMouseMove}
-                  onClick={() => window.location.href = '/tiktokweb'}
+                  transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}
+                  style={{ flex: 1, display: "flex" }}
                 >
-                  <div style={{ position: "relative", width: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
-                    <div 
-                      className="shimmer-border"
-                      style={{
-                        ...projectGridStyles.shimmerGlow,
-                        opacity: hoveredManualIndex === 3 ? 0.6 : 0,
-                      }}
-                    />
-                    <div style={{ ...projectGridStyles.cardCover, flex: 1, aspectRatio: "auto", backgroundImage: "url(https://res.cloudinary.com/dkjokhb4w/image/upload/v1774906952/TTSeo_bscy0l.jpg)", backgroundSize: "cover", backgroundPosition: "center", position: "relative", zIndex: 1 }} />
-                    <div 
-                      className="shimmer-border"
-                      style={{
-                        ...projectGridStyles.shimmerWrapper,
-                        opacity: hoveredManualIndex === 3 ? 1 : 0,
-                        zIndex: 2,
-                      }}
-                    />
-                  </div>
-                  <div style={projectGridStyles.cardInfo}>
-                    <div style={{ ...projectGridStyles.cardMeta, textAlign: "left", lineHeight: "19.2px" }}>SEO Design</div>
-                  </div>
+                  <ProjectCard 
+                    isTall
+                    imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774903555/ttcomcover_f9qmat.jpg"
+                    title="TikTok.com Product Iteration"
+                    subtitle="Design Engineering / Full-Stack / Data Analysis"
+                    onClick={() => window.location.href = '/tiktokweb'}
+                    firstCursorTag="View Project"
+                    cursorTag="TikTok.com"
+                  />
                 </motion.div>
-              </div>
-                </>
+                <div style={{ flex: 1, display: "flex", gap: "8px" }}>
+                  <div style={projectGridStyles.gridColumn}>
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.45, delay: (randomDelays[5] || 0) + 0.1 }}
+                    >
+                      <ProjectCard 
+                        videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774908949/Scene-9_1_a8odck.mp4"
+                        title=""
+                        subtitle="Design System"
+                        subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
+                        onClick={() => window.location.href = '/tiktokweb'}
+                        firstCursorTag="View Project"
+                        cursorTag="TikTok.com"
+                      />
+                    </motion.div>
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.45, delay: (randomDelays[6] || 0) + 0.1 }}
+                    >
+                      <ProjectCard 
+                        videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/nav.mp4"
+                        title=""
+                        subtitle="Nav & Panel"
+                        subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
+                        onClick={() => window.location.href = '/tiktokweb'}
+                        firstCursorTag="View Project"
+                        cursorTag="TikTok.com"
+                      />
+                    </motion.div>
+                  </div>
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}
+                    style={{ flex: 1, display: "flex" }}
+                  >
+                    <ProjectCard 
+                      isTall
+                      imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774906952/TTSeo_bscy0l.jpg"
+                      title=""
+                      subtitle="SEO Design"
+                      subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
+                      onClick={() => window.location.href = '/tiktokweb'}
+                      firstCursorTag="View Project"
+                      cursorTag="TikTok.com"
+                    />
+                  </motion.div>
+                </div>
               </div>
               <div style={{
                 ...projectGridStyles.motionContainer,
                 flexDirection: "row"
               }}>
-                <>
-              <div style={{ flex: 1, display: "flex", gap: "8px" }}>
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[8] || 0) + 0.1 }} style={{ flex: 1, display: "flex" }}>
-                  <ProjectCard 
-                    isTall 
-                    videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774912323/Scene-10_noyfer.mp4"
-                    overlayText="Vibe Coding"
-                    title="Vibe Coding Gallery"
-                    subtitle=""
-                    cursorTag="Vibing gallery"
-                    onClick={() => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')}
-                  />
-                </motion.div>
-                <div style={projectGridStyles.gridColumn}>
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[9] || 0) + 0.1 }}>
-                    <ProjectCard 
-                  videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774914422/20260330-164535_1_nechjv.mp4"
-                  title=""
-                  subtitle="TikTok Pro Component"
-                  subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
-                  cursorTag="Vibing gallery"
-                  onClick={() => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')}
+                <BentoRow 
+                  delays={[
+                    (randomDelays[8] || 0) + 0.1,
+                    (randomDelays[9] || 0) + 0.1,
+                    (randomDelays[10] || 0) + 0.1,
+                    (randomDelays[11] || 0) + 0.1
+                  ]}
+                  tallCardProps={{
+                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774912323/Scene-10_noyfer.mp4",
+                    overlayText: "Vibe Coding",
+                    title: "Vibe Coding Gallery",
+                    subtitle: "",
+                    cursorTag: "Vibing gallery",
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                  }}
+                  topSmallCardProps={{
+                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774914422/20260330-164535_1_nechjv.mp4",
+                    title: "",
+                    subtitle: "TikTok Pro Component",
+                    subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
+                    cursorTag: "Vibing gallery",
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                  }}
+                  bottomSmallCardProps={{
+                    imageUrl: "https://res.cloudinary.com/dkjokhb4w/image/upload/v1774919613/vibe_qkwojg.jpg",
+                    title: "",
+                    subtitle: "Gallary Card",
+                    subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
+                    cursorTag: "Vibing gallery",
+                    onClick: () => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')
+                  }}
+                  bigCardProps={{
+                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4",
+                    title: "AI Search",
+                    subtitle: "Markdwon / Modularized UI / Web Design",
+                    firstCursorTag: "Coming soon",
+                  }}
                 />
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[10] || 0) + 0.1 }}>
-                    <ProjectCard 
-                      imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774919613/vibe_qkwojg.jpg"
-                      title=""
-                      subtitle="Gallary Card"
-                      subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
-                      cursorTag="Vibing gallery"
-                      onClick={() => window.open('/vibe-coding', '_blank', 'noopener,noreferrer')}
-                    />
-                  </motion.div>
-                </div>
               </div>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[11] || 0) + 0.1 }} style={{ flex: 1, display: "flex" }}>
-                <ProjectCard 
-                  isBig 
-                  imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774926600/downloadcover_heynsl.jpg"
-                  title="TT Download Page"
-                  subtitle="SEO / Branding / Web Design"
-                  onClick={() => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer')}
+              <div style={{
+                ...projectGridStyles.motionContainer,
+                flexDirection: "row"
+              }}>
+                <BigLeftBentoRightRow
+                  delays={[
+                    (randomDelays[15] || 0) + 0.1,
+                    (randomDelays[12] || 0) + 0.1,
+                    (randomDelays[13] || 0) + 0.1,
+                    (randomDelays[14] || 0) + 0.1
+                  ]}
+                  bigCardProps={{
+                    imageUrl: "https://res.cloudinary.com/dkjokhb4w/image/upload/v1774926600/downloadcover_heynsl.jpg",
+                    title: "TT Download Page",
+                    subtitle: "SEO / Branding / Web Design",
+                    firstCursorTag: "View website",
+                    coverAspectRatio: "16 / 11",
+                    onClick: () => window.open('https://tiktokdownload.framer.website', '_blank', 'noopener,noreferrer')
+                  }}
+                  tallCardProps={{
+                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD.jpg",
+                    title: "Nike Shoe Finder",
+                    subtitle: "",
+                    firstCursorTag: "Coming soon"
+                  }}
+                  topSmallCardProps={{
+                    videoUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/nikesf.mp4",
+                    title: "",
+                    subtitle: "3D motion",
+                    subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
+                    firstCursorTag: "Coming soon"
+                  }}
+                  bottomSmallCardProps={{
+                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD_cover.jpg",
+                    title: "",
+                    subtitle: "Gamification / Creative UX",
+                    subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
+                    firstCursorTag: "Coming soon"
+                  }}
                 />
-              </motion.div>
-                </>
-                {children}
               </div>
+              <div style={{
+                ...projectGridStyles.motionContainer,
+                flexDirection: "row"
+              }}>
+                <TwoBigRow
+                  delays={[
+                    (randomDelays[16] || 0) + 0.1,
+                    (randomDelays[17] || 0) + 0.1
+                  ]}
+                  leftCardProps={{
+                    videoUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/kv_pc.mp4",
+                    title: "Nike Shoe Chart",
+                    subtitle: "Creative UX / Web Design",
+                    firstCursorTag: "View website",
+                    coverAspectRatio: "16 / 11",
+                    onClick: () => window.open('https://nike.jp/running/shoeschart/', '_blank', 'noopener,noreferrer')
+                  }}
+                  rightCardProps={{
+                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/google.jpg",
+                    title: "Google I/O 2022 - 2023",
+                    subtitle: "Creative UX / O2O / Web Design",
+                    firstCursorTag: "View website",
+                    coverAspectRatio: "16 / 11",
+                    onClick: () => window.open('https://ioconnectchina.googlecnapps.cn/2023/intl/en_cn/', '_blank', 'noopener,noreferrer')
+                  }}
+                />
+              </div>
+              {children}
             </>
           )}
         </div>
       </div>
-      {hoveredManualIndex !== null && (
-        <motion.div
-          style={{
-            ...projectGridStyles.cursorTagContainer,
-            left: smoothX,
-            top: smoothY,
-            x: 10,
-            y: 10,
-          }}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-        >
-          <div style={projectGridStyles.cursorTag}>
-            {(hoveredManualIndex >= 0 && hoveredManualIndex <= 3) ? "View Project" : "View Project"}
-          </div>
-          {(hoveredManualIndex >= 0 && hoveredManualIndex <= 3) && (
-            <div style={projectGridStyles.cursorTag}>
-              TikTok.com
-            </div>
-          )}
-        </motion.div>
-      )}
     </section>
   );
 };

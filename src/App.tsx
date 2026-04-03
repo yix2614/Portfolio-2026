@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect, useMemo } from 'react';
+import Lenis from '@studio-freight/lenis';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BioProfile from './components/BioProfile'
 
@@ -34,6 +35,7 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const lenisRef = useRef<Lenis | null>(null);
   const getTabFromPath = (pathname: string) =>
     pathname === "/project" ? "project" : "dashboard";
   const [activeTab, setActiveTab] = useState<"dashboard" | "project">(() =>
@@ -44,6 +46,42 @@ export default function App() {
     const nextTab = getTabFromPath(location.pathname);
     setActiveTab(nextTab);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (activeTab !== "dashboard") {
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+      return;
+    }
+
+    const lenis = new Lenis({
+      duration: 0.8,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.2,
+      touchMultiplier: 2,
+    });
+
+    lenisRef.current = lenis;
+    let rafId = 0;
+
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, [activeTab]);
 
   useEffect(() => {
     // Generate a list of delays from 0 to 7 * 0.1s (e.g. 0s, 0.1s, 0.2s ... 0.7s)
