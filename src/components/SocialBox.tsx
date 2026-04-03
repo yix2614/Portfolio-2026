@@ -73,7 +73,7 @@ export const SocialBox: React.FC = () => {
         <div style={socialBoxStyles.resumeContent}>
           <p style={socialBoxStyles.resumeLabel}>Other:</p>
           <motion.a 
-            href="https://drive.google.com/file/d/114P0p66v7f0roG4f7IMfStK2O2-zp0qf/view?usp=sharing"
+            href="https://drive.google.com/file/d/1figSowQL-ll7ABG0jmgauBwzig-dQEJP/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             style={{ ...socialBoxStyles.resumeLink, textDecoration: "none" } as any}
