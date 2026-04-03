@@ -437,16 +437,38 @@ const VibeCodingPage = () => {
       video.crossOrigin = 'anonymous'; // Added for cross-origin videos
       video.preload = 'metadata';
       video.muted = true;
+      video.playsInline = true; // Add this, iOS needs this
+      
+      let isDone = false;
+
       const onLoaded = () => {
+        if (isDone) return;
+        isDone = true;
         video.removeEventListener('loadedmetadata', onLoaded);
         video.removeEventListener('error', onError);
         handleDone();
       };
+      
       const onError = () => {
+        if (isDone) return;
+        isDone = true;
         video.removeEventListener('loadedmetadata', onLoaded);
         video.removeEventListener('error', onError);
+        console.warn('Video failed to load metadata:', url);
         handleDone(); // Proceed even if it errors to not block the whole page
       };
+      
+      // Sometimes loadedmetadata never fires if the browser caches it weirdly or refuses to load
+      // Add a fallback timeout to force the loading screen to finish
+      setTimeout(() => {
+          if (!isDone) {
+            isDone = true;
+            video.removeEventListener('loadedmetadata', onLoaded);
+            video.removeEventListener('error', onError);
+            handleDone();
+          }
+      }, 5000); // 5 seconds max wait per video
+
       video.addEventListener('loadedmetadata', onLoaded);
       video.addEventListener('error', onError);
       video.src = url;
