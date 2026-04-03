@@ -461,14 +461,14 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               }}>
                 {visibleCategories.map((cat) => {
                   const isActive = activeCategory === cat.id;
-                  const tabBgColor = isActive
-                    ? (isDark ? "#FFFFFF" : "#000000")
-                    : (isDark ? "#5A5A5A" : "#F6F6F6");
-                  const tabTextColor = isActive
-                    ? (isDark ? "#000000" : "#FFFFFF")
-                    : (isDark ? "#F0F0F0" : "#8A8A8A");
-                  const tabCountBgColor = isActive ? tabTextColor : "#FFFFFF";
-                  const tabCountTextColor = isActive ? tabBgColor : "#9A9A9A";
+                const tabBgColor = isActive
+                  ? (isDark ? "#FFFFFF" : "#000000")
+                  : (isDark ? "#2A2A2A" : "#F6F6F6");
+                const tabTextColor = isActive
+                  ? (isDark ? "#000000" : "#FFFFFF")
+                  : (isDark ? "#C8C8C8" : "#8A8A8A");
+                const tabCountBgColor = isActive ? tabTextColor : (isDark ? "#000000" : "#FFFFFF");
+                const tabCountTextColor = isActive ? tabBgColor : (isDark ? "#C8C8C8" : "#9A9A9A");
                   return (
                     <motion.div
                       key={cat.id}
