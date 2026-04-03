@@ -343,7 +343,7 @@ const slides = [
     id: 0,
     title: 'Vibe Coding',
     subtitle: 'Visual Experiment',
-    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770603644/jimeng_gidwco.mp4',
+    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/jimeng_gidwco.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V0.9',
     type: 'ascii'
@@ -352,7 +352,7 @@ const slides = [
     id: 1,
     title: 'TikTok.com',
     subtitle: 'Long Video UI',
-    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770615726/long_1_vbip9e.mp4',
+    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/long_1_vbip9e.mp4',
     date: 'Feb 1, 2026',
     version: 'Concept V1.0',
     type: 'video'
@@ -361,7 +361,7 @@ const slides = [
     id: 2,
     title: 'TikTok.com',
     subtitle: 'On-boarding Experience',
-    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770620886/20260208-230441_rcqqd1.mp4',
+    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20260208-230441_rcqqd1.mp4',
     date: 'Jan 16, 2026',
     version: 'Concept V1.0',
     type: 'video'
@@ -380,7 +380,7 @@ const slides = [
     id: 3,
     title: 'UG hiring',
     subtitle: 'Hiring Journey',
-    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770682036/20251216-170912_qafqms.mp4',
+    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20251216-170912_qafqms.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V1.0',
     type: 'video'
@@ -434,6 +434,7 @@ const VibeCodingPage = () => {
     };
     assets.forEach((url) => {
       const video = document.createElement('video');
+      video.crossOrigin = 'anonymous'; // Added for cross-origin videos
       video.preload = 'metadata';
       video.muted = true;
       const onLoaded = () => {
@@ -444,7 +445,7 @@ const VibeCodingPage = () => {
       const onError = () => {
         video.removeEventListener('loadedmetadata', onLoaded);
         video.removeEventListener('error', onError);
-        handleDone();
+        handleDone(); // Proceed even if it errors to not block the whole page
       };
       video.addEventListener('loadedmetadata', onLoaded);
       video.addEventListener('error', onError);
@@ -1102,6 +1103,7 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAs
                 loop
                 muted
                 playsInline
+                crossOrigin="anonymous" // Important for external videos
                 onLoadedMetadata={(event) => {
                     const video = event.currentTarget;
                     if (video.videoWidth && video.videoHeight && onAspectRatio) {
