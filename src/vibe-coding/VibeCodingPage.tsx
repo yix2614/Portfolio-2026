@@ -177,7 +177,7 @@ const AsciiScene = ({ videoUrl, isHeroMode, aspectRatio, onAspectRatio }: { vide
         // Video Setup
         const video = document.createElement('video');
         video.src = videoUrl;
-        // video.crossOrigin = 'anonymous'; // Removed to prevent CORS errors on external resources
+        video.crossOrigin = 'anonymous'; // AsciiScene STRICTLY NEEDS this to read pixels into Canvas
         video.muted = true;
         video.loop = false; 
         video.playbackRate = 1.0;
