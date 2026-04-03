@@ -521,7 +521,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
             }}>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[1] || 0) + 0.1 }}>
                 <ProjectCard 
-                  imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774903555/ttcomcover_f9qmat.jpg"
+                  imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover_f9qmat.jpg"
                   title="TikTok.com Product Iteration"
                   subtitle="Design Engineering / Full-Stack / Data Analysis"
                   onClick={() => window.location.href = '/tiktokweb'}
@@ -532,7 +532,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[2] || 0) + 0.1 }}>
                 <ProjectCard 
-                  videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774912323/Scene-10_noyfer.mp4"
+                  videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-10_noyfer.mp4"
                   overlayText="Vibe Coding"
                   title="Vibe Coding Gallery" 
                   subtitle="" 
@@ -543,7 +543,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[3] || 0) + 0.1 }}>
                 <ProjectCard 
-                  videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4"
+                  videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4"
                   title="AI Search"
                   subtitle="Markdwon / Modularized UI / Web Design"
                   firstCursorTag="Coming soon"
@@ -562,7 +562,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[7] || 0) + 0.1 }}>
                 <ProjectCard 
-                  imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774926600/downloadcover_heynsl.jpg"
+                  imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/downloadcover_heynsl.jpg"
                   title="TT Download Page"
                   subtitle="SEO / Branding / Web Design"
                   firstCursorTag="View website"
@@ -609,7 +609,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                 >
                   <ProjectCard 
                     isTall
-                    imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774903555/ttcomcover_f9qmat.jpg"
+                    imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover_f9qmat.jpg"
                     title="TikTok.com Product Iteration"
                     subtitle="Design Engineering / Full-Stack / Data Analysis"
                     onClick={() => window.location.href = '/tiktokweb'}
@@ -626,7 +626,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                       transition={{ duration: 0.45, delay: (randomDelays[5] || 0) + 0.1 }}
                     >
                       <ProjectCard 
-                        videoUrl="https://res.cloudinary.com/dkjokhb4w/video/upload/v1774908949/Scene-9_1_a8odck.mp4"
+                        videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-9_1_a8odck.mp4"
                         title=""
                         subtitle="Design System"
                         subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
@@ -661,7 +661,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   >
                     <ProjectCard 
                       isTall
-                      imageUrl="https://res.cloudinary.com/dkjokhb4w/image/upload/v1774906952/TTSeo_bscy0l.jpg"
+                      imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/TTSeo_bscy0l.jpg"
                       title=""
                       subtitle="SEO Design"
                       subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
@@ -685,7 +685,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     (randomDelays[11] || 0) + 0.1
                   ]}
                   tallCardProps={{
-                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774912323/Scene-10_noyfer.mp4",
+                    videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-10_noyfer.mp4",
                     overlayText: "Vibe Coding",
                     title: "Vibe Coding Gallery",
                     subtitle: "",
@@ -694,7 +694,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Tech"])
                   }}
                   topSmallCardProps={{
-                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774914422/20260330-164535_1_nechjv.mp4",
+                    videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260330-164535_1_nechjv.mp4",
                     title: "",
                     subtitle: "TikTok Pro Component",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
@@ -703,7 +703,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Tech"])
                   }}
                   bottomSmallCardProps={{
-                    imageUrl: "https://res.cloudinary.com/dkjokhb4w/image/upload/v1774919613/vibe_qkwojg.jpg",
+                    imageUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/vibe_qkwojg.jpg",
                     title: "",
                     subtitle: "Gallary Card",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
@@ -712,7 +712,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Tech"])
                   }}
                   bigCardProps={{
-                    videoUrl: "https://res.cloudinary.com/dkjokhb4w/video/upload/v1774905085/Scene-8_1_ftmykn.mp4",
+                    videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4",
                     title: "AI Search",
                     subtitle: "Markdwon / Modularized UI / Web Design",
                     firstCursorTag: "Coming soon",
@@ -732,7 +732,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     (randomDelays[14] || 0) + 0.1
                   ]}
                   bigCardProps={{
-                    imageUrl: "https://res.cloudinary.com/dkjokhb4w/image/upload/v1774926600/downloadcover_heynsl.jpg",
+                    imageUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/downloadcover_heynsl.jpg",
                     title: "TT Download Page",
                     subtitle: "SEO / Branding / Web Design",
                     firstCursorTag: "View website",

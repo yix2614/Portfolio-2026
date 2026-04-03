@@ -343,7 +343,7 @@ const slides = [
     id: 0,
     title: 'Vibe Coding',
     subtitle: 'Visual Experiment',
-    videoUrl: 'https://res.cloudinary.com/dkjokhb4w/video/upload/v1770603644/jimeng_gidwco.mp4',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/jimeng_gidwco.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V0.9',
     type: 'ascii'
@@ -426,6 +426,7 @@ const VibeCodingPage = () => {
 
     const videoElements = assets.map(url => {
       const video = document.createElement('video');
+      video.crossOrigin = 'anonymous';
       video.preload = 'auto';
       video.muted = true;
       video.src = url;
@@ -1140,6 +1141,7 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAs
              <video
                 key={videoSrc}
                 src={videoSrc}
+                crossOrigin="anonymous"
                 autoPlay
                 loop
                 muted
