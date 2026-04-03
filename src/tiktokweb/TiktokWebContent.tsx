@@ -224,15 +224,12 @@ const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: ()
     }} onClick={onClose}>
       <div 
         style={{
-          backgroundColor: "var(--color-bg-page)",
+          backgroundColor: "transparent",
           padding: "32px",
-          borderRadius: "16px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           gap: "24px",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
-          border: "1px solid var(--color-border-default)"
         }}
         onClick={(e) => e.stopPropagation()}
       >
