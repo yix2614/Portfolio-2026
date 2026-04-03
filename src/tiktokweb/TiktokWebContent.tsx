@@ -725,7 +725,7 @@ const TiktokWebContent = () => {
         <SectionDivider dotHeight={6} />
 
         {/* The trick */}
-        <SectionHeader id="section-growth" subtitle="The trick" title="How TikTok.com drive growth" />
+        <SectionHeader id="section-growth" subtitle="The trick" title="How TikTok.com Drives Growth from a Design Perspective" />
 
         <style>{`
           .tiktokweb-table table {
