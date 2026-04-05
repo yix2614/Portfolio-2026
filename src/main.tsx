@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App'
 import VibeCodingPage from './vibe-coding/VibeCodingPage'
 import TiktokWebPage from './tiktokweb/TiktokWebPage'
+import TiktokSearchPage from './tiktokSearch/TiktokSearchPage'
 import { applyTheme, getInitialTheme } from './utils/theme'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -50,6 +51,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/project" element={<App />} />
         <Route path="/vibe-coding" element={<VibeCodingPage />} />
         <Route path="/tiktokweb" element={<TiktokWebPage />} />
+        <Route path="/tiktokSearch" element={<TiktokSearchPage />} />
       </Routes>
     </BrowserRouter>
     <Analytics />

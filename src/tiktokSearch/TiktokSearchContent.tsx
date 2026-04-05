@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Text, Badge, Grid } from "@geist-ui/core";
 import Lenis from '@studio-freight/lenis'
-import ImageComparison from "./ImageComparison";
+import ImageComparison from "../tiktokweb/ImageComparison";
 
 // --- Text Scramble Effect Component ---
 const ScrambleText = ({ text, duration = 800, delay = 0, style }: { text: string, duration?: number, delay?: number, style?: React.CSSProperties }) => {
@@ -309,7 +309,7 @@ const LockedData = ({ text, isUnlocked, onClick }: { text: string, isUnlocked: b
   );
 };
 
-const TiktokWebContent = () => {
+const TiktokSearchContent = () => {
   const tableData = [
     {
       category: "Scope & Content",
@@ -664,7 +664,7 @@ const TiktokWebContent = () => {
           margin: 0,
           color: "var(--color-text-primary)",
         }}>
-          <ScrambleText text="Driving TikTok.com growth through continuous product iteration and data-driven insights." duration={800} delay={500} />
+          <ScrambleText text="TikTok Search: Integrating Generative AI into the Web Discovery Ecosystem." duration={800} delay={500} />
         </h1>
         
         <Grid.Container gap={2} style={{ margin: 0 }}>
@@ -673,7 +673,7 @@ const TiktokWebContent = () => {
               Role
             </Text>
             <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              Sole Product designer{"\n"}Design Engineer
+            Product designer
             </Text>
           </Grid>
 
@@ -682,7 +682,7 @@ const TiktokWebContent = () => {
               Credits
             </Text>
             <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              Huiqiao Z. /Design manger{"\n"}Yiming M. Jason L. /PM
+              Simin Tan /PM{"\n"}Chenxiao W. /R&D
             </Text>
           </Grid>
 
@@ -691,23 +691,24 @@ const TiktokWebContent = () => {
               Time
             </Text>
             <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              2025 Q2 - Present
+              2025 Q4
             </Text>
           </Grid>
         </Grid.Container>
 
-        {/* Image Comparison Section */}
-        <div style={{ width: "100%" }}>
-          <ImageComparison 
-            beforeImage="https://f004.backblazeb2.com/file/xiangyi-assets/Before.jpg"
-            afterImage="https://f004.backblazeb2.com/file/xiangyi-assets/After.jpg"
-          />
+        
+          <div style={{ width: "100%", marginTop: "0px", marginBottom: "0px" }}>
+          <AutoVideo src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4" />
         </div>
 
         {/* Text Section After Image Comparison */}
-        <TwoCol id="section-context" subtitle="There and here" title="Blurring the boundaries">
+        <TwoCol id="section-context" subtitle="What I did" title="Bridging AI Intelligence with Video Discovery">
 <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              Before I joined, the lean team prioritized rapid shipping over scalability, leaving a legacy of fragmented design assets, a visible quality gap relative to TikTok’s global brand, and UX flaws that undermined conversion.{"\n\n"}Upon joining, I took full end-to-end ownership—bridging PM, Design, and Engineering—to formalize design standards and technical rules, successfully closing the quality gap and elevating the product to premium brand standards."
+              This project explores the <b>seamless integration of Generative AI</b> within TikTok’s web ecosystem. 
+  I spearheaded the development of a <b>dynamic layout system</b> tailored for large screens, 
+  addressing critical pain points such as <b>unpredictable output formats</b> and visual hierarchy displacement. 
+  From <b>modular typography</b> to <b>adaptive data tables</b>, I built a comprehensive <b>UI library</b> 
+  that enables an <b>elegant coexistence</b> between deep AI-driven answers and TikTok’s signature video feed.
             </Text>
 </TwoCol>
 
@@ -1430,4 +1431,4 @@ Current DM is a <strong>standalone page</strong> that interrupts the <strong>con
   );
 };
 
-export default TiktokWebContent;
+export default TiktokSearchContent;
