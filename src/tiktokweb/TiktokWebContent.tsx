@@ -537,6 +537,19 @@ const TiktokWebContent = () => {
           }
         }
 
+        /* Pure Black/White Toggle for Badges */
+        :root {
+          --badge-bg-active: #000000;
+          --badge-text-active: #FFFFFF;
+          --badge-border-active: #000000;
+        }
+        
+        [data-theme="dark"] {
+          --badge-bg-active: #FFFFFF;
+          --badge-text-active: #000000;
+          --badge-border-active: #FFFFFF;
+        }
+
         /* Mobile specific layout adjustments */
         @media (max-width: 480px) {
           .mobile-stack {
@@ -1152,9 +1165,9 @@ To put it simply, the adaptivity of the FYP (For You Page) relies on <strong>dyn
             >
               <Badge 
                 style={{ 
-                  backgroundColor: activeCoreVideo === "sidenav" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "sidenav" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "sidenav" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  backgroundColor: activeCoreVideo === "sidenav" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeCoreVideo === "sidenav" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeCoreVideo === "sidenav" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
                   borderRadius: "9999px"
@@ -1169,9 +1182,9 @@ To put it simply, the adaptivity of the FYP (For You Page) relies on <strong>dyn
             >
               <Badge 
                 style={{ 
-                  backgroundColor: activeCoreVideo === "suggest" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "suggest" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "suggest" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  backgroundColor: activeCoreVideo === "suggest" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeCoreVideo === "suggest" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeCoreVideo === "suggest" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
                   borderRadius: "9999px"

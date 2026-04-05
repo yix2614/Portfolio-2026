@@ -376,7 +376,7 @@ const TiktokSearchContent = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeSection, setActiveSection] = useState("");
   const [hoveredSection, setHoveredSection] = useState("");
-  const [activeCoreVideo, setActiveCoreVideo] = useState("sidenav");
+  const [activeCoreVideo, setActiveCoreVideo] = useState("challenge1");
   const [activeFeatureTab, setActiveFeatureTab] = useState("like");
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPinOverlay, setShowPinOverlay] = useState(false);
@@ -712,123 +712,109 @@ const TiktokSearchContent = () => {
             </Text>
 </TwoCol>
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "12px",
-          width: "100%"
-        }}>
-          <ImgCard src="https://f004.backblazeb2.com/file/xiangyi-assets/PM.jpg" alt="PM" badge="PM" badgeColor="#7C3AED" />
-          <ImgCard src="https://f004.backblazeb2.com/file/xiangyi-assets/Design.jpg" alt="Design" badge="Design" badgeColor="#2563EB" />
-          <ImgCard src="https://f004.backblazeb2.com/file/xiangyi-assets/Enginner.jpg" alt="Engineer" badge="Engineer" badgeColor="#000000" />
-        </div>
+       
 
         <SectionDivider dotHeight={4} />
 
         {/* The trick */}
-        <SectionHeader id="section-growth" subtitle="The trick" title="How TikTok.com Drives Growth from a Design Perspective" />
-
-        <style>{`
-          .tiktokweb-table table {
-            border-collapse: collapse;
-            width: 100%;
-            background-color: transparent;
-          }
-          .tiktokweb-table thead th {
-            font-weight: 600;
-            color: var(--color-text-primary);
-            text-align: left;
-          }
-          .tiktokweb-table th,
-          .tiktokweb-table td {
-            vertical-align: top;
-            padding: 12px;
-            border-bottom: 1px solid var(--color-border-default);
-            font-size: 14px;
-            color: var(--color-text-secondary);
-          }
-          .tiktokweb-table tbody td:first-child {
-            font-weight: 600;
-            color: var(--color-text-primary);
-          }
-          .tiktokweb-table tr:last-child td {
-            border-bottom: none;
-          }
-          @keyframes ticker-scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(calc(-50% - 6px));
-            }
-          }
-        `}</style>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-          <div style={{ position: "relative", width: "100%" }}>
-            <div style={{
-              position: "relative",
-              boxSizing: "border-box",
-              border: "1px solid var(--color-border-default)",
-              borderRadius: "12px",
-              padding: "20px",
-              backgroundColor: "var(--color-bg-page)",
-              overflow: "hidden"
-            }}>
-              <div style={{ overflowX: "auto", width: "100%", margin: "-20px", padding: "20px" }}>
-                <div style={{ minWidth: "1200px" }} className="tiktokweb-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Category</th>
-                        <th>Design Systems &amp; Foundational Experience</th>
-                        <th>Core Web Framework Iterations</th>
-                        <th>Web Innovative Features</th>
-                        <th>Performance &amp; Recommendations</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tableData.map((row, index) => (
-                        <tr key={index}>
-                          <td>{row.category}</td>
-                          <td>{Array.isArray(row.col1) ? renderList(row.col1) : row.col1}</td>
-                          <td>{Array.isArray(row.col2) ? renderList(row.col2) : row.col2}</td>
-                          <td>{Array.isArray(row.col3) ? renderList(row.col3) : row.col3}</td>
-                          <td>{Array.isArray(row.col4) ? renderList(row.col4) : row.col4}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  width: "100px",
-                  height: "100%",
-                  pointerEvents: "none",
-                  background: "linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--color-bg-page) 100%)",
+        <SectionHeader id="section01" subtitle="The Unique Friction" title="Evolving SERP Hierarchy: Adapting AI for the Large Screen" />
+      
+  
+   
+        {/* Core Iterations Video Toggle Section */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
+          {/* Badge Controllers */}
+          <div style={{ display: "flex", gap: "12px" }}>
+            <div 
+              onClick={() => setActiveCoreVideo("challenge1")}
+              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
+            >
+              <Badge 
+                style={{ 
+                  backgroundColor: activeCoreVideo === "challenge1" ? "#000000" : "transparent", 
+                  color: activeCoreVideo === "challenge1" ? "#FFFFFF" : "#000000",
+                  border: activeCoreVideo === "challenge1" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  padding: "6px 12px",
+                  fontSize: "14px",
+                  borderRadius: "9999px"
                 }}
-              />
+              >
+                Challenge#1
+              </Badge>
+            </div>
+            <div 
+              onClick={() => setActiveCoreVideo("challenge2")}
+              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
+            >
+              <Badge 
+                style={{ 
+                  backgroundColor: activeCoreVideo === "challenge2" ? "#000000" : "transparent", 
+                  color: activeCoreVideo === "challenge2" ? "#FFFFFF" : "#000000",
+                  border: activeCoreVideo === "challenge2" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  padding: "6px 12px",
+                  fontSize: "14px",
+                  borderRadius: "9999px"
+                }}
+              >
+                Challenge#2
+              </Badge>
+            </div>
+            <div 
+              onClick={() => setActiveCoreVideo("challenge3")}
+              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
+            >
+              <Badge 
+                style={{ 
+                  backgroundColor: activeCoreVideo === "challenge3" ? "#000000" : "transparent", 
+                  color: activeCoreVideo === "challenge3" ? "#FFFFFF" : "#000000",
+                  border: activeCoreVideo === "challenge3" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  padding: "6px 12px",
+                  fontSize: "14px",
+                  borderRadius: "9999px"
+                }}
+              >
+                Challenge#3
+              </Badge>
             </div>
           </div>
 
-          <div style={{ width: "100%" }}>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
-              *Core data: DAU + Life Time (LT) + Playtime
-            </Text>
+          {/* Image Container */}
+          <div style={{ width: "100%", position: "relative", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)", aspectRatio: "16 / 9" }}>
+            <img
+              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge1.jpg"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge1" ? "block" : "none" }}
+            />
+            <img
+              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge2" ? "block" : "none" }}
+            />
+            <img
+              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge3.jpg"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge3" ? "block" : "none" }}
+            />
           </div>
         </div>
 
-        {/* New Text Section (Copied Layout) */}
-        <TwoCol subtitle="The three tricks" title="Fundations & Innovations">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              Our strategy focuses on <strong>fortifying the design system</strong> for seamless scalability, <strong>optimizing the Web framework</strong> for high-certainty growth, and <strong>pioneering Web-native innovations</strong> to unlock unique, high-value user experiences.
-              <br /> <br />To demonstrate how this strategy translates into production-level implementation, I will walk through several key initiatives below.
-            </Text>
+        <TwoCol title="Boosting Distribution Efficiency">
+{activeCoreVideo === "challenge1" ? (
+              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
+                As a core pillar of our Web architecture, we are proposing a <strong>long-term design blueprint</strong> to streamline the current UI complexity of the <strong>Side Nav</strong>. This vision introduces <strong>distinct partitioning</strong> for <strong>Discovery (Consumption)</strong>, <strong>Functional</strong>, and <strong>Sub-menu zones</strong>, while implementing a new <strong>Right-side Functional Drawer</strong> that is <strong>synchronized with the Top Navigation</strong> to create a unified system synergy.
+              </Text>
+            ) : activeCoreVideo === "challenge2" ? (
+              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
+                By introducing <strong>Related Recommendations</strong>, we are creating more <strong>entry points</strong> to <strong>Personal Profiles</strong>, enabling users to discover and engage with a broader community.
+              </Text>
+            ) : (
+              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
+                Challenge 3 text placeholder.
+              </Text>
+            )}
 </TwoCol>
+        
+
+
+
+
 
         {/* Divider */}
         <SectionDivider id="section-bug-fixing" />
