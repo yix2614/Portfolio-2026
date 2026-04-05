@@ -377,6 +377,15 @@ const slides = [
     cursorTag: 'Coming soon'
   },
   {
+    id: 5,
+    title: 'Gesture control feed',
+    subtitle: 'interaction ideation',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Lark20260405-140611.mp4',
+    date: 'Apr 5, 2026',
+    version: 'Concept V1.0',
+    type: 'video'
+  },
+  {
     id: 3,
     title: 'UG hiring',
     subtitle: 'Hiring Journey',
