@@ -2,6 +2,7 @@ import React from "react";
 import { GeistProvider, Button, Text } from "@geist-ui/core";
 import { tiktokSearchPageStyles } from "./TiktokSearchPage.styles";
 import TiktokSearchContent from "./TiktokSearchContent";
+import Dock2 from "../tiktokweb/Dock2";
 
 const FloatingCard = ({ hidden }: { hidden: boolean }) => {
   const [mounted, setMounted] = React.useState(false);
@@ -188,6 +189,9 @@ const TiktokSearchPage = () => {
         <div style={tiktokSearchPageStyles.page} className="tiktoksearch-page">
           <ContentSection />
           <FloatingCard hidden={isCardHidden} />
+          <div style={tiktokSearchPageStyles.dockWrapper}>
+            <Dock2 />
+          </div>
         </div>
       )}
     </GeistProvider>

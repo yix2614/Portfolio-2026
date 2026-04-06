@@ -346,7 +346,9 @@ const slides = [
     videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/jimeng_gidwco.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V0.9',
-    type: 'ascii'
+    type: 'ascii',
+    cursorTag: '',
+    
   },
   {
     id: 1,
@@ -355,7 +357,9 @@ const slides = [
     videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/long_1_vbip9e.mp4',
     date: 'Feb 1, 2026',
     version: 'Concept V1.0',
-    type: 'video'
+    type: 'video',
+    cursorTag: 'View Project',
+    link: 'https://long-video-bkc1.vercel.app/'
   },
   {
     id: 2,
@@ -364,7 +368,9 @@ const slides = [
     videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20260208-230441_rcqqd1.mp4',
     date: 'Jan 16, 2026',
     version: 'Concept V1.0',
-    type: 'video'
+    type: 'video',
+    cursorTag: '',
+   
   },
   {
     id: 4,
@@ -374,7 +380,8 @@ const slides = [
     date: 'Apr 2, 2026',
     version: 'Concept V1.0',
     type: 'video',
-    cursorTag: 'Coming soon'
+    cursorTag: 'Coming soon',
+
   },
   {
     id: 5,
@@ -383,7 +390,9 @@ const slides = [
     videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Lark20260405-140611.mp4',
     date: 'Apr 5, 2026',
     version: 'Concept V1.0',
-    type: 'video'
+    type: 'video',
+    cursorTag: 'Coming soon',
+   
   },
   {
     id: 3,
@@ -392,7 +401,9 @@ const slides = [
     videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20251216-170912_qafqms.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V1.0',
-    type: 'video'
+    type: 'video',
+    cursorTag: '',
+   
   }
 ];
 
@@ -907,17 +918,12 @@ const VibeCodingPage = () => {
                 overflow: isHeroMode ? 'hidden' : 'visible', // Dynamic overflow: hidden for Hero crop, visible for Card shadow
                 position: 'absolute', // Absolute positioning is key
                 boxShadow: 'none', // Removed shadow
-                // When in card mode, we want to allow dragging on this element
-                cursor: !isHeroMode ? 'grab' : 'default',
+                // Removed grab cursor since drag is disabled
+                cursor: 'default',
                 backgroundColor: 'transparent',
                 transform: 'translate(-50%, -50%)'
             }}
-            // Drag Logic only active in Card Mode
-            drag={!isHeroMode ? "y" : false}
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.2}
-            dragSnapToOrigin
-            onDragEnd={handleDragEnd}
+            // Drag Logic Removed
         >
             <AnimatePresence mode="wait" initial={false} onExitComplete={handleSlideExitComplete}>
                 <motion.div
@@ -949,7 +955,7 @@ const VibeCodingPage = () => {
                         style={{ width: '100%', height: '100%' }}
                     >
                         {currentSlide.type === 'ascii' ? (
-                            <CardWrapper isHeroMode={isHeroMode}>
+                            <CardWrapper isHeroMode={isHeroMode} cursorTag={currentSlide.cursorTag} link={currentSlide.link}>
                                 <AsciiScene
                                     videoUrl={currentSlide.videoUrl}
                                     isHeroMode={isHeroMode}
@@ -962,6 +968,7 @@ const VibeCodingPage = () => {
                                 videoSrc={currentSlide.videoUrl}
                                 onAspectRatio={(ratio) => handleAspectRatio(currentSlide.videoUrl, ratio)}
                                 cursorTag={currentSlide.cursorTag}
+                                link={currentSlide.link}
                             />
                         )}
                     </motion.div>
@@ -1024,7 +1031,7 @@ const VibeCodingPage = () => {
 };
 
 // Shared Wrapper to provide 3D hover effects
-const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.ReactNode, isHeroMode: boolean, cursorTag?: string }) => {
+const CardWrapper = ({ children, isHeroMode, cursorTag, link }: { children: React.ReactNode, isHeroMode: boolean, cursorTag?: string, link?: string }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const [rotate, setRotate] = useState({ x: 0, y: 0 });
     const [isHovering, setIsHovering] = useState(false);
@@ -1069,7 +1076,7 @@ const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.Reac
 
     return (
         <>
-            {!isHeroMode && createPortal(
+            {!isHeroMode && cursorTag && createPortal(
                 <motion.div 
                     style={{
                         ...vibeCodingPageStyles.cursorCircle,
@@ -1082,10 +1089,11 @@ const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.Reac
                         top: 0,
                         opacity: isHovering ? 1 : 0,
                         scale: isHovering ? 1 : 0.5,
-                        pointerEvents: 'none'
+                        pointerEvents: 'none',
+                        transform: 'translate(-50%, -50%)' // Fix cursor tag offset
                     }}
                 >
-                    {cursorTag ?? 'OPEN'}
+                    {cursorTag}
                 </motion.div>,
                 document.body
             )}
@@ -1096,20 +1104,20 @@ const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.Reac
                     // Remove fixed width/height constraints from container style if they exist, 
                     // let parent control size.
                     width: '100%',
-                    height: isHeroMode ? '100%' : 'auto', // Fix: Force 100% height in Hero mode to prevent collapse
+                    height: '100%', // Fixed: Always force 100% height to prevent container collapse
                     perspective: '1000px',
                     pointerEvents: isHeroMode ? 'none' : 'auto', // Pass through clicks in Hero mode if needed, or block
-                    cursor: !isHeroMode ? 'none' : 'default', // Explicitly hide cursor in Card mode
+                    cursor: !isHeroMode && !cursorTag ? 'pointer' : (!isHeroMode ? 'none' : 'default'), // Fallback cursor if no tag
                 }}
                 onMouseEnter={() => !isHeroMode && setIsHovering(true)}
                 onMouseLeave={() => !isHeroMode && setIsHovering(false)}
-                onClick={() => !isHeroMode && window.open('https://long-video-bkc1.vercel.app/', '_blank')}
+                onClick={() => !isHeroMode && link && window.open(link, '_blank')}
             >
                 <div 
                     ref={cardRef}
                     style={{
                         width: '100%',
-                        height: isHeroMode ? '100%' : 'auto', // In Hero mode fill height, in Card mode adapt
+                        height: '100%', // Fixed: Keep 100% height to ensure aspect ratio calculations work properly
                         position: 'relative',
                         borderRadius: '12px',
                         // Apply rotation only in Card mode
@@ -1120,7 +1128,7 @@ const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.Reac
                         overflow: 'hidden', // Clip content (like ASCII) inside the rounded corners
                         transformStyle: 'preserve-3d', 
                         background: 'transparent',
-                        cursor: isHeroMode ? 'default' : 'none', // Ensure inner container also hides cursor
+                        cursor: isHeroMode ? 'default' : (!cursorTag ? 'inherit' : 'none'), // Ensure inner container cursor falls back correctly
                     }}
                 >
                     {children}
@@ -1146,10 +1154,10 @@ const CardWrapper = ({ children, isHeroMode, cursorTag }: { children: React.Reac
 };
 
 // 3D Card Component for Mouse Tracking
-const Card3D = ({ videoSrc, onAspectRatio, cursorTag }: { videoSrc: string, onAspectRatio?: (ratio: number) => void, cursorTag?: string }) => {
+const Card3D = ({ videoSrc, onAspectRatio, cursorTag, link }: { videoSrc: string, onAspectRatio?: (ratio: number) => void, cursorTag?: string, link?: string }) => {
     // Reuse the wrapper for consistent behavior
     return (
-        <CardWrapper isHeroMode={false} cursorTag={cursorTag}>
+        <CardWrapper isHeroMode={false} cursorTag={cursorTag} link={link}>
              <video
                 key={videoSrc}
                 src={videoSrc}

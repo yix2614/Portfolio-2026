@@ -67,8 +67,8 @@ export const vibeCodingPageStyles = {
     color: 'var(--color-text-primary)',
     fontFamily: 'Helvetica, sans-serif',
     fontWeight: '400',
-    fontSize: '12px',
-    textTransform: 'uppercase',
+    fontSize: '14px',
+    textTransform: 'none',
     whiteSpace: 'nowrap'
   } as CSSProperties,
 

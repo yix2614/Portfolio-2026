@@ -378,6 +378,7 @@ const TiktokSearchContent = () => {
   const [hoveredSection, setHoveredSection] = useState("");
   const [activeCoreVideo, setActiveCoreVideo] = useState("challenge1");
   const [activeFeatureTab, setActiveFeatureTab] = useState("like");
+  const [activeSolution, setActiveSolution] = useState("solution1");
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPinOverlay, setShowPinOverlay] = useState(false);
 
@@ -535,6 +536,19 @@ const TiktokSearchContent = () => {
           .animate-nav, .animate-minimap {
             display: none !important;
           }
+        }
+
+        /* Pure Black/White Toggle for Badges */
+        :root {
+          --badge-bg-active: #000000;
+          --badge-text-active: #FFFFFF;
+          --badge-border-active: #000000;
+        }
+        
+        [data-theme="dark"] {
+          --badge-bg-active: #FFFFFF;
+          --badge-text-active: #000000;
+          --badge-border-active: #FFFFFF;
         }
 
         /* Mobile specific layout adjustments */
@@ -731,9 +745,9 @@ const TiktokSearchContent = () => {
             >
               <Badge 
                 style={{ 
-                  backgroundColor: activeCoreVideo === "challenge1" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "challenge1" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "challenge1" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  backgroundColor: activeCoreVideo === "challenge1" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeCoreVideo === "challenge1" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeCoreVideo === "challenge1" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
                   borderRadius: "9999px"
@@ -748,9 +762,9 @@ const TiktokSearchContent = () => {
             >
               <Badge 
                 style={{ 
-                  backgroundColor: activeCoreVideo === "challenge2" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "challenge2" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "challenge2" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  backgroundColor: activeCoreVideo === "challenge2" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeCoreVideo === "challenge2" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeCoreVideo === "challenge2" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
                   borderRadius: "9999px"
@@ -765,9 +779,9 @@ const TiktokSearchContent = () => {
             >
               <Badge 
                 style={{ 
-                  backgroundColor: activeCoreVideo === "challenge3" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "challenge3" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "challenge3" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
+                  backgroundColor: activeCoreVideo === "challenge3" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeCoreVideo === "challenge3" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeCoreVideo === "challenge3" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
                   borderRadius: "9999px"
@@ -785,36 +799,102 @@ const TiktokSearchContent = () => {
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge1" ? "block" : "none" }}
             />
             <img
-              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
+              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge3.jpg"
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge2" ? "block" : "none" }}
             />
             <img
-              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge3.jpg"
+              src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge3" ? "block" : "none" }}
             />
           </div>
         </div>
 
-        <TwoCol title="Boosting Distribution Efficiency">
+        <TwoCol 
+          title={
+            activeCoreVideo === "challenge1" ? "The Space & Equity Tension" :
+            activeCoreVideo === "challenge2" ? "Fragmented Reading Flow" :
+            "Non-deterministic Content"
+          }
+        >
 {activeCoreVideo === "challenge1" ? (
-              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                As a core pillar of our Web architecture, we are proposing a <strong>long-term design blueprint</strong> to streamline the current UI complexity of the <strong>Side Nav</strong>. This vision introduces <strong>distinct partitioning</strong> for <strong>Discovery (Consumption)</strong>, <strong>Functional</strong>, and <strong>Sub-menu zones</strong>, while implementing a new <strong>Right-side Functional Drawer</strong> that is <strong>synchronized with the Top Navigation</strong> to create a unified system synergy.
-              </Text>
+              <>
+                <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
+                  The "infinite canvas" of the web is often a trap. While we have more <b>screen real estate</b>, an oversized AI module can easily become an <b>information silo</b>, pushing TikTok’s most vital asset—the <b>organic video feed</b>—below the fold. 
+                </Text> <br/>
+                <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
+                  <b>Core Tension:</b> How can we leverage the <b>horizontal width</b> to enhance AI content richness without sacrificing the <b>above-the-fold visibility</b> of our core discovery engine?
+                </Text>
+              </>
             ) : activeCoreVideo === "challenge2" ? (
               <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                By introducing <strong>Related Recommendations</strong>, we are creating more <strong>entry points</strong> to <strong>Personal Profiles</strong>, enabling users to discover and engage with a broader community.
+               Simply porting the mobile vertical stack—text followed by images and a "View More" button—fails on a larger web canvas. When <b>textual descriptions</b> and <b>visual assets</b> are physically separated by long distances, the <b>contextual association</b> is lost. Users are forced to memorize text while scrolling down to see images, significantly increasing <b>cognitive load</b> and breaking the reading flow.
               </Text>
             ) : (
               <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                Challenge 3 text placeholder.
+               <b>We cannot control AI outputs.</b> When a response lacks visual assets, the UI must gracefully handle <b>purely textual content</b>. On a large screen, sticking to the standard <b>search results grid</b> is a mistake—it forces text to span excessive line lengths or creates overwhelming <b>visual density</b>. Without a dedicated <b>typographic framework</b>, long-form AI answers become a "wall of text" that discourages reading and <b>breaks the search experience</b>.
               </Text>
             )}
 </TwoCol>
-        
+
+ 
 
 
+        {/* Solution Toggle Section */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", marginTop: "32px" }}>
+          {/* Badge Controllers */}
+          <div style={{ display: "flex", gap: "12px" }}>
+            <div 
+              onClick={() => setActiveSolution("solution1")}
+              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
+            >
+              <Badge 
+                style={{ 
+                  backgroundColor: activeSolution === "solution1" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeSolution === "solution1" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeSolution === "solution1" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+                  padding: "6px 12px",
+                  fontSize: "14px",
+                  borderRadius: "9999px"
+                }}
+              >
+                Solution#1
+              </Badge>
+            </div>
+            <div 
+              onClick={() => setActiveSolution("solution2")}
+              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
+            >
+              <Badge 
+                style={{ 
+                  backgroundColor: activeSolution === "solution2" ? "var(--badge-bg-active)" : "transparent", 
+                  color: activeSolution === "solution2" ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                  border: activeSolution === "solution2" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+                  padding: "6px 12px",
+                  fontSize: "14px",
+                  borderRadius: "9999px"
+                }}
+              >
+                Solution#2
+              </Badge>
+            </div>
+          </div>
 
-
+          {/* Media Container (Auto Height based on content) */}
+          <div style={{ width: "100%", position: "relative", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)" }}>
+            <div style={{ width: "100%", display: activeSolution === "solution1" ? "block" : "none" }}>
+              <AutoVideo 
+                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260405-175656.mp4" 
+                style={{ borderRadius: "0px", backgroundColor: "transparent" }}
+              />
+            </div>
+            <div style={{ width: "100%", display: activeSolution === "solution2" ? "block" : "none" }}>
+              <img
+                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
+                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Divider */}
         <SectionDivider id="section-bug-fixing" />
