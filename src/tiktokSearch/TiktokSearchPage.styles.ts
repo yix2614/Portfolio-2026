@@ -228,7 +228,7 @@ export const tiktokSearchPageStyles = {
     boxSizing: "border-box",
     position: "relative",
     zIndex: 2,
-    backgroundColor: "var(--color-bg-page)"
+    backgroundColor: "var(--color-bg-page)",
   } as CSSProperties,
   contentInner: {
     width: "840px",

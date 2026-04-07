@@ -52,7 +52,7 @@ export const SocialBox: React.FC = () => {
           <div style={socialBoxStyles.separator} />
           <div style={socialBoxStyles.rowContent}>
             <p style={socialBoxStyles.rowLabel}>Phone:</p>
-            <p style={socialBoxStyles.rowValue}>+86 13920189354</p>
+            <p style={socialBoxStyles.rowValue}>+1 6693018449</p>
           </div>
         </div>
         

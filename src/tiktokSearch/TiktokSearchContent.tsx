@@ -1,36 +1,47 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Text, Badge, Grid } from "@geist-ui/core";
-import Lenis from '@studio-freight/lenis'
+import Lenis from "@studio-freight/lenis";
 import ImageComparison from "../tiktokweb/ImageComparison";
 
 // --- Text Scramble Effect Component ---
-const ScrambleText = ({ text, duration = 800, delay = 0, style }: { text: string, duration?: number, delay?: number, style?: React.CSSProperties }) => {
+const ScrambleText = ({
+  text,
+  duration = 800,
+  delay = 0,
+  style,
+}: {
+  text: string;
+  duration?: number;
+  delay?: number;
+  style?: React.CSSProperties;
+}) => {
   const [displayText, setDisplayText] = useState("");
   // Reverted to a half-width character set to match English text widths perfectly
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
-  
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
     let frameId: number;
     let startTime: number;
-    
+
     // Start after the delay
     timeoutId = setTimeout(() => {
       const run = (timestamp: number) => {
         if (!startTime) startTime = timestamp;
         const progress = Math.min((timestamp - startTime) / duration, 1);
-        
+
         if (progress === 1) {
           setDisplayText(text);
           return;
         }
-        
+
         let scrambled = "";
         for (let i = 0; i < text.length; i++) {
           // If the character's relative position is less than our progress, show the real char
           if (i / text.length < progress) {
             scrambled += text[i];
-          } 
+          }
           // Keep spaces as spaces
           else if (text[i] === " ") {
             scrambled += " ";
@@ -40,125 +51,311 @@ const ScrambleText = ({ text, duration = 800, delay = 0, style }: { text: string
             scrambled += chars[Math.floor(Math.random() * chars.length)];
           }
         }
-        
+
         setDisplayText(scrambled);
         frameId = requestAnimationFrame(run);
       };
-      
+
       frameId = requestAnimationFrame(run);
     }, delay);
-    
+
     return () => {
       clearTimeout(timeoutId);
       cancelAnimationFrame(frameId);
     };
   }, [text, duration, delay]);
-  
+
   return (
     <span style={{ position: "relative", display: "inline-block", ...style }}>
       {/* Invisible placeholder to maintain exact height and width from the start */}
-      <span style={{ opacity: 0, pointerEvents: "none", userSelect: "none" }}>{text}</span>
+      <span style={{ opacity: 0, pointerEvents: "none", userSelect: "none" }}>
+        {text}
+      </span>
       {/* Absolute positioned animated text */}
-      <span style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%" }}>
+      <span
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      >
         {displayText}
       </span>
     </span>
   );
 };
 
-
 // --- Reusable Components ---
 
 const ImageTicker = ({ images }: { images: string[] }) => (
-  <div style={{
-    width: "100%",
-    overflow: "hidden",
-    position: "relative",
-    display: "flex",
-    maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-    WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-  }}>
-    <div style={{
+  <div
+    style={{
+      width: "100%",
+      overflow: "hidden",
+      position: "relative",
       display: "flex",
-      gap: "12px",
-      animation: "ticker-scroll 20s linear infinite",
-      width: "max-content"
-    }}>
+      maskImage:
+        "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+      WebkitMaskImage:
+        "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        gap: "12px",
+        animation: "ticker-scroll 20s linear infinite",
+        width: "max-content",
+      }}
+    >
       {[...images, ...images].map((src, i) => (
-        <img key={i} src={src} alt="Ticker item" style={{ width: "320px", height: "auto", display: "block", borderRadius: "12px", objectFit: "cover" }} />
+        <img
+          key={i}
+          src={src}
+          alt="Ticker item"
+          style={{
+            width: "320px",
+            height: "auto",
+            display: "block",
+            borderRadius: "12px",
+            objectFit: "cover",
+          }}
+        />
       ))}
     </div>
   </div>
 );
 
-const AutoVideo = ({ src, style }: { src: string, style?: React.CSSProperties }) => (
+const AutoVideo = ({
+  src,
+  style,
+}: {
+  src: string;
+  style?: React.CSSProperties;
+}) => (
   <video
     src={src}
     autoPlay
     loop
     muted
     playsInline
-    style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px", backgroundColor: "var(--color-bg-secondary)", ...style }}
+    style={{
+      width: "100%",
+      height: "auto",
+      display: "block",
+      borderRadius: "12px",
+      backgroundColor: "var(--color-bg-secondary)",
+      ...style,
+    }}
   />
 );
 
-const SectionDivider = ({ id, dotSize = 4, dotHeight, lineThickness = 0.5 }: { id?: string, dotSize?: number, dotHeight?: number, lineThickness?: number }) => (
-  <div id={id} style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%" }}>
-    <div style={{ flex: 1, height: `${lineThickness}px`, backgroundColor: "var(--color-border-default)" }} />
-    <div style={{ width: `${dotSize}px`, height: `${dotHeight || dotSize}px`, borderRadius: "9999px", backgroundColor: "var(--color-border-default)" }} />
-    <div style={{ flex: 1, height: `${lineThickness}px`, backgroundColor: "var(--color-border-default)" }} />
+const SectionDivider = ({
+  id,
+  dotSize = 4,
+  dotHeight,
+  lineThickness = 0.5,
+}: {
+  id?: string;
+  dotSize?: number;
+  dotHeight?: number;
+  lineThickness?: number;
+}) => (
+  <div
+    id={id}
+    style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%" }}
+  >
+    <div
+      style={{
+        flex: 1,
+        height: `${lineThickness}px`,
+        backgroundColor: "var(--color-border-default)",
+      }}
+    />
+    <div
+      style={{
+        width: `${dotSize}px`,
+        height: `${dotHeight || dotSize}px`,
+        borderRadius: "9999px",
+        backgroundColor: "var(--color-border-default)",
+      }}
+    />
+    <div
+      style={{
+        flex: 1,
+        height: `${lineThickness}px`,
+        backgroundColor: "var(--color-border-default)",
+      }}
+    />
   </div>
 );
 
-const SectionHeader = ({ id, subtitle, title }: { id?: string, subtitle: string, title: string }) => (
+const SectionHeader = ({
+  id,
+  subtitle,
+  title,
+  titleWeight,
+}: {
+  id?: string;
+  subtitle: string;
+  title: string;
+  titleWeight?: number;
+}) => (
   <div id={id} style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-    <Text span style={{ fontSize: "12px", textTransform: "none", color: "var(--color-text-muted)", lineHeight: 1.3 }}>
+    <Text
+      span
+      style={{
+        fontSize: "12px",
+        textTransform: "none",
+        color: "var(--color-text-muted)",
+        lineHeight: 1.3,
+      }}
+    >
       {subtitle}
     </Text>
-    <Text h2 style={{
-      fontFamily: '"Instrument Serif", serif',
-      fontSize: "28px",
-      lineHeight: 1.1,
-      margin: 0,
-      color: "var(--color-text-primary)"
-    }}>
+    <Text
+      h2
+      style={{
+        fontFamily: '"Instrument Serif", serif',
+        fontSize: "28px",
+        lineHeight: 1.1,
+        margin: 0,
+        color: "var(--color-text-primary)",
+        fontWeight: titleWeight,
+      }}
+    >
       {title}
     </Text>
   </div>
 );
 
-const TwoCol = ({ id, gap = "12px", title, subtitle, children }: { id?: string, gap?: string, title: React.ReactNode, subtitle?: React.ReactNode, children: React.ReactNode }) => (
-  <div id={id} className="mobile-stack" style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 2fr",
-    gap,
-    width: "100%",
-    alignItems: "start"
-  }}>
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
-      {subtitle && <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", lineHeight: 1.3 }}>{subtitle}</Text>}
-      <Text span style={{ fontFamily: '"Instrument Serif", serif', fontSize: "22px", color: "var(--color-text-primary)", lineHeight: 1.1 }}>
+const TwoCol = ({
+  id,
+  gap = "12px",
+  title,
+  subtitle,
+  children,
+}: {
+  id?: string;
+  gap?: string;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
+  children: React.ReactNode;
+}) => (
+  <div
+    id={id}
+    className="mobile-stack"
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr 2fr",
+      gap,
+      width: "100%",
+      alignItems: "start",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+        width: "100%",
+      }}
+    >
+      {subtitle && (
+        <Text
+          span
+          style={{
+            fontSize: "12px",
+            color: "var(--color-text-muted)",
+            lineHeight: 1.3,
+          }}
+        >
+          {subtitle}
+        </Text>
+      )}
+      <Text
+        span
+        style={{
+          fontFamily: '"Instrument Serif", serif',
+          fontSize: "22px",
+          color: "var(--color-text-primary)",
+          lineHeight: 1.1,
+        }}
+      >
         {title}
       </Text>
     </div>
-    <div style={{ flex: 1 }}>
-      {children}
-    </div>
+    <div style={{ flex: 1 }}>{children}</div>
   </div>
 );
 
-const PText = ({ children, style }: { children: React.ReactNode, style?: React.CSSProperties }) => (
-  <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", ...style }}>
+const PText = ({
+  children,
+  style,
+}: {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+}) => (
+  <Text
+    span
+    style={{
+      fontSize: "14px",
+      color: "var(--color-text-primary)",
+      lineHeight: 1.6,
+      whiteSpace: "pre-wrap",
+      ...style,
+    }}
+  >
     {children}
   </Text>
 );
 
-const ImgCard = ({ src, alt, badge, badgeColor }: { src: string, alt: string, badge?: string, badgeColor?: string }) => (
+const ImgCard = ({
+  src,
+  alt,
+  badge,
+  badgeColor,
+}: {
+  src: string;
+  alt: string;
+  badge?: string;
+  badgeColor?: string;
+}) => (
   <div style={{ position: "relative", width: "100%" }}>
-    <img src={src} alt={alt} style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }} />
+    <img
+      src={src}
+      alt={alt}
+      style={{
+        width: "100%",
+        height: "auto",
+        display: "block",
+        borderRadius: "12px",
+      }}
+    />
     {badge && (
-      <div style={{ position: "absolute", right: 12, bottom: 12, pointerEvents: "none" }}>
-        <Badge style={{ borderRadius: "9999px", backgroundColor: badgeColor, color: "#FFFFFF", border: "none", fontWeight: 500, padding: "0 8px", height: "24px", display: "flex", alignItems: "center" }}>
+      <div
+        style={{
+          position: "absolute",
+          right: 12,
+          bottom: 12,
+          pointerEvents: "none",
+        }}
+      >
+        <Badge
+          style={{
+            borderRadius: "9999px",
+            backgroundColor: badgeColor,
+            color: "#FFFFFF",
+            border: "none",
+            fontWeight: 500,
+            padding: "0 8px",
+            height: "24px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           {badge}
         </Badge>
       </div>
@@ -167,13 +364,19 @@ const ImgCard = ({ src, alt, badge, badgeColor }: { src: string, alt: string, ba
 );
 
 // --- Pin Overlay Component ---
-const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: () => void }) => {
+const PinOverlay = ({
+  onClose,
+  onSuccess,
+}: {
+  onClose: () => void;
+  onSuccess: () => void;
+}) => {
   const [pin, setPin] = useState(["", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
-    
+
     const newPin = [...pin];
     if (value.length > 1) {
       const pasted = value.slice(0, 4).split("");
@@ -192,7 +395,10 @@ const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: ()
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace" && pin[index] === "" && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -207,22 +413,25 @@ const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: ()
   }, [pin, onSuccess]);
 
   return (
-    <div style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "rgba(0, 0, 0, 0.4)",
-      backdropFilter: "blur(10px)",
-      WebkitBackdropFilter: "blur(10px)",
-      zIndex: 9999,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      animation: "fadeIn 0.3s ease"
-    }} onClick={onClose}>
-      <div 
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        animation: "fadeIn 0.3s ease",
+      }}
+      onClick={onClose}
+    >
+      <div
         style={{
           backgroundColor: "transparent",
           padding: "32px",
@@ -233,12 +442,24 @@ const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: ()
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <Text h3 style={{ margin: 0, color: "var(--color-text-primary)", fontFamily: '"Instrument Serif", serif', fontSize: "32px" }}>Unlock Data</Text>
+        <Text
+          h3
+          style={{
+            margin: 0,
+            color: "var(--color-text-primary)",
+            fontFamily: '"Instrument Serif", serif',
+            fontSize: "32px",
+          }}
+        >
+          Unlock Data
+        </Text>
         <div style={{ display: "flex", gap: "12px" }}>
           {pin.map((digit, index) => (
             <input
               key={index}
-              ref={el => { inputRefs.current[index] = el; }}
+              ref={(el) => {
+                inputRefs.current[index] = el;
+              }}
               type="password"
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
@@ -252,23 +473,37 @@ const PinOverlay = ({ onClose, onSuccess }: { onClose: () => void, onSuccess: ()
                 border: "1px solid var(--color-border-default)",
                 backgroundColor: "var(--color-bg-secondary)",
                 color: "var(--color-text-primary)",
-                outline: "none"
+                outline: "none",
               }}
               autoFocus={index === 0}
             />
           ))}
         </div>
+
       </div>
     </div>
   );
 };
 
 // --- Locked Data Component ---
-const LockedData = ({ text, isUnlocked, onClick }: { text: string, isUnlocked: boolean, onClick: () => void }) => {
+const LockedData = ({
+  text,
+  isUnlocked,
+  onClick,
+}: {
+  text: string;
+  isUnlocked: boolean;
+  onClick: () => void;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const scrambled = React.useMemo(() => {
     const chars = "!@#$%&*?";
-    return text.split('').map(c => /[0-9.]/.test(c) ? chars[Math.floor(Math.random() * chars.length)] : c).join('');
+    return text
+      .split("")
+      .map((c) =>
+        /[0-9.]/.test(c) ? chars[Math.floor(Math.random() * chars.length)] : c,
+      )
+      .join("");
   }, [text]);
 
   if (isUnlocked) {
@@ -276,32 +511,38 @@ const LockedData = ({ text, isUnlocked, onClick }: { text: string, isUnlocked: b
   }
 
   return (
-    <span 
-      style={{ position: "relative", cursor: "pointer", display: "inline-block" }}
+    <span
+      style={{
+        position: "relative",
+        cursor: "pointer",
+        display: "inline-block",
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
       <span style={{ fontFamily: "monospace" }}>{scrambled}</span>
       {isHovered && (
-        <div style={{
-          position: "absolute",
-          bottom: "100%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          marginBottom: "8px",
-          backgroundColor: "var(--color-bg-page)",
-          color: "var(--color-text-primary)",
-          padding: "6px 10px",
-          borderRadius: "6px",
-          fontSize: "12px",
-          whiteSpace: "nowrap",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-          border: "1px solid var(--color-border-default)",
-          zIndex: 10,
-          pointerEvents: "none",
-          fontWeight: 500
-        }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "100%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            marginBottom: "8px",
+            backgroundColor: "var(--color-bg-page)",
+            color: "var(--color-text-primary)",
+            padding: "6px 10px",
+            borderRadius: "6px",
+            fontSize: "12px",
+            whiteSpace: "nowrap",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            border: "1px solid var(--color-border-default)",
+            zIndex: 10,
+            pointerEvents: "none",
+            fontWeight: 500,
+          }}
+        >
           Click to unlock
         </div>
       )}
@@ -327,10 +568,7 @@ const TiktokSearchContent = () => {
         "Web exclusive UX (Player, Auth, etc.)",
         "Leverage Web-native capabilities",
       ],
-      col4: [
-        "Load performance",
-        "Recommendation UX",
-      ],
+      col4: ["Load performance", "Recommendation UX"],
     },
     {
       category: "Design Role",
@@ -349,20 +587,54 @@ const TiktokSearchContent = () => {
   ];
 
   const breakpointsData = [
-    { breakpoint: "≥ 1600px", padding: "32px", gap: "16px", column: "12", paddingTop: "20px" },
-    { breakpoint: "1599px - 1200px", padding: "32px", gap: "16px", column: "12", paddingTop: "20px" },
-    { breakpoint: "1199px - 1024px", padding: "20px", gap: "16px", column: "12", paddingTop: "20px" },
-    { breakpoint: "1023px - 840px", padding: "20px", gap: "16px", column: "12", paddingTop: "20px" },
-    { breakpoint: "839px - 600px", padding: "20px", gap: "16px", column: "12", paddingTop: "20px" },
-    { breakpoint: "< 600px (minimal size)", padding: "12px", gap: "12px", column: "12", paddingTop: "12px" },
+    {
+      breakpoint: "≥ 1600px",
+      padding: "32px",
+      gap: "16px",
+      column: "12",
+      paddingTop: "20px",
+    },
+    {
+      breakpoint: "1599px - 1200px",
+      padding: "32px",
+      gap: "16px",
+      column: "12",
+      paddingTop: "20px",
+    },
+    {
+      breakpoint: "1199px - 1024px",
+      padding: "20px",
+      gap: "16px",
+      column: "12",
+      paddingTop: "20px",
+    },
+    {
+      breakpoint: "1023px - 840px",
+      padding: "20px",
+      gap: "16px",
+      column: "12",
+      paddingTop: "20px",
+    },
+    {
+      breakpoint: "839px - 600px",
+      padding: "20px",
+      gap: "16px",
+      column: "12",
+      paddingTop: "20px",
+    },
+    {
+      breakpoint: "< 600px (minimal size)",
+      padding: "12px",
+      gap: "12px",
+      column: "12",
+      paddingTop: "12px",
+    },
   ];
 
   const renderList = (items: string[]) => (
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
       {items.map((item, index) => (
-        <div key={`${item}-${index}`}>
-          • {item}
-        </div>
+        <div key={`${item}-${index}`}>• {item}</div>
       ))}
     </div>
   );
@@ -370,7 +642,7 @@ const TiktokSearchContent = () => {
   const slideImages = [
     "https://f004.backblazeb2.com/file/xiangyi-assets/grid.png",
     "https://f004.backblazeb2.com/file/xiangyi-assets/content.jpeg",
-    "https://f004.backblazeb2.com/file/xiangyi-assets/Anatomy+of+a+grid.jpeg"
+    "https://f004.backblazeb2.com/file/xiangyi-assets/Anatomy+of+a+grid.jpeg",
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -379,6 +651,35 @@ const TiktokSearchContent = () => {
   const [activeCoreVideo, setActiveCoreVideo] = useState("challenge1");
   const [activeFeatureTab, setActiveFeatureTab] = useState("like");
   const [activeSolution, setActiveSolution] = useState("solution1");
+  const [placeholderFontSize, setPlaceholderFontSize] = useState<number>(16);
+  const [placeholderLineHeightPct, setPlaceholderLineHeightPct] = useState<number>(160);
+  const [placeholderMaxHeight, setPlaceholderMaxHeight] = useState<number | null>(null);
+  const measureRef = useRef<HTMLSpanElement | null>(null);
+  const fontSizeRef = useRef<HTMLInputElement | null>(null);
+  const lineHeightRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (measureRef.current) {
+        const h = measureRef.current.offsetHeight;
+        setPlaceholderMaxHeight(h);
+      }
+    }, 100);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const applyFill = (el: HTMLInputElement | null) => {
+      if (!el) return;
+      const min = Number(el.min);
+      const max = Number(el.max);
+      const val = Number(el.value);
+      const pct = ((val - min) / (max - min)) * 100;
+      el.style.setProperty("--sx", pct + "%");
+    };
+    applyFill(fontSizeRef.current);
+    applyFill(lineHeightRef.current);
+  }, [placeholderFontSize, placeholderLineHeightPct]);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showPinOverlay, setShowPinOverlay] = useState(false);
 
@@ -388,7 +689,7 @@ const TiktokSearchContent = () => {
     { id: "section-bug-fixing", title: "The Foundation" },
     { id: "section-core", title: "Core Iterations, Steady Growth." },
     { id: "section-innovations", title: "Unique and Key Innovations" },
-    { id: "section-design-engineering", title: "Design Engineering" }
+    { id: "section-design-engineering", title: "Design Engineering" },
   ];
 
   // Minimap / Ruler states
@@ -402,8 +703,8 @@ const TiktokSearchContent = () => {
     const lenis = new Lenis({
       duration: 0.8, // Reduced from 1.2 to make it faster
       easing: (t) => 1 - Math.pow(1 - t, 4), // Changed to a faster, more natural ease-out-quart curve
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      orientation: "vertical",
+      gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1.2, // Slightly increased to make scrolling feel lighter
       touchMultiplier: 2,
@@ -426,7 +727,7 @@ const TiktokSearchContent = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight * 0.4; // Trigger when section reaches top 40% of viewport
-      
+
       let currentActive = "";
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i].id);
@@ -439,8 +740,10 @@ const TiktokSearchContent = () => {
 
       // Calculate overall page scroll progress (0 to 1)
       const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress =
+        docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
       setScrollProgress(progress);
     };
 
@@ -462,9 +765,9 @@ const TiktokSearchContent = () => {
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link 
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" 
-        rel="stylesheet" 
+      <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet"
       />
 
       <style>{`
@@ -563,51 +866,60 @@ const TiktokSearchContent = () => {
 
       {/* Left Navigation */}
       <div className="animate-nav">
-          {sections.map((section, index) => {
-            const isActive = activeSection === section.id;
-            const isHovered = hoveredSection === section.id;
-            
-            const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.preventDefault();
-              const target = document.getElementById(section.id);
-              if (target && lenisRef.current) {
-                // Use Lenis scrollTo method for perfectly smooth scrolling with easing
-                lenisRef.current.scrollTo(target, {
-                  offset: -100, // Offset for top padding
-                  duration: 0.8 // Match the new faster global duration
-                });
-              } else if (target) {
-                // Fallback
-                const targetPosition = target.getBoundingClientRect().top + window.scrollY;
-                window.scrollTo({
-                  top: targetPosition - 100, // Offset for top padding
-                  behavior: "smooth"
-                });
-              }
-            };
+        {sections.map((section, index) => {
+          const isActive = activeSection === section.id;
+          const isHovered = hoveredSection === section.id;
 
-            return (
-              <div key={section.id} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <a
-                  href={`#${section.id}`}
-                  className={`nav-link ${isActive ? "active" : "inactive"}`}
-                  onClick={handleNavClick}
-                  onMouseEnter={() => setHoveredSection(section.id)}
-                  onMouseLeave={() => setHoveredSection("")}
-                  style={{
-                    color: isHovered && !isActive ? "var(--color-text-secondary)" : "var(--color-text-primary)",
-                    opacity: isActive ? 1 : isHovered ? 0.8 : 0.4,
-                  }}
-                >
-                  {section.title}
-                </a>
-              </div>
-            );
-          })}
-        </div>
+          const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            const target = document.getElementById(section.id);
+            if (target && lenisRef.current) {
+              // Use Lenis scrollTo method for perfectly smooth scrolling with easing
+              lenisRef.current.scrollTo(target, {
+                offset: -100, // Offset for top padding
+                duration: 0.8, // Match the new faster global duration
+              });
+            } else if (target) {
+              // Fallback
+              const targetPosition =
+                target.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo({
+                top: targetPosition - 100, // Offset for top padding
+                behavior: "smooth",
+              });
+            }
+          };
 
-        {/* Dynamic Minimap Ruler (Right side) */}
-      <div className="animate-minimap" style={{
+          return (
+            <div
+              key={section.id}
+              style={{ display: "flex", alignItems: "center", gap: "12px" }}
+            >
+              <a
+                href={`#${section.id}`}
+                className={`nav-link ${isActive ? "active" : "inactive"}`}
+                onClick={handleNavClick}
+                onMouseEnter={() => setHoveredSection(section.id)}
+                onMouseLeave={() => setHoveredSection("")}
+                style={{
+                  color:
+                    isHovered && !isActive
+                      ? "var(--color-text-secondary)"
+                      : "var(--color-text-primary)",
+                  opacity: isActive ? 1 : isHovered ? 0.8 : 0.4,
+                }}
+              >
+                {section.title}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Dynamic Minimap Ruler (Right side) */}
+      <div
+        className="animate-minimap"
+        style={{
           position: "fixed",
           top: "50%",
           transform: "translateY(-50%)",
@@ -617,42 +929,48 @@ const TiktokSearchContent = () => {
           alignItems: "flex-end", // Align to the right
           gap: "4px", // Highly dense gap
           zIndex: 50,
-        }}>
-          {[...Array(totalTicks)].map((_, i) => {
-            const isMajor = i % ticksPerMajor === 0;
-            const baseWidth = isMajor ? 20 : 10; // Slightly shorter base width for high density
-            // Use a very light grey with high transparency so it's subtle
-            const color = isMajor ? "var(--color-text-muted)" : "var(--color-border-default)";
-            
-            // Calculate distance from current scroll position
-            const tickProgress = i / (totalTicks - 1);
-            const distance = Math.abs(tickProgress - scrollProgress);
-            
-            // Parabolic curve: closer = wider (scaleX > 1).
-            const spread = 0.12; // Narrower spread for high density
-            const intensity = 0.8;
-            let scaleX = 1;
-            
-            if (distance < spread) {
-              const curve = Math.cos((distance / spread) * (Math.PI / 2));
-              scaleX = 1 + curve * intensity;
-            }
+        }}
+      >
+        {[...Array(totalTicks)].map((_, i) => {
+          const isMajor = i % ticksPerMajor === 0;
+          const baseWidth = isMajor ? 20 : 10; // Slightly shorter base width for high density
+          // Use a very light grey with high transparency so it's subtle
+          const color = isMajor
+            ? "var(--color-text-muted)"
+            : "var(--color-border-default)";
 
-            return (
-              <div key={i} style={{
+          // Calculate distance from current scroll position
+          const tickProgress = i / (totalTicks - 1);
+          const distance = Math.abs(tickProgress - scrollProgress);
+
+          // Parabolic curve: closer = wider (scaleX > 1).
+          const spread = 0.12; // Narrower spread for high density
+          const intensity = 0.8;
+          let scaleX = 1;
+
+          if (distance < spread) {
+            const curve = Math.cos((distance / spread) * (Math.PI / 2));
+            scaleX = 1 + curve * intensity;
+          }
+
+          return (
+            <div
+              key={i}
+              style={{
                 width: `${baseWidth}px`,
                 height: "2px",
                 backgroundColor: color,
                 transformOrigin: "100% 0", // Transform from the right edge
                 transform: `scaleX(${scaleX})`,
                 transition: "transform 0.1s linear",
-                borderRadius: "1px"
-              }} />
-            );
-          })}
-        </div>
-      
-      <div 
+                borderRadius: "1px",
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <div
         id="container"
         className="animate-content"
         style={{
@@ -664,127 +982,240 @@ const TiktokSearchContent = () => {
           fontFamily: "var(--font-tiktok)",
           display: "flex",
           flexDirection: "column",
-          gap: "60px"
+          gap: "60px",
         }}
       >
         {/* Context anchor */}
-        <div id="section-context" style={{ position: "relative", top: "-100px" }} />
-        
+        <div
+          id="section-context"
+          style={{ position: "relative", top: "-100px" }}
+        />
+
         {/* Add your content here */}
-        <h1 style={{ 
-          fontFamily: '"Instrument Serif", serif', 
-          fontSize: "36px", 
-          lineHeight: 1.2,
-          margin: 0,
-          color: "var(--color-text-primary)",
-        }}>
-          <ScrambleText text="TikTok Search: Integrating Generative AI into the Web Discovery Ecosystem." duration={800} delay={500} />
+        <h1
+          style={{
+            fontFamily: '"Instrument Serif", serif',
+            fontSize: "36px",
+            lineHeight: 1.2,
+            margin: 0,
+            color: "var(--color-text-primary)",
+            fontWeight: 400,
+          }}
+        >
+          <ScrambleText
+            text="TikTok Search: Integrating Generative AI into the Web Discovery Ecosystem."
+            duration={800}
+            delay={500}
+          />
         </h1>
-        
+
         <Grid.Container gap={2} style={{ margin: 0 }}>
           <Grid xs={12} direction="column" style={{ padding: 0 }}>
-            <Text span style={{ fontSize: "12px", textTransform: "uppercase", color: "#A0A0A0", lineHeight: 1.3 }}>
+            <Text
+              span
+              style={{
+                fontSize: "12px",
+                textTransform: "uppercase",
+                color: "#A0A0A0",
+                lineHeight: 1.3,
+              }}
+            >
               Role
             </Text>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-            Product designer
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.3,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              Product designer
             </Text>
           </Grid>
 
           <Grid xs={12} direction="column" style={{ padding: 0 }}>
-            <Text span style={{ fontSize: "12px", textTransform: "uppercase", color: "#A0A0A0", lineHeight: 1.3 }}>
+            <Text
+              span
+              style={{
+                fontSize: "12px",
+                textTransform: "uppercase",
+                color: "#A0A0A0",
+                lineHeight: 1.3,
+              }}
+            >
               Credits
             </Text>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              Simin Tan /PM{"\n"}Chenxiao W. /R&D
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.3,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              Simin T. /PM{"\n"}Chenxiao W. /R&D
             </Text>
           </Grid>
 
-          <Grid xs={24} direction="column" style={{ marginTop: "20px", padding: 0 }}>
-            <Text span style={{ fontSize: "12px", textTransform: "uppercase", color: "#A0A0A0", lineHeight: 1.3 }}>
+          <Grid
+            xs={24}
+            direction="column"
+            style={{ marginTop: "20px", padding: 0 }}
+          >
+            <Text
+              span
+              style={{
+                fontSize: "12px",
+                textTransform: "uppercase",
+                color: "#A0A0A0",
+                lineHeight: 1.3,
+              }}
+            >
               Time
             </Text>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.3,
+                whiteSpace: "pre-wrap",
+              }}
+            >
               2025 Q4
             </Text>
           </Grid>
         </Grid.Container>
 
-        
-          <div style={{ width: "100%", marginTop: "0px", marginBottom: "0px" }}>
+        <div style={{ width: "100%", marginTop: "0px", marginBottom: "0px" }}>
           <AutoVideo src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4" />
         </div>
 
         {/* Text Section After Image Comparison */}
-        <TwoCol id="section-context" subtitle="What I did" title="Bridging AI Intelligence with Video Discovery">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-              This project explores the <b>seamless integration of Generative AI</b> within TikTok’s web ecosystem. 
-  I spearheaded the development of a <b>dynamic layout system</b> tailored for large screens, 
-  addressing critical pain points such as <b>unpredictable output formats</b> and visual hierarchy displacement. 
-  From <b>modular typography</b> to <b>adaptive data tables</b>, I built a comprehensive <b>UI library</b> 
-  that enables an <b>elegant coexistence</b> between deep AI-driven answers and TikTok’s signature video feed.
-            </Text>
-</TwoCol>
-
-       
+        <TwoCol
+          id="section-context"
+          subtitle="What I did"
+          title="Bridging AI Intelligence with Video Discovery"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            This project explores the{" "}
+            <b>seamless integration of Generative AI</b> within TikTok’s web
+            ecosystem. I spearheaded the development of a{" "}
+            <b>dynamic layout system</b> tailored for large screens, addressing
+            critical pain points such as <b>unpredictable output formats</b> and
+            visual hierarchy displacement. From <b>modular typography</b> to{" "}
+            <b>adaptive data tables</b>, I built a comprehensive{" "}
+            <b>UI library</b>
+            that enables an <b>elegant coexistence</b> between deep AI-driven
+            answers and TikTok’s signature video feed.
+          </Text>
+        </TwoCol>
 
         <SectionDivider dotHeight={4} />
 
         {/* The trick */}
-        <SectionHeader id="section01" subtitle="The Unique Friction" title="Evolving SERP Hierarchy: Adapting AI for the Large Screen" />
-      
-  
-   
+        <SectionHeader
+          id="section01"
+          subtitle="The Unique Friction"
+          title="Evolving SERP Hierarchy: Adapting AI for the Large Screen"
+          titleWeight={400}
+        />
+
         {/* Core Iterations Video Toggle Section */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            width: "100%",
+          }}
+        >
           {/* Badge Controllers */}
           <div style={{ display: "flex", gap: "12px" }}>
-            <div 
+            <div
               onClick={() => setActiveCoreVideo("challenge1")}
               style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
             >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeCoreVideo === "challenge1" ? "var(--badge-bg-active)" : "transparent", 
-                  color: activeCoreVideo === "challenge1" ? "var(--badge-text-active)" : "var(--color-text-primary)",
-                  border: activeCoreVideo === "challenge1" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+              <Badge
+                style={{
+                  backgroundColor:
+                    activeCoreVideo === "challenge1"
+                      ? "var(--badge-bg-active)"
+                      : "transparent",
+                  color:
+                    activeCoreVideo === "challenge1"
+                      ? "var(--badge-text-active)"
+                      : "var(--color-text-primary)",
+                  border:
+                    activeCoreVideo === "challenge1"
+                      ? "1px solid var(--badge-border-active)"
+                      : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
-                  borderRadius: "9999px"
+                  borderRadius: "9999px",
                 }}
               >
                 Challenge#1
               </Badge>
             </div>
-            <div 
+            <div
               onClick={() => setActiveCoreVideo("challenge2")}
               style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
             >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeCoreVideo === "challenge2" ? "var(--badge-bg-active)" : "transparent", 
-                  color: activeCoreVideo === "challenge2" ? "var(--badge-text-active)" : "var(--color-text-primary)",
-                  border: activeCoreVideo === "challenge2" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+              <Badge
+                style={{
+                  backgroundColor:
+                    activeCoreVideo === "challenge2"
+                      ? "var(--badge-bg-active)"
+                      : "transparent",
+                  color:
+                    activeCoreVideo === "challenge2"
+                      ? "var(--badge-text-active)"
+                      : "var(--color-text-primary)",
+                  border:
+                    activeCoreVideo === "challenge2"
+                      ? "1px solid var(--badge-border-active)"
+                      : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
-                  borderRadius: "9999px"
+                  borderRadius: "9999px",
                 }}
               >
                 Challenge#2
               </Badge>
             </div>
-            <div 
+            <div
               onClick={() => setActiveCoreVideo("challenge3")}
               style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
             >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeCoreVideo === "challenge3" ? "var(--badge-bg-active)" : "transparent", 
-                  color: activeCoreVideo === "challenge3" ? "var(--badge-text-active)" : "var(--color-text-primary)",
-                  border: activeCoreVideo === "challenge3" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+              <Badge
+                style={{
+                  backgroundColor:
+                    activeCoreVideo === "challenge3"
+                      ? "var(--badge-bg-active)"
+                      : "transparent",
+                  color:
+                    activeCoreVideo === "challenge3"
+                      ? "var(--badge-text-active)"
+                      : "var(--color-text-primary)",
+                  border:
+                    activeCoreVideo === "challenge3"
+                      ? "1px solid var(--badge-border-active)"
+                      : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
-                  borderRadius: "9999px"
+                  borderRadius: "9999px",
                 }}
               >
                 Challenge#3
@@ -792,86 +1223,195 @@ const TiktokSearchContent = () => {
             </div>
           </div>
 
-          {/* Image Container */}
-          <div style={{ width: "100%", position: "relative", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)", aspectRatio: "16 / 9" }}>
+          {/* Image Container (Auto Height) */}
+          <div
+            style={{
+              width: "100%",
+              position: "relative",
+              borderRadius: "12px",
+              overflow: "hidden",
+              backgroundColor: "var(--color-bg-secondary)",
+            }}
+          >
             <img
               src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge1.jpg"
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge1" ? "block" : "none" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                display: activeCoreVideo === "challenge1" ? "block" : "none",
+              }}
             />
             <img
               src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge3.jpg"
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge2" ? "block" : "none" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                display: activeCoreVideo === "challenge2" ? "block" : "none",
+              }}
             />
             <img
               src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "challenge3" ? "block" : "none" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                display: activeCoreVideo === "challenge3" ? "block" : "none",
+              }}
             />
           </div>
         </div>
 
-        <TwoCol 
+        <TwoCol
           title={
-            activeCoreVideo === "challenge1" ? "The Space & Equity Tension" :
-            activeCoreVideo === "challenge2" ? "Fragmented Reading Flow" :
-            "Non-deterministic Content"
+            activeCoreVideo === "challenge1"
+              ? "The Space & Equity Tension"
+              : activeCoreVideo === "challenge2"
+                ? "Fragmented Reading Flow"
+                : "Non-deterministic Content"
           }
         >
-{activeCoreVideo === "challenge1" ? (
-              <>
-                <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                  The "infinite canvas" of the web is often a trap. While we have more <b>screen real estate</b>, an oversized AI module can easily become an <b>information silo</b>, pushing TikTok’s most vital asset—the <b>organic video feed</b>—below the fold. 
-                </Text> <br/>
-                <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                  <b>Core Tension:</b> How can we leverage the <b>horizontal width</b> to enhance AI content richness without sacrificing the <b>above-the-fold visibility</b> of our core discovery engine?
-                </Text>
-              </>
-            ) : activeCoreVideo === "challenge2" ? (
-              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-               Simply porting the mobile vertical stack—text followed by images and a "View More" button—fails on a larger web canvas. When <b>textual descriptions</b> and <b>visual assets</b> are physically separated by long distances, the <b>contextual association</b> is lost. Users are forced to memorize text while scrolling down to see images, significantly increasing <b>cognitive load</b> and breaking the reading flow.
+          {activeCoreVideo === "challenge1" ? (
+            <>
+              <Text
+                span
+                style={{
+                  fontSize: "14px",
+                  color: "var(--color-text-primary)",
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-wrap",
+                  display: "block",
+                  minHeight: "60px",
+                }}
+              >
+                The "infinite canvas" of the web is often a trap. While we have
+                more <b>screen real estate</b>, an oversized AI module can
+                easily become an <b>information silo</b>, pushing TikTok’s most
+                vital asset—the <b>organic video feed</b>—below the fold.
+              </Text>{" "}
+              <br />
+              <Text
+                span
+                style={{
+                  fontSize: "14px",
+                  color: "var(--color-text-primary)",
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-wrap",
+                  display: "block",
+                  minHeight: "60px",
+                }}
+              >
+                <b>Core Tension:</b> How can we leverage the{" "}
+                <b>horizontal width</b> to enhance AI content richness without
+                sacrificing the <b>above-the-fold visibility</b> of our core
+                discovery engine?
               </Text>
-            ) : (
-              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-               <b>We cannot control AI outputs.</b> When a response lacks visual assets, the UI must gracefully handle <b>purely textual content</b>. On a large screen, sticking to the standard <b>search results grid</b> is a mistake—it forces text to span excessive line lengths or creates overwhelming <b>visual density</b>. Without a dedicated <b>typographic framework</b>, long-form AI answers become a "wall of text" that discourages reading and <b>breaks the search experience</b>.
-              </Text>
-            )}
-</TwoCol>
-
- 
-
+            </>
+          ) : activeCoreVideo === "challenge2" ? (
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+                display: "block",
+                minHeight: "60px",
+              }}
+            >
+              Simply porting the mobile vertical stack—text followed by images
+              and a "View More" button—fails on a larger web canvas. When{" "}
+              <b>textual descriptions</b> and <b>visual assets</b> are
+              physically separated by long distances, the{" "}
+              <b>contextual association</b> is lost. Users are forced to
+              memorize text while scrolling down to see images, significantly
+              increasing <b>cognitive load</b> and breaking the reading flow.
+            </Text>
+          ) : (
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+                display: "block",
+                minHeight: "60px",
+              }}
+            >
+              <b>We cannot control AI outputs.</b> When a response lacks visual
+              assets, the UI must gracefully handle{" "}
+              <b>purely textual content</b>. On a large screen, sticking to the
+              standard <b>search results grid</b> is a mistake—it forces text to
+              span excessive line lengths or creates overwhelming{" "}
+              <b>visual density</b>. Without a dedicated{" "}
+              <b>typographic framework</b>, long-form AI answers become a "wall
+              of text" that discourages reading and{" "}
+              <b>breaks the search experience</b>.
+            </Text>
+          )}
+        </TwoCol>
 
         {/* Solution Toggle Section */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", marginTop: "32px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            width: "100%",
+            marginTop: "32px",
+          }}
+        >
           {/* Badge Controllers */}
           <div style={{ display: "flex", gap: "12px" }}>
-            <div 
+            <div
               onClick={() => setActiveSolution("solution1")}
               style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
             >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeSolution === "solution1" ? "var(--badge-bg-active)" : "transparent", 
-                  color: activeSolution === "solution1" ? "var(--badge-text-active)" : "var(--color-text-primary)",
-                  border: activeSolution === "solution1" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+              <Badge
+                style={{
+                  backgroundColor:
+                    activeSolution === "solution1"
+                      ? "var(--badge-bg-active)"
+                      : "transparent",
+                  color:
+                    activeSolution === "solution1"
+                      ? "var(--badge-text-active)"
+                      : "var(--color-text-primary)",
+                  border:
+                    activeSolution === "solution1"
+                      ? "1px solid var(--badge-border-active)"
+                      : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
-                  borderRadius: "9999px"
+                  borderRadius: "9999px",
                 }}
               >
                 Solution#1
               </Badge>
             </div>
-            <div 
+            <div
               onClick={() => setActiveSolution("solution2")}
               style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
             >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeSolution === "solution2" ? "var(--badge-bg-active)" : "transparent", 
-                  color: activeSolution === "solution2" ? "var(--badge-text-active)" : "var(--color-text-primary)",
-                  border: activeSolution === "solution2" ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
+              <Badge
+                style={{
+                  backgroundColor:
+                    activeSolution === "solution2"
+                      ? "var(--badge-bg-active)"
+                      : "transparent",
+                  color:
+                    activeSolution === "solution2"
+                      ? "var(--badge-text-active)"
+                      : "var(--color-text-primary)",
+                  border:
+                    activeSolution === "solution2"
+                      ? "1px solid var(--badge-border-active)"
+                      : "1px solid var(--color-border-default)",
                   padding: "6px 12px",
                   fontSize: "14px",
-                  borderRadius: "9999px"
+                  borderRadius: "9999px",
                 }}
               >
                 Solution#2
@@ -880,617 +1420,568 @@ const TiktokSearchContent = () => {
           </div>
 
           {/* Media Container (Auto Height based on content) */}
-          <div style={{ width: "100%", position: "relative", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)" }}>
-            <div style={{ width: "100%", display: activeSolution === "solution1" ? "block" : "none" }}>
-              <AutoVideo 
-                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260405-175656.mp4" 
+          <div
+            style={{
+              width: "100%",
+              position: "relative",
+              borderRadius: "12px",
+              overflow: "hidden",
+              backgroundColor: "var(--color-bg-secondary)",
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+                display: activeSolution === "solution1" ? "block" : "none",
+              }}
+            >
+              <AutoVideo
+                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260405-175656.mp4"
                 style={{ borderRadius: "0px", backgroundColor: "transparent" }}
               />
             </div>
-            <div style={{ width: "100%", display: activeSolution === "solution2" ? "block" : "none" }}>
-              <img
-                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/seachchallenge2.jpg"
-                style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
+            <div
+              style={{
+                width: "100%",
+                display: activeSolution === "solution2" ? "block" : "none",
+              }}
+            >
+                <AutoVideo
+                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttsearchso.mp4"
+                style={{ borderRadius: "0px", backgroundColor: "transparent" }}
               />
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <SectionDivider id="section-bug-fixing" />
+        <TwoCol
+          subtitle={
+            activeSolution === "solution1"
+              ? "Contextual Re-alignment"
+              : "Elastic Typographic Framework"
+          }
+          title={
+            activeSolution === "solution1"
+              ? "From Linear Stacking to Parallel Association"
+              : "Responsive Content Containment"
+          }
+        >
+          {activeSolution === "solution1" ? (
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+                display: "block",
+                minHeight: "60px",
+              }}
+            >
+              I replaced the mobile-first vertical layout with a <b>dual-column structure</b>. By repositioning images as <b>supplementary thumbnails</b> alongside the text, I eliminated the "scroll-to-visual" gap. This allows users to seamlessly cross-reference <b>textual insights</b> with visual proof at a glance, significantly reducing <b>cognitive switching costs</b> and preserving the reading flow.
+            </Text>
+          ) : (
+            <Text
+              span
+              style={{
+                fontSize: "14px",
+                color: "var(--color-text-primary)",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+                display: "block",
+                minHeight: "60px",
+              }}
+            >
+             To handle the <b>unpredictable nature of AI outputs</b>, I implemented a <b>dynamic max-width strategy</b> across multiple breakpoints. By setting specific <b>character-per-line (CPL)</b> constraints, I ensured that even in "text-only" scenarios, the layout remains <b>legible and structured</b> on large screens. This prevents the dreaded "wall of text" and maintains an <b>optimal reading rhythm</b> regardless of content density.
+            </Text>
+          )}
+        </TwoCol>
 
-         <SectionHeader  subtitle="The foundations" title="Our Moat: System Robustness & Component Excellence" />
+
 
         <div style={{ width: "100%" }}>
           <img
-            src="https://f004.backblazeb2.com/file/xiangyi-assets/web+bug.jpg"
+            src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/thumbnailttsearch.jpg"
             alt="Moat: Bug fixing & Components"
-            style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-          />
-        </div>
-
-        <TwoCol gap="20px" title="Bug Dashboard">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-             For a <strong>lean Web team</strong>, new features drive growth, often leaving foundational polish as a "nice-to-have" afterthought. We are bridging this gap by <strong>stealthily turning UX debt into a competitive moat</strong>. Through systematic <strong>design audits</strong> and <strong>bug dashboards</strong>, we make invisible friction visible and non-negotiable. 
-              </Text>
-</TwoCol>
-
-        <TwoCol gap="20px" title="Some key results">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", marginBottom: "8px" }}>
-              Since the launch of our Bug Dashboard, systematic design audits have directly driven growth across our core FYP and Preview metrics: PlayTime/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1325%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Finish/Play: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1853%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Play/I: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0198%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, Preview VV/U: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2441%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>.
-            </Text>
-</TwoCol>
-
-         <div style={{ width: "100%" }}>
-          <img
-            src="https://f004.backblazeb2.com/file/xiangyi-assets/%E3%80%90TikTok-Design-UG%E3%80%91-%E9%A1%B9%E6%80%BF+%E6%99%8B%E5%8D%87%E7%AD%94%E8%BE%A9%E6%9D%90%E6%96%99-Cover-1.jpg"
-            alt="Cover"
-            style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-          />
-        </div>
-
-        <TwoCol gap="20px" title="Web Guidelines">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-             Establish <strong>high-level design standards</strong> to align the entire team on core objectives and <strong>minimize communication overhead</strong>.
-          </Text>
-</TwoCol>
-
-        {/* Two Columns Images with Description */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "12px",
-              width: "100%"
-            }}>
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/max-width+do+not.jpg"
-                alt="Max width do not"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/max-width+do.jpg"
-                alt="Max width do"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-            </div>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-muted)", lineHeight: 1.6, padding: "0 12px" }}>
-              <strong>*Compact Content:</strong> Focus on responsive design with precise grids and max-width constraints to ensure rich detail on large screens while streamlining secondary content for an immersive video experience.
-            </Text>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "12px",
-              width: "100%"
-            }}>
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/%E3%80%90TikTok-Design-UG%E3%80%91-%E9%A1%B9%E6%80%BF+%E6%99%8B%E5%8D%87%E7%AD%94%E8%BE%A9%E6%9D%90%E6%96%99-ezgif-3-0727c27ddf.gif"
-                alt="Max width do not"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/%E3%80%90TikTok-Design-UG%E3%80%91-%E9%A1%B9%E6%80%BF+%E6%99%8B%E5%8D%87%E7%AD%94%E8%BE%A9%E6%9D%90%E6%96%99-ezgif-3-78dccfe6e9.gif"
-                alt="Max width do"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-            </div>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-muted)", lineHeight: 1.6, padding: "0 12px" }}>
-              <strong>Compact Interaction:</strong> Keep interactions within reach by prioritizing flat structures. Perform actions within the current page layer whenever possible, rather than redirecting to secondary pages or opening pop-up windows.
-            </Text>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-            <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "12px",
-          width: "100%"
-        }}>
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/%E3%80%90TikTok-Design-UG%E3%80%91-%E9%A1%B9%E6%80%BF+%E6%99%8B%E5%8D%87%E7%AD%94%E8%BE%A9%E6%9D%90%E6%96%99-image-3.png"
-                alt="Max width do not"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-              <img
-                src="https://f004.backblazeb2.com/file/xiangyi-assets/%E3%80%90TikTok-Design-UG%E3%80%91-%E9%A1%B9%E6%80%BF+%E6%99%8B%E5%8D%87%E7%AD%94%E8%BE%A9%E6%9D%90%E6%96%99-header+1.jpg"
-                alt="Max width do"
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-              />
-            </div>
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-muted)", lineHeight: 1.6, padding: "0 12px" }}>
-             <strong>Modular Page Construction: </strong> Prioritize adaptive logic for independent components, using fill for fluid containers and fixed width for structural stability. Combine these via a page-level grid to ensure a stable, responsive interface.
-            </Text>
-          </div>
-        </div>
-
-        {/* 6 Images Ticker */}
-        <ImageTicker images={[
-          "https://f004.backblazeb2.com/file/xiangyi-assets/Chips.jpg",
-          "https://f004.backblazeb2.com/file/xiangyi-assets/video+player.jpg",
-          "https://f004.backblazeb2.com/file/xiangyi-assets/Comment.jpg",
-          "https://f004.backblazeb2.com/file/xiangyi-assets/Side+nav.jpg",
-          "https://f004.backblazeb2.com/file/xiangyi-assets/In-app+push.jpg",
-          "https://f004.backblazeb2.com/file/xiangyi-assets/Toolbar.jpg"
-        ]} />
-
-         <TwoCol gap="20px" title="Component Libraries">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.3, whiteSpace: "pre-wrap" }}>
-             Tailored individual components based on specific business needs rather than a "one-size-fits-all" library, resulting in a more <strong>unified UI</strong>.
-          </Text>
-</TwoCol>
-
-        {/* Bottom Container for Video, Table, and Slide Show */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "28px", width: "100%", marginTop: "12px" }}>
-          {/* Video Section */}
-          <div style={{ width: "100%" }}>
-            <AutoVideo src="https://f004.backblazeb2.com/file/xiangyi-assets/Scene-1+(4).mp4" />
-          </div>
-
-          {/* Breakpoints Table Section */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-            <div style={{
-              position: "relative",
-              boxSizing: "border-box",
-              border: "1px solid var(--color-border-default)",
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
               borderRadius: "12px",
-              backgroundColor: "var(--color-bg-page)",
-              overflow: "hidden"
-            }}>
-              <div style={{ overflowX: "auto", width: "100%" }}>
-                <div style={{ minWidth: "600px", padding: "20px" }} className="tiktokweb-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Breakpoints</th>
-                        <th>Padding left/right</th>
-                        <th>Gap</th>
-                        <th>Column</th>
-                        <th>Padding Top</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {breakpointsData.map((row, index) => (
-                        <tr key={index}>
-                          <td>{row.breakpoint}</td>
-                          <td>{row.padding}</td>
-                          <td>{row.gap}</td>
-                          <td>{row.column}</td>
-                          <td>{row.paddingTop}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            }}
+          />
+        </div>
+
+        {/* Text Section After Image Comparison */}
+        <TwoCol
+          subtitle="The Thumbnail"
+          title="Intuitive Media Affordance"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            This thumbnail is more than just a preview. It features <b>real-time metadata labels</b> for quick content filtering and a <b>prominent play hint</b> to encourage <b>video exploration</b>. Optimized for <b>Large Screen navigation</b>, the component uses <b>horizontal alignment with edge-peeking</b> to signal "more," transforming a static image list into an <b>interactive discovery carousel</b>.
+          </Text>
+        </TwoCol>
+
+
+        <div style={{ width: "100%", marginTop: "0px", marginBottom: "0px" }}>
+          <AutoVideo src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttsearchexpand.mp4" />
+        </div>
+   
+
+        {/* Text Section After Image Comparison */}
+        <TwoCol
+          subtitle="Progressive Content Disclosure"
+          title="Preserving SERP Integrity"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+           To prevent long-form AI insights from overwhelming the <b>organic search results</b>, I implemented a <b>expandable container logic</b>. By using a <b>gradient text overlay</b> as a subtle <b>visual cue</b>, I signaled the existence of more content without sacrificing vertical space. This <b>on-demand expansion</b> ensures that the AI response remains compact, allowing the <b>core discovery feed</b> to stay within reach while giving users <b>granular control</b> over how much they want to read.
+          </Text>
+        </TwoCol>
+
+        <div style={{ width: "100%", marginTop: "0px", marginBottom: "0px" }}>
+          <AutoVideo src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttsearchscroll.mp4" />
+        </div>
+   
+
+        {/* Text Section After Image Comparison */}
+        <TwoCol
+          subtitle="Sticky Media Anchorin"
+          title="Leveraging Desktop Multi-Tasking"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+           Unlike mobile, the desktop canvas allows for <b>simultaneous content viewing</b>. I designed the thumbnail component to be <b>temporarily fixed (sticky)</b> during long-text exploration. This removes the friction of "lost visuals"—users can finish a deep-dive read and <b>immediately trigger a video</b> without losing their place. This <b>non-linear navigation</b> significantly boosts the <b>conversion from search to watch</b>.
+          </Text>
+        </TwoCol>
+
+
+        {/* Divider */}
+        <SectionDivider id="Generative_Typography" />
+
+        <SectionHeader
+          subtitle="Atomic Precision"
+          title="The Design System: Mastering Generative Typography & Layout"
+          titleWeight={400}
+        />
+
+        {/* Typography Playground: 控制字号与行高的占位文本组件 */}
+        <div
+          style={{
+            width: "100%",
+            display: "grid",
+            gridTemplateColumns: "1fr 2fr",
+            gap: "24px",
+            alignItems: "start",
+            position: "relative",
+            gridAutoFlow: "dense",
+          }}
+        >
+          {/* 隐藏的测量元素：用于计算 17px / 200% 时的最大高度 */}
+          <span
+            ref={measureRef}
+            style={{
+              position: "absolute",
+              opacity: 0,
+              pointerEvents: "none",
+              userSelect: "none",
+              width: "100%",
+              fontSize: "17px",
+              lineHeight: 2,
+              whiteSpace: "pre-wrap",
+              top: 0,
+            }}
+          >
+            This is a placeholder paragraph used to observe readability and rhythm under different font sizes and line-heights. Switching between 14, 15, 16, and 17 pixels helps evaluate body copy balance across desktop canvases, while 140%, 160%, 180%, and 200% line-height reveals changes in breathing space and text density. The goal is to validate typographic consistency in a real layout with sufficiently long content that mimics practical reading scenarios across various resolutions and user preferences.
+          </span>
+
+          {/* 固定到最大高度的卡片容器 */}
+          <div
+            style={{
+              width: "100%",
+              gridColumn: "2 / 3",
+              alignSelf: "start",
+              gridRow: "1",
+            }}
+          >
+            <Text
+              span
+              style={{
+                fontSize: `${placeholderFontSize}px`,
+                color: "var(--color-text-primary)",
+                lineHeight: placeholderLineHeightPct / 100,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              This is a placeholder paragraph used to observe readability and rhythm under different font sizes and line-heights. Switching between 14, 15, 16, and 17 pixels helps evaluate body copy balance across desktop canvases, while 140%, 160%, 180%, and 200% line-height reveals changes in breathing space and text density. The goal is to validate typographic consistency in a real layout with sufficiently long content that mimics practical reading scenarios across various resolutions and user preferences.
+            </Text>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "stretch", gridColumn: "1 / 2", alignSelf: "start", gridRow: "1" }}>
+            <style>{`
+              .range-typography {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 100%;
+                background: transparent;
+                --sx: 0%;
+                --slider-active: #000;
+                --tick-color: var(--color-text-muted);
+              }
+              .range-typography:focus { outline: none; }
+              /* WebKit */
+              .range-typography::-webkit-slider-runnable-track {
+                height: 4px;
+                border-radius: 999px;
+                background:
+                  linear-gradient(var(--slider-active) 0 0) 0/var(--sx) 100% no-repeat,
+                  repeating-linear-gradient(to right, var(--tick-color), var(--tick-color) 2px, transparent 2px, transparent 33.3333%),
+                  var(--color-border-default);
+              }
+              .range-typography::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 8px;
+                height: 16px;
+                border-radius: 4px;
+                background: var(--slider-active);
+                margin-top: -6px;
+              }
+              /* Firefox */
+              .range-typography::-moz-range-track {
+                height: 4px;
+                border-radius: 999px;
+                background:
+                  linear-gradient(var(--slider-active) 0 0) 0/var(--sx) 100% no-repeat,
+                  repeating-linear-gradient(to right, var(--tick-color), var(--tick-color) 2px, transparent 2px, transparent 33.3333%),
+                  var(--color-border-default);
+              }
+              .range-typography::-moz-range-thumb {
+                width: 8px;
+                height: 16px;
+                border-radius: 4px;
+                background: var(--slider-active);
+                border: none;
+              }
+              /* 主题联动：暗色纯白，亮色纯黑 */
+              @media (prefers-color-scheme: dark) {
+                .range-typography { --slider-active: #FFFFFF; }
+              }
+              @media (prefers-color-scheme: light) {
+                .range-typography { --slider-active: #000000; }
+              }
+              :root[data-theme="dark"] .range-typography,
+              body[data-theme="dark"] .range-typography,
+              .dark .range-typography {
+                --slider-active: #FFFFFF;
+              }
+              :root[data-theme="light"] .range-typography,
+              body[data-theme="light"] .range-typography,
+              .light .range-typography {
+                --slider-active: #000000;
+              }
+            `}</style>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textTransform: "none" }}>Font size</Text>
+                <Text span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{placeholderFontSize}px</Text>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px" }}>
+                <div style={{ flex: 1 }}>
+                  <input
+                    type="range"
+                    min={14}
+                    max={17}
+                    step={1}
+                    value={placeholderFontSize}
+                    onChange={(e) => setPlaceholderFontSize(parseInt(e.target.value))}
+                    className="range-typography"
+                    ref={fontSizeRef}
+                  />
                 </div>
               </div>
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  width: "100px",
-                  height: "100%",
-                  pointerEvents: "none",
-                  background: "linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--color-bg-page) 100%)",
-                }}
-              />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textTransform: "none" }}>Line height</Text>
+                <Text span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{placeholderLineHeightPct}%</Text>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px" }}>
+                <div style={{ flex: 1 }}>
+                  <input
+                    type="range"
+                    min={140}
+                    max={200}
+                    step={20}
+                    value={placeholderLineHeightPct}
+                    onChange={(e) => setPlaceholderLineHeightPct(parseInt(e.target.value))}
+                    className="range-typography"
+                    ref={lineHeightRef}
+                  />
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            border: "1px solid var(--color-border-default)",
+            borderRadius: "12px",
+            backgroundColor: "var(--color-bg-secondary)",
+            padding: "40px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
+          
 
-          {/* Slide Show Section */}
-          <div style={{ width: "100%" }}>
-            <div style={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: "3 / 2", // Fixed aspect ratio to prevent height jumping
-            }}>
-              {slideImages.map((src, index) => (
-                <div
-                  key={src}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    opacity: currentSlide === index ? 1 : 0,
-                    transition: "opacity 0.5s ease-in-out",
-                    pointerEvents: currentSlide === index ? "auto" : "none"
-                  }}
-                >
-                  <div style={{
-                    position: "relative",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    display: "inline-flex",
-                    borderRadius: "12px",
-                    overflow: "hidden"
-                  }}>
-                    <img
-                      src={src}
-                      alt={`Slide ${index + 1}`}
-                      style={{
-                        display: "block",
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain"
-                      }}
-                    />
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textAlign: "right" }}>H1</Text>
+              <Text h2 style={{ fontSize: "28px", fontWeight: 700, lineHeight: 1.2, margin: 0, color: "var(--color-text-primary)" }}>H2 Bold 32px</Text>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textAlign: "right" }}>H2</Text>
+              <Text h3 style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.2, margin: 0, color: "var(--color-text-primary)" }}>H3 Bold 24px</Text>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textAlign: "right" }}>Body Copy title/H3</Text>
+              <Text span style={{ fontSize: "16px", fontWeight: 700, lineHeight: 1.2, color: "var(--color-text-primary)" }}>Body Headline Bold 16px</Text>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "2px", textAlign: "right" }}>Body Copy highlight</Text>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                  <Text span style={{ fontSize: "16px", fontWeight: 600, color: "var(--color-text-primary)", backgroundColor: "rgba(0, 117, 220, 0.19)", padding: "2px 4px", borderRadius: "2px" }}>Body Headline Semibold</Text>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <svg width="12" height="26" viewBox="0 0 12 26" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+                      <path d="M6 1 L6 25" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 4 L6 1 L9 4" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 22 L6 25 L9 22" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                    </svg>
+                    <Text span style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>160%</Text>
                   </div>
                 </div>
-              ))}
+              </div>
+            </div>
 
-              {/* Slide Indicators */}
-              <div style={{
-                position: "absolute",
-                bottom: "16px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                display: "flex",
-                gap: "8px",
-                zIndex: 10
-              }}>
-                {slideImages.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      border: "none",
-                      padding: 0,
-                      cursor: "pointer",
-                      backgroundColor: currentSlide === index ? "var(--color-text-primary)" : "var(--color-border-default)",
-                      transition: "background-color 0.3s ease",
-                    }}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "2px", textAlign: "right" }}>Body Copy</Text>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                  <Text span style={{ fontSize: "16px", fontWeight: 400, color: "var(--color-text-primary)" }}>Body Headline regular </Text>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <svg width="12" height="26" viewBox="0 0 12 26" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+                      <path d="M6 1 L6 25" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 4 L6 1 L9 4" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 22 L6 25 L9 22" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                    </svg>
+                    <Text span style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>160%</Text>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "2px", textAlign: "right" }}>Copy quote</Text>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                  <Text span style={{ fontSize: "16px", fontWeight: 400, fontStyle: "italic", color: "var(--color-text-secondary)" }}>Body Headline regular</Text>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                    <svg width="12" height="26" viewBox="0 0 12 26" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+                      <path d="M6 1 L6 25" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 4 L6 1 L9 4" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                      <path d="M3 22 L6 25 L9 22" fill="none" stroke="var(--color-border-default)" strokeWidth="1" />
+                    </svg>
+                    <Text span style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>160%</Text>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", alignItems: "center", columnGap: "60px" }}>
+              <Text span style={{ fontSize: "12px", color: "var(--color-text-muted)", textAlign: "right" }}>Supportive description</Text>
+              <Text span style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>P2 regular (12px)</Text>
+            </div>
+          </div>
+        </div>
+
+
+ <TwoCol
+          subtitle="Evidence-Based Design"
+          title="The ChatGPT Benchmark"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+           To define the optimal <b>reading rhythm</b> for generative content, I conducted a deep-dive <b>competitive audit</b> of industry leaders like ChatGPT. By deconstructing their <b>spatial systems</b> and <b>typographic scales</b>, I analyzed how they balance <b>information density</b> with <b>legibility</b> on large screens. This research allowed me to reverse-engineer a <b>proven spacing logic</b>—optimizing <b>line-height, paragraph margins, and nested list padding</b>—to ensure TikTok's AI insights feel both native to the web and highly professional.
+          </Text>
+        </TwoCol>
+
+
+
+        <div
+          style={{
+            width: "100%",
+            border: "1px solid var(--color-border-default)",
+            borderRadius: "12px",
+            backgroundColor: "var(--color-bg-secondary)",
+            padding: "40px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "24px" }}>
+            <div style={{ width: "200px", color: "var(--color-text-muted)", fontSize: "14px", paddingTop: "4px", flexShrink: 0 }}>
+              Main Heading
+            </div>
+            <div style={{ flexGrow: 1, color: "var(--color-text-primary)", fontSize: "14px" }}>
+              <ul style={{ margin: 0, paddingLeft: "24px" }}>
+                <li style={{ marginBottom: "8px" }}>
+                  <span style={{ fontWeight: 600 }}>Body Headline SemiBold:</span> Body Headline regular
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "24px" }}>
+            <div style={{ width: "200px", color: "var(--color-text-muted)", fontSize: "14px", paddingTop: "4px", flexShrink: 0 }}>
+              Nested Section
+            </div>
+            <div style={{ flexGrow: 1, color: "var(--color-text-primary)", fontSize: "14px" }}>
+              <ul style={{ margin: 0, paddingLeft: "24px" }}>
+                <li style={{ marginBottom: "8px" }}>
+                  <span style={{ fontWeight: 600 }}>Body Headline SemiBold:</span> Body Headline regular
+                  <ul style={{ marginTop: "8px", paddingLeft: "24px", listStyleType: "circle" }}>
+                    <li style={{ marginBottom: "8px" }}>Body Headline regular</li>
+                    <li style={{ marginBottom: "8px" }}>Body Headline regular</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "24px" }}>
+            <div style={{ width: "200px", color: "var(--color-text-muted)", fontSize: "14px", paddingTop: "4px", flexShrink: 0 }}>
+              Nested Numbering
+            </div>
+            <div style={{ flexGrow: 1, color: "var(--color-text-primary)", fontSize: "14px" }}>
+              <ul style={{ margin: 0, paddingLeft: "24px" }}>
+                <li style={{ marginBottom: "8px" }}>
+                  <span style={{ fontWeight: 600 }}>Body Headline SemiBold:</span> Body Headline regular
+                  <ol style={{ marginTop: "10px", paddingLeft: "24px", listStylePosition: "outside" }}>
+                    <li style={{ marginBottom: "8px", paddingLeft: "8px" }}>Body Headline regular</li>
+                    <li style={{ marginBottom: "8px", paddingLeft: "8px" }}>Body Headline regular</li>
+                  </ol>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "24px" }}>
+            <div style={{ width: "200px", color: "var(--color-text-muted)", fontSize: "14px", paddingTop: "4px", flexShrink: 0 }}>
+              Numbered Heading
+            </div>
+            <div style={{ flexGrow: 1, color: "var(--color-text-primary)", fontSize: "14px" }}>
+              <ol style={{ margin: 0, paddingLeft: "24px", listStylePosition: "outside" }}>
+                <li style={{ marginBottom: "8px", paddingLeft: "8px" }}>Body Headline regular</li>
+                <li style={{ marginBottom: "8px", paddingLeft: "8px" }}>Body Headline regular</li>
+              </ol>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "24px" }}>
+            <div style={{ width: "200px", color: "var(--color-text-muted)", fontSize: "14px", paddingTop: "4px", flexShrink: 0 }}>
+              Quotation Section
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <div style={{ borderLeft: "2px solid var(--color-border-default)", paddingLeft: "20px", color: "var(--color-text-secondary)", fontStyle: "italic", fontSize: "18px" }}>
+                "Quoted Headline regular"
               </div>
             </div>
           </div>
-
-          
         </div>
 
-        <TwoCol gap="20px" title="Breakpoint & Grids">
-<PText>
-As a core pillar of Web architecture, our grid system is informed by <strong>TikTok.com’s screen resolution distribution</strong>. By analyzing user traffic across different dimensions, we’ve identified the most <strong>critical breakpoints</strong> to ensure an <strong>optimized experience</strong> for our primary audience.
-</PText>
-</TwoCol>
-
-        {/* Grid Comparison Section */}
-          <div style={{ width: "100%" }}>
-            <ImageComparison
-              beforeImage="https://f004.backblazeb2.com/file/xiangyi-assets/Beforegrid.jpg"
-              afterImage="https://f004.backblazeb2.com/file/xiangyi-assets/Aftergrid.jpg"
-            />
-          </div>
-
-         <TwoCol gap="20px" title="Some key results">
-<Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", marginBottom: "8px" }}>
-              Within the <strong>Explore and Profile pages</strong>, VV per User increased by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2069%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>, while Play Time per User grew by <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0038%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>.
-            </Text>
-            
-            <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block" }}>
-              <strong>Search Results Performance</strong> Last 1-day Active Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1479%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
-              Last 1-day Active Days (Non-logged in): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2605%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
-              PlayDays/Days: <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0187%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
-              Play Rate (New Users v1): <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.0679%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>
-            </Text>
-</TwoCol>
-
-        {/* Additional Image */}
-          <div style={{ width: "100%" }}>
-            <img
-              src="https://f004.backblazeb2.com/file/xiangyi-assets/web+fyp+grid.jpg"
-              alt="Web FYP Grid"
-              style={{ width: "100%", height: "auto", display: "block", borderRadius: "12px" }}
-            />
-          </div>
-
-
-        <TwoCol title="FYP Responsiveness">
-<PText>
-To put it simply, the adaptivity of the FYP (For You Page) relies on <strong>dynamic padding</strong>. By adjusting the whitespace, we ensure the video content remains <strong>centered</strong> and maintains its visual focus regardless of the viewport size.
-</PText>
-</TwoCol>
-
-        {/* Divider */}
-        <SectionDivider id="section-foundations" />
-
-        {/* Core Iterations */}
-        <SectionHeader id="section-core" subtitle="A No-Brainer" title="Core Iterations, Steady Growth." />
-
-        {/* Core Iterations Video Toggle Section */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
-          {/* Badge Controllers */}
-          <div style={{ display: "flex", gap: "12px" }}>
-            <div 
-              onClick={() => setActiveCoreVideo("sidenav")}
-              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
-            >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeCoreVideo === "sidenav" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "sidenav" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "sidenav" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
-                  padding: "6px 12px",
-                  fontSize: "14px",
-                  borderRadius: "9999px"
-                }}
-              >
-                Side nav redesign
-              </Badge>
-            </div>
-            <div 
-              onClick={() => setActiveCoreVideo("suggest")}
-              style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
-            >
-              <Badge 
-                style={{ 
-                  backgroundColor: activeCoreVideo === "suggest" ? "#000000" : "transparent", 
-                  color: activeCoreVideo === "suggest" ? "#FFFFFF" : "#000000",
-                  border: activeCoreVideo === "suggest" ? "1px solid #000000" : "1px solid rgba(0,0,0,0.1)",
-                  padding: "6px 12px",
-                  fontSize: "14px",
-                  borderRadius: "9999px"
-                }}
-              >
-                Suggest account
-              </Badge>
-            </div>
-          </div>
-
-          {/* Video Container */}
-          <div style={{ width: "100%", position: "relative", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)", aspectRatio: "16 / 9" }}>
-            <AutoVideo
-              src="https://f004.backblazeb2.com/file/xiangyi-assets/20260401-180210+(1).mp4"
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "sidenav" ? "block" : "none" }}
-            />
-            <AutoVideo
-              src="https://f004.backblazeb2.com/file/xiangyi-assets/Lark20260401-181435.mp4"
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "contain", display: activeCoreVideo === "suggest" ? "block" : "none" }}
-            />
-          </div>
-        </div>
-
-        <TwoCol title="Boosting Distribution Efficiency">
-{activeCoreVideo === "sidenav" ? (
-              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                As a core pillar of our Web architecture, we are proposing a <strong>long-term design blueprint</strong> to streamline the current UI complexity of the <strong>Side Nav</strong>. This vision introduces <strong>distinct partitioning</strong> for <strong>Discovery (Consumption)</strong>, <strong>Functional</strong>, and <strong>Sub-menu zones</strong>, while implementing a new <strong>Right-side Functional Drawer</strong> that is <strong>synchronized with the Top Navigation</strong> to create a unified system synergy.
-              </Text>
-            ) : (
-              <Text span style={{ fontSize: "14px", color: "var(--color-text-primary)", lineHeight: 1.6, whiteSpace: "pre-wrap", display: "block", minHeight: "60px" }}>
-                By introducing <strong>Related Recommendations</strong>, we are creating more <strong>entry points</strong> to <strong>Personal Profiles</strong>, enabling users to discover and engage with a broader community.
-              </Text>
-            )}
-</TwoCol>
-
-        {/* Two Side-by-Side Videos */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", width: "100%" }}>
-          <AutoVideo src="https://f004.backblazeb2.com/file/xiangyi-assets/Lark20260401-193101.mp4" />
-          <AutoVideo src="https://f004.backblazeb2.com/file/xiangyi-assets/Lark20260401-193106.mp4" />
-        </div>
-
-       <TwoCol gap="20px" title="TikTok Stroy">
-<PText>
-<strong>Web-Adaptive Video Experience:</strong> To optimize <strong>feed real estate</strong> on larger screens, I architected a <strong>specialized Sky-window (Picture-in-Picture)</strong> entry. By implementing a <strong>minimalist pill component</strong> with <strong>hover-to-expand</strong> interactions, I successfully balanced <strong>content discoverability</strong> with a clean, unobtrusive user interface.
-</PText>
-</TwoCol>
+        
 
        
         
+             
+              
+
+          
+
+        
+
         {/* To be continued */}
-        <div style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px", // space between text and divider
-          justifyContent: "center",
-          alignItems: "center",
-          paddingTop: "20px",
-          paddingBottom: "20px"
-        }}>
-          <Text span style={{
-            fontFamily: '"Instrument Serif", serif',
-            fontSize: "20px",
-            color: "var(--color-text-secondary)", // Slightly darker color
-            fontStyle: "italic",
-            opacity: 0.8 // Increased opacity
-          }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px", // space between text and divider
+            justifyContent: "center",
+            alignItems: "center",
+            paddingTop: "20px",
+            paddingBottom: "20px",
+          }}
+        >
+          <Text
+            span
+            style={{
+              fontFamily: '"Instrument Serif", serif',
+              fontSize: "20px",
+              color: "var(--color-text-secondary)", // Slightly darker color
+              fontStyle: "italic",
+              opacity: 0.8, // Increased opacity
+            }}
+          >
             To be continued...
           </Text>
-          
-          
-
-          
         </div>
-
-        {/* Final Divider */}
-          <SectionDivider />
-
-        {/* The trick */}
-        <SectionHeader id="section-innovations" subtitle="The hand one" title="Unique and Key Innovations" />
-        {/* Emoji Image Comparison */}
-        <div style={{ width: "100%" }}>
-          <ImageComparison
-            beforeImage="https://f004.backblazeb2.com/file/xiangyi-assets/Beforeemoji.jpg"
-            afterImage="https://f004.backblazeb2.com/file/xiangyi-assets/Afteremoji.jpg"
-          />
-        </div>
-
-        <TwoCol gap="20px" title="Incentive NUJ">
-<PText>
-By integrating <strong>Emoji-based categorization</strong>, we’ve transformed the interest selection process into a more <strong>scannable, low-friction experience</strong>. This reduces <strong>cognitive load</strong>, effectively discouraging users from skipping and ensuring more <strong>comprehensive user profiling</strong> for our data models.
-</PText>
-</TwoCol>
-
-        {/* Feature Tabs (Follow, Explore, etc.) */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", marginTop: "24px" }}>
-          {/* Badge Controllers */}
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            {[
-              { id: "like", label: "Like", img: "https://f004.backblazeb2.com/file/xiangyi-assets/Like.png" },
-              { id: "comment", label: "Comment", img: "https://f004.backblazeb2.com/file/xiangyi-assets/Comment.png" },
-              { id: "bookmark", label: "Bookmark", img: "https://f004.backblazeb2.com/file/xiangyi-assets/Bookmark.png" },
-              { id: "follow", label: "Follow", img: "https://f004.backblazeb2.com/file/xiangyi-assets/Follow.png" },
-              { id: "explore", label: "Explore page", img: "https://f004.backblazeb2.com/file/xiangyi-assets/Explore+page.png" },
-              { id: "live", label: "LIVE", img: "https://f004.backblazeb2.com/file/xiangyi-assets/LIVE.png" }
-            ].map((tab) => (
-              <div 
-                key={tab.id}
-                onClick={() => setActiveFeatureTab(tab.id)}
-                style={{ cursor: "pointer", transition: "opacity 0.2s ease" }}
-              >
-                <Badge 
-                  style={{ 
-                    backgroundColor: activeFeatureTab === tab.id ? "#000000" : "transparent", 
-                    color: activeFeatureTab === tab.id ? "#FFFFFF" : "#000000",
-                    border: "1px solid rgba(0,0,0,0.1)", // Subtle border to match existing badges
-                    padding: "6px 12px",
-                    fontSize: "14px",
-                    borderRadius: "9999px"
-                  }}
-                >
-                  {tab.label}
-                </Badge>
-              </div>
-            ))}
-          </div>
-
-          {/* Image Display */}
-          <div style={{ width: "100%", borderRadius: "12px", overflow: "hidden", backgroundColor: "var(--color-bg-secondary)" }}>
-            <img
-              src={
-                activeFeatureTab === "like" ? "https://f004.backblazeb2.com/file/xiangyi-assets/Like.png" :
-                activeFeatureTab === "comment" ? "https://f004.backblazeb2.com/file/xiangyi-assets/Comment.png" :
-                activeFeatureTab === "bookmark" ? "https://f004.backblazeb2.com/file/xiangyi-assets/Bookmark.png" :
-                activeFeatureTab === "follow" ? "https://f004.backblazeb2.com/file/xiangyi-assets/Follow.png" :
-                activeFeatureTab === "explore" ? "https://f004.backblazeb2.com/file/xiangyi-assets/Explore+page.png" :
-                "https://f004.backblazeb2.com/file/xiangyi-assets/LIVE.png"
-              }
-              alt={`${activeFeatureTab} interface`}
-              style={{ width: "100%", height: "auto", display: "block", objectFit: "contain" }}
-            />
-          </div>
-        </div>
-
-       
-
-           <TwoCol gap="20px" title="Growth Hacking">
-<PText>
-Since our Web platform allows <strong>unauthenticated consumption</strong>, converting passive viewers into <strong>logged-in users</strong> is a top priority. We’ve strategically integrated <strong>high-engagement visual cues</strong> and <strong>micro-animations</strong> across key <strong>user touchpoints</strong> to incentivize account creation and sign-ins.
-</PText>
-</TwoCol>
-
- {/* To be continued */}
-        <div style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px", // space between text and divider
-          justifyContent: "center",
-          alignItems: "center",
-          paddingTop: "20px",
-          paddingBottom: "20px"
-        }}>
-          <Text span style={{
-            fontFamily: '"Instrument Serif", serif',
-            fontSize: "20px",
-            color: "var(--color-text-secondary)", // Slightly darker color
-            fontStyle: "italic",
-            opacity: 0.8 // Increased opacity
-          }}>
-            To be continued...
-          </Text>
-          
-          
-
-          
-        </div>
-
-        
-       {/* Scene 11 Video */}
-        <div style={{ width: "100%", marginTop: "24px", marginBottom: "24px" }}>
-          <AutoVideo src="https://f004.backblazeb2.com/file/xiangyi-assets/Scene-11.mp4" />
-        </div>
-
-         <TwoCol gap="20px" title="Frictionless Messaging">
-<PText>
-Current DM is a <strong>standalone page</strong> that interrupts the <strong>consumption flow</strong>, leading to a <strong><LockedData text="12.1%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /> DAU drop-off</strong>. We are transitioning from <strong>Jump-to-Interact</strong> to <strong>In-feed Messaging</strong> to minimize churn and ensure social interaction <strong>complements</strong> the video experience.
-</PText>
-</TwoCol>
-        
-         {/* Divider */}
-        <SectionDivider id="section-bug-fixing" />
-
-
-
-        {/* The trick */}
-        <SectionHeader id="section-design-engineering" subtitle="The new method" title="Design Engineering" />
-
-        {/* Emoji Image Comparison */}
-        <div style={{ width: "100%" }}>
-          <ImageComparison
-            beforeImage="https://f004.backblazeb2.com/file/xiangyi-assets/beforecomment.jpg"
-            afterImage="https://f004.backblazeb2.com/file/xiangyi-assets/Aftercomment.jpg"
-          />
-        </div>
-
-      
-
-        {/* Emoji Image Comparison */}
-        <div style={{ width: "100%" }}>
-          <ImageComparison
-            beforeImage="https://f004.backblazeb2.com/file/xiangyi-assets/beforeheader.jpg"
-            afterImage="https://f004.backblazeb2.com/file/xiangyi-assets/afterheader.jpg"
-          />
-        </div>
-
-{/* To be continued */}
-        <div style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px", // space between text and divider
-          justifyContent: "center",
-          alignItems: "center",
-          paddingTop: "20px",
-          paddingBottom: "20px"
-        }}>
-          <Text span style={{
-            fontFamily: '"Instrument Serif", serif',
-            fontSize: "20px",
-            color: "var(--color-text-secondary)", // Slightly darker color
-            fontStyle: "italic",
-            opacity: 0.8 // Increased opacity
-          }}>
-            To be continued...
-          </Text>
-          
-          
-
-          
-        </div>
-
-        
-
       </div>
       {showPinOverlay && (
-        <PinOverlay 
-          onClose={() => setShowPinOverlay(false)} 
+        <PinOverlay
+          onClose={() => setShowPinOverlay(false)}
           onSuccess={() => {
             setIsUnlocked(true);
             setShowPinOverlay(false);
-          }} 
+          }}
         />
       )}
     </>
