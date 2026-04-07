@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 
 export const globeBoxClasses = {
   label: "globe-box__label max-[600px]:!text-[8px] max-[1200px]:!left-[8px] max-[1200px]:!top-[8px]",
-  footer: "globe-box__footer max-[1200px]:!left-[8px] max-[1200px]:!bottom-[8px]",
+  footer: "globe-box__footer max-[1200px]:!bottom-[8px]",
   footerText: "max-[600px]:!text-[8px]"
 };
 
