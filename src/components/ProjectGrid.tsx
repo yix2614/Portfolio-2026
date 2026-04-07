@@ -546,7 +546,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                   videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4"
                   title="AI Search"
                   subtitle="Markdwon / Modularized UI / Web Design"
-                  firstCursorTag="Coming soon"
+                  onClick={() => window.location.href = '/tiktokSearch'}
+                  firstCursorTag="View project"
                   isDisabled={isCardDisabled(["Product"])}
                 />
               </motion.div>
@@ -715,7 +716,8 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Scene-8_1_ftmykn.mp4",
                     title: "AI Search",
                     subtitle: "Markdwon / Modularized UI / Web Design",
-                    firstCursorTag: "Coming soon",
+                    onClick: () => window.location.href = '/tiktokSearch',
+                    firstCursorTag: "View project",
                     isDisabled: isCardDisabled(["Product"])
                   }}
                 />
