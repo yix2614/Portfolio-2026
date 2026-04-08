@@ -96,7 +96,7 @@ const Dock: React.FC<DockProps> = ({ onProjectClick, activeTab, onTabChange }) =
           className="dock-switch-option"
           style={{
             ...dockSwitchOptionStyles,
-            color: activeTab === "dashboard" ? "var(--color-text-primary)" : "var(--color-text-muted)",
+            color: activeTab === "dashboard" ? "var(--color-text-inverse)" : "var(--color-text-muted)",
           }}
           onClick={() => onTabChange("dashboard")}
         >
@@ -107,7 +107,7 @@ const Dock: React.FC<DockProps> = ({ onProjectClick, activeTab, onTabChange }) =
           className="dock-switch-option"
           style={{
             ...dockSwitchOptionStyles,
-            color: activeTab === "project" ? "var(--color-text-primary)" : "var(--color-text-muted)",
+            color: activeTab === "project" ? "var(--color-text-inverse)" : "var(--color-text-muted)",
           }}
           onClick={() => onTabChange("project")}
         >
