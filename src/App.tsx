@@ -88,6 +88,7 @@ export default function App() {
 
     let wheelAccumulator = 0;
     let touchStartY = 0;
+    let touchStartX = 0;
     let touchAccumulator = 0;
     let timeoutId: any;
 
@@ -122,6 +123,9 @@ export default function App() {
     };
 
     const handleWheel = (e: WheelEvent) => {
+      // Allow horizontal scrolling on Windows without triggering vertical logic
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
       const isAtBottom = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 50;
       
       if (isAtBottom && e.deltaY > 0) {
@@ -142,13 +146,20 @@ export default function App() {
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
       touchAccumulator = 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      const isAtBottom = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 50;
+      const currentX = e.touches[0].clientX;
       const currentY = e.touches[0].clientY;
+      const deltaX = touchStartX - currentX;
       const deltaY = touchStartY - currentY;
+
+      // Allow horizontal swipes (like trackpad back/forward) to pass through
+      if (Math.abs(deltaX) > Math.abs(deltaY)) return;
+
+      const isAtBottom = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 50;
 
       if (isAtBottom && deltaY > 0) {
         touchAccumulator += deltaY;
@@ -161,9 +172,10 @@ export default function App() {
           triggerNavigation();
         }
       } else {
-        touchAccumulator = 0;
+        resetAccumulator();
       }
       touchStartY = currentY;
+      touchStartX = currentX;
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
