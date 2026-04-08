@@ -66,7 +66,7 @@ export const SocialBox: React.FC = () => {
               whileHover={{ color: "rgba(255, 255, 255, 1)" }}
               onClick={handleCopyPhone}
             >
-              Copy phone number
+              Copy number
             </motion.p>
           </div>
         </div>
