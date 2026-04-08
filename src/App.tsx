@@ -84,6 +84,77 @@ export default function App() {
   }, [activeTab]);
 
   useEffect(() => {
+    if (activeTab !== "dashboard") return;
+
+    let wheelAccumulator = 0;
+    let touchStartY = 0;
+    let touchAccumulator = 0;
+    let timeoutId: any;
+
+    const resetAccumulator = () => {
+      wheelAccumulator = 0;
+      touchAccumulator = 0;
+    };
+
+    const triggerNavigation = () => {
+      setActiveTab("project");
+      navigate("/project");
+      resetAccumulator();
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      const isAtBottom = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 50;
+      
+      if (isAtBottom && e.deltaY > 0) {
+        wheelAccumulator += e.deltaY;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(resetAccumulator, 500); // reset if stopped scrolling
+
+        if (wheelAccumulator > 150) {
+          triggerNavigation();
+        }
+      } else {
+        resetAccumulator();
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+      touchAccumulator = 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const isAtBottom = Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 50;
+      const currentY = e.touches[0].clientY;
+      const deltaY = touchStartY - currentY;
+
+      if (isAtBottom && deltaY > 0) {
+        touchAccumulator += deltaY;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(resetAccumulator, 500);
+
+        if (touchAccumulator > 150) {
+          triggerNavigation();
+        }
+      } else {
+        touchAccumulator = 0;
+      }
+      touchStartY = currentY;
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      clearTimeout(timeoutId);
+    };
+  }, [activeTab, navigate]);
+
+  useEffect(() => {
     // Generate a list of delays from 0 to 7 * 0.1s (e.g. 0s, 0.1s, 0.2s ... 0.7s)
     // Then shuffle them to get random order but distinct timing
     const delays = Array.from({ length: 8 }, (_, i) => i * 0.1);
