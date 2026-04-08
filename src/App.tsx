@@ -97,19 +97,28 @@ export default function App() {
     };
 
     const triggerNavigation = () => {
+      // 1. Immediately destroy Lenis on the dashboard to kill any internal momentum loops entirely
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+      
       // Temporarily lock scrolling immediately upon triggering navigation
       document.body.style.overflow = 'hidden';
       // Force the scroll to top at the window level before doing anything else
       window.scrollTo(0, 0);
+      // Lock touch-action to prevent native smooth scrolling rubber-banding
+      document.documentElement.style.touchAction = 'none';
       
       setActiveTab("project");
       navigate("/project");
       resetAccumulator();
 
-      // Unlock scrolling after the animation/transition settles (e.g. 800ms)
+      // Unlock scrolling after the animation/transition settles
       setTimeout(() => {
         document.body.style.overflow = '';
-      }, 800);
+        document.documentElement.style.touchAction = '';
+      }, 1200); // Extended timeout to outlast any trackpad momentum
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -122,10 +131,8 @@ export default function App() {
 
         if (wheelAccumulator > 150) {
           e.preventDefault(); // Stop native scrolling behavior from bleeding over
-          // Stop Lenis on the dashboard instantly
-          if (lenisRef.current) {
-            lenisRef.current.stop();
-          }
+          // Hard reset the wheel state
+          e.stopPropagation();
           triggerNavigation();
         }
       } else {
@@ -149,11 +156,8 @@ export default function App() {
         timeoutId = setTimeout(resetAccumulator, 500);
 
         if (touchAccumulator > 150) {
-          e.preventDefault(); // prevent scroll bleed on touch
-          // Stop Lenis on the dashboard instantly
-          if (lenisRef.current) {
-            lenisRef.current.stop();
-          }
+          if (e.cancelable) e.preventDefault(); // prevent scroll bleed on touch
+          e.stopPropagation();
           triggerNavigation();
         }
       } else {

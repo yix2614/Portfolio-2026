@@ -376,9 +376,11 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Before doing anything, make absolutely sure we're at the top
-    window.scrollTo(0, 0);
-    
+    // Force native scroll position reset continuously during initial load to fight any inherited browser momentum
+    const initialResetInterval = setInterval(() => {
+      window.scrollTo(0, 0);
+    }, 10);
+
     const lenis = new Lenis({
       duration: 0.8,
       easing: (t) => 1 - Math.pow(1 - t, 4),
@@ -394,10 +396,11 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
     // Stop Lenis initially so the page doesn't inherit residual scroll momentum from Dashboard
     lenis.stop();
     
-    // Start Lenis after a short delay (e.g. 600ms) once the fade-in / transition is complete
+    // Start Lenis after a short delay once the fade-in / transition is complete and trackpad momentum has died down
     const timeoutId = setTimeout(() => {
+      clearInterval(initialResetInterval);
       lenis.start();
-    }, 600);
+    }, 1200);
 
     const raf = (time: number) => {
       lenis.raf(time);
@@ -407,6 +410,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
     requestAnimationFrame(raf);
 
     return () => {
+      clearInterval(initialResetInterval);
       clearTimeout(timeoutId);
       lenis.destroy();
     };
