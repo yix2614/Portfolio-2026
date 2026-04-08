@@ -387,6 +387,13 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
     });
 
     lenisRef.current = lenis;
+    
+    // Stop Lenis initially so the page doesn't inherit residual scroll momentum from Dashboard
+    lenis.stop();
+    // Start Lenis after a short delay (e.g. 600ms) once the fade-in / transition is complete
+    const timeoutId = setTimeout(() => {
+      lenis.start();
+    }, 600);
 
     const raf = (time: number) => {
       lenis.raf(time);
@@ -396,6 +403,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
     requestAnimationFrame(raf);
 
     return () => {
+      clearTimeout(timeoutId);
       lenis.destroy();
     };
   }, []);

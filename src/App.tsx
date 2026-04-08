@@ -97,9 +97,17 @@ export default function App() {
     };
 
     const triggerNavigation = () => {
+      // Temporarily lock scrolling immediately upon triggering navigation
+      document.body.style.overflow = 'hidden';
+      
       setActiveTab("project");
       navigate("/project");
       resetAccumulator();
+
+      // Unlock scrolling after the animation/transition settles (e.g. 800ms)
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 800);
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -111,6 +119,9 @@ export default function App() {
         timeoutId = setTimeout(resetAccumulator, 500); // reset if stopped scrolling
 
         if (wheelAccumulator > 150) {
+          e.preventDefault(); // Stop native scrolling behavior from bleeding over
+          // Force reset scroll to top immediately upon triggering
+          window.scrollTo({ top: 0, behavior: 'instant' });
           triggerNavigation();
         }
       } else {
@@ -134,6 +145,9 @@ export default function App() {
         timeoutId = setTimeout(resetAccumulator, 500);
 
         if (touchAccumulator > 150) {
+          e.preventDefault(); // prevent scroll bleed on touch
+          // Force reset scroll to top immediately upon triggering
+          window.scrollTo({ top: 0, behavior: 'instant' });
           triggerNavigation();
         }
       } else {
@@ -142,9 +156,9 @@ export default function App() {
       touchStartY = currentY;
     };
 
-    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
