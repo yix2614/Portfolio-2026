@@ -63,7 +63,7 @@ export const dockSwitchOptionStyles: CSSProperties = {
   justifyContent: "center",
   border: "none",
   background: "transparent",
-  color: "var(--color-text-muted, #999999)",
+  color: "var(--color-text-muted)",
   fontSize: "12px",
   fontFamily: "TikTok Sans, Inter, sans-serif",
   cursor: "pointer",
