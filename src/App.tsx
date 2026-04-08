@@ -99,6 +99,8 @@ export default function App() {
     const triggerNavigation = () => {
       // Temporarily lock scrolling immediately upon triggering navigation
       document.body.style.overflow = 'hidden';
+      // Force the scroll to top at the window level before doing anything else
+      window.scrollTo(0, 0);
       
       setActiveTab("project");
       navigate("/project");
@@ -120,8 +122,10 @@ export default function App() {
 
         if (wheelAccumulator > 150) {
           e.preventDefault(); // Stop native scrolling behavior from bleeding over
-          // Force reset scroll to top immediately upon triggering
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          // Stop Lenis on the dashboard instantly
+          if (lenisRef.current) {
+            lenisRef.current.stop();
+          }
           triggerNavigation();
         }
       } else {
@@ -146,8 +150,10 @@ export default function App() {
 
         if (touchAccumulator > 150) {
           e.preventDefault(); // prevent scroll bleed on touch
-          // Force reset scroll to top immediately upon triggering
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          // Stop Lenis on the dashboard instantly
+          if (lenisRef.current) {
+            lenisRef.current.stop();
+          }
           triggerNavigation();
         }
       } else {
