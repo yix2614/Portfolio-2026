@@ -1,6 +1,6 @@
 export const appStyles = {
   pageWrapper: 'page-wrapper',
-  mainContainer: 'app-container min-[1200px]:pb-[48px]',
+  mainContainer: 'app-container min-[1200px]:pb-[54px]',
   leftColumn: 'left-column bio-globe-name-container',
   bioGlobeRow: 'bio-globe-row',
   bioWrapper: 'bio-wrapper relative',
