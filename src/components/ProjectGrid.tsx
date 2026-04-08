@@ -42,8 +42,8 @@ const ProjectCard = React.memo(({
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const smoothX = useSpring(mouseX, { damping: 20, stiffness: 300 });
-  const smoothY = useSpring(mouseY, { damping: 20, stiffness: 300 });
+  const smoothX = useSpring(mouseX, { damping: 25, stiffness: 400, mass: 0.5 });
+  const smoothY = useSpring(mouseY, { damping: 25, stiffness: 400, mass: 0.5 });
 
   useEffect(() => {
     if (!videoUrl) return;
@@ -83,10 +83,27 @@ const ProjectCard = React.memo(({
     }
   }, [videoUrl, isInView]);
 
+  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+    // 1. Force the internal MotionValue to the exact starting position immediately.
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
+    
+    // 2. Critically, we must force the Spring to jump instantly as well.
+    // Setting velocity to 0 ensures it doesn't overshoot or "fly in".
+    smoothX.jump(e.clientX);
+    smoothY.jump(e.clientY);
+    
+    setIsHovered(true);
+  }, [mouseX, mouseY, smoothX, smoothY]);
+
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     mouseX.set(e.clientX);
     mouseY.set(e.clientY);
   }, [mouseX, mouseY]);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
 
 
   const cardStyle = isBig ? projectGridStyles.bigCard : (isTall ? projectGridStyles.tallCard : projectGridStyles.card);
@@ -104,8 +121,8 @@ const ProjectCard = React.memo(({
         pointerEvents: isDisabled ? "none" : "auto",
         transition: "opacity 0.2s ease"
       }}
-      onMouseEnter={!isDisabled ? () => setIsHovered(true) : undefined}
-      onMouseLeave={!isDisabled ? () => setIsHovered(false) : undefined}
+      onMouseEnter={!isDisabled ? handleMouseEnter : undefined}
+      onMouseLeave={!isDisabled ? handleMouseLeave : undefined}
       onMouseMove={!isDisabled ? handleMouseMove : undefined}
       onClick={!isDisabled ? onClick : undefined}
     >
@@ -218,12 +235,19 @@ const ProjectCard = React.memo(({
             ...projectGridStyles.cursorTagContainer,
             left: smoothX,
             top: smoothY,
-            x: 10,
-            y: 10,
+            x: 16,
+            y: 16,
+            transformOrigin: "top left",
           }}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
+          transition={{
+            type: "spring",
+            damping: 25,
+            stiffness: 400,
+            mass: 0.5
+          }}
         >
           <div style={projectGridStyles.cursorTag}>
             {firstCursorTag}
