@@ -1,5 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { socialBoxStyles, socialBoxClasses } from './SocialBox.styles';
 
 const ArrowIcon = () => (
@@ -29,6 +30,15 @@ const InstagramIcon = () => (
 );
 
 export const SocialBox: React.FC = () => {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText('+1 6693018449').then(() => {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000);
+    });
+  };
+
   return (
     <div style={socialBoxStyles.container}>
       <div style={socialBoxStyles.imageContainer}>
@@ -51,7 +61,13 @@ export const SocialBox: React.FC = () => {
           <div style={socialBoxStyles.separator} />
           <div style={socialBoxStyles.rowContent}>
             <p style={socialBoxStyles.rowLabel}>Phone:</p>
-            <p style={socialBoxStyles.rowValue}>+1 6693018449</p>
+            <motion.p 
+              style={{ ...socialBoxStyles.resumeLink, textTransform: "none", textDecoration: "none" } as any}
+              whileHover={{ color: "rgba(255, 255, 255, 1)" }}
+              onClick={handleCopyPhone}
+            >
+              Copy phone number
+            </motion.p>
           </div>
         </div>
         
@@ -59,10 +75,13 @@ export const SocialBox: React.FC = () => {
           <div style={socialBoxStyles.separator} />
           <div style={socialBoxStyles.rowContent}>
             <p style={socialBoxStyles.rowLabel}>E-mail:</p>
-            <div style={socialBoxStyles.rowValueContainer}>
-              <p style={socialBoxStyles.rowValue}>yix2614@gmail.com</p>
-              <p style={socialBoxStyles.rowValue}>xiangyi_work@163.com</p>
-            </div>
+            <motion.a 
+              href="mailto:yix2614@gmail.com"
+              style={{ ...socialBoxStyles.resumeLink, textTransform: "none", textDecoration: "none" } as any}
+              whileHover={{ color: "rgba(255, 255, 255, 1)" }}
+            >
+              Email Me
+            </motion.a>
           </div>
         </div>
       </div>
@@ -109,6 +128,37 @@ export const SocialBox: React.FC = () => {
           <XIcon />
         </motion.div>
       </div>
+
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {showToast && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, x: "-50%" }}
+              animate={{ opacity: 1, y: 0, x: "-50%" }}
+              exit={{ opacity: 0, y: -20, x: "-50%" }}
+              style={{
+                position: "fixed",
+                top: "64px",
+                left: "50%",
+                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                color: "#fff",
+                padding: "8px 16px",
+                borderRadius: "20px",
+                fontSize: "12px",
+                fontFamily: '"Helvetica Neue Regular", sans-serif',
+                zIndex: 9999,
+                whiteSpace: "nowrap",
+                backdropFilter: "blur(4px)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                pointerEvents: "none",
+              }}
+            >
+              Copied to clipboard
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };
