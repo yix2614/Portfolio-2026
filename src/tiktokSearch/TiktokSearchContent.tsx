@@ -1768,9 +1768,43 @@ const TiktokSearchContent = () => {
             critical pain points such as <b>unpredictable output formats</b> and
             visual hierarchy displacement. From <b>modular typography</b> to{" "}
             <b>adaptive data tables</b>, I built a comprehensive{" "}
-            <b>UI library</b>
-            that enables an <b>elegant coexistence</b> between deep AI-driven
+            <b>UI library</b> that enables an <b>elegant coexistence</b> between deep AI-driven
             answers and TikTok’s signature video feed.
+          </Text>
+        </TwoCol>
+
+
+         <div style={{ width: "100%" }}>
+          <img
+            src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/TTsearchmobile.jpg"
+            alt="Moat: Bug fixing & Components"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              borderRadius: "12px",
+            }}
+          />
+        </div>
+
+        <TwoCol
+          
+          subtitle="The Why Behind AI Integration"
+          title="Capitalizing on Mobile Success to Unlock Web Potential"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+           This architectural shift was directly informed by the <b>proven success on mobile</b>—where AI highlights boosted 
+    <b> LT </b> and <b>Search PV </b>. By translating these insights to the desktop, 
+    I led the mission to satisfy the <b>unique needs of web users</b> for deep topic research, 
+    transforming a <b>high-penetration search surface</b> into a <b>high-efficiency discovery engine</b>.
           </Text>
         </TwoCol>
 
