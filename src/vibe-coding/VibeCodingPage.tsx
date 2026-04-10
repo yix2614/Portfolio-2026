@@ -373,15 +373,14 @@ const slides = [
    
   },
   {
-    id: 4,
-    title: 'TT Incentive Component',
-    subtitle: 'Visual Experiment',
-    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/drop.mp4',
-    date: 'Apr 2, 2026',
+    id: 6,
+    title: 'CSS Inspector Pro',
+    subtitle: 'Real-time Prompt Generator',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/css.mp4',
+    date: 'Dec 18, 2025',
     version: 'Concept V1.0',
     type: 'video',
-    cursorTag: 'Coming soon',
-
+    cursorTag: '',
   },
   {
     id: 5,
