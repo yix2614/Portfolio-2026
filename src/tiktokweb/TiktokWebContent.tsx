@@ -1298,9 +1298,9 @@ By integrating <strong>Emoji-based categorization</strong>, we’ve transformed 
               >
                 <Badge 
                   style={{ 
-                    backgroundColor: activeFeatureTab === tab.id ? "#000000" : "transparent", 
-                    color: activeFeatureTab === tab.id ? "#FFFFFF" : "#000000",
-                    border: "1px solid rgba(0,0,0,0.1)", // Subtle border to match existing badges
+                    backgroundColor: activeFeatureTab === tab.id ? "var(--badge-bg-active)" : "transparent", 
+                    color: activeFeatureTab === tab.id ? "var(--badge-text-active)" : "var(--color-text-primary)",
+                    border: activeFeatureTab === tab.id ? "1px solid var(--badge-border-active)" : "1px solid var(--color-border-default)",
                     padding: "6px 12px",
                     fontSize: "14px",
                     borderRadius: "9999px"
