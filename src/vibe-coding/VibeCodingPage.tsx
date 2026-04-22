@@ -351,6 +351,16 @@ const slides = [
     
   },
   {
+    id: 7,
+    title: 'Vibe text',
+    subtitle: '3D text generator',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/vibetext.mp4',
+    date: 'Dec 12, 2025',
+    version: 'Concept V1.0',
+    type: 'video',
+    cursorTag: '',
+  },
+  {
     id: 1,
     title: 'TikTok.com',
     subtitle: 'Long Video UI',
@@ -384,14 +394,13 @@ const slides = [
   },
   {
     id: 5,
-    title: 'Gesture control feed',
-    subtitle: 'interaction ideation',
-    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Lark20260405-140611.mp4',
-    date: 'Apr 5, 2026',
+    title: 'Dieter Rams UI Kit',
+    subtitle: 'iOS UI experiment',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/IMG_7683.mp4',
+    date: 'Dec 20, 2025',
     version: 'Concept V1.0',
     type: 'video',
-    cursorTag: 'Coming soon',
-   
+    cursorTag: '',
   },
   {
     id: 3,
