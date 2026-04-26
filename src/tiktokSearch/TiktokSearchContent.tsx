@@ -1808,6 +1808,28 @@ const TiktokSearchContent = () => {
           </Text>
         </TwoCol>
 
+          <TwoCol
+          
+          subtitle="The Goal"
+          title="Conservative Web Uplift Assumptions"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+          Based on app holdout results and conservative web assumptions, de‑identified targets show:
+          LT7 <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.06%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark> from lower web search penetration and a conservative MVP effectiveness estimate
+          Search PV <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.2%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark> scaled from app holdout performance
+          Stayduration <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.1%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark> as users scan more information
+          Playduration <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="-0.05%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark> since videos sit below the card
+          </Text>
+        </TwoCol>
+
         <SectionDivider />
 
         {/* The trick */}
@@ -2258,6 +2280,27 @@ const TiktokSearchContent = () => {
             }}
           >
            Unlike mobile, the desktop canvas allows for <b>simultaneous content viewing</b>. I designed the thumbnail component to be <b>temporarily fixed (sticky)</b> during long-text exploration. This removes the friction of "lost visuals"—users can finish a deep-dive read and <b>immediately trigger a video</b> without losing their place. This <b>non-linear navigation</b> significantly boosts the <b>conversion from search to watch</b>.
+          </Text>
+        </TwoCol>
+
+        <TwoCol
+          subtitle="Results"
+          title="Early Signals (De-identified)"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            Short-term experiment readout shows a lift in search-to-watch conversion and deeper reading engagement.
+            LT7 <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.04%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>,
+            Search PV <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.15%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>,
+            Stayduration <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="+0.08%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>,
+            Playduration <mark style={{ backgroundColor: "rgba(34, 197, 94, 0.3)", color: "var(--color-text-primary)", padding: "0 4px", borderRadius: "4px", fontWeight: "600" }}><LockedData text="-0.03%" isUnlocked={isUnlocked} onClick={() => setShowPinOverlay(true)} /></mark>.
           </Text>
         </TwoCol>
 
