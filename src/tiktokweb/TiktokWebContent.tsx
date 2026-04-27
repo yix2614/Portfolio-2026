@@ -1393,6 +1393,12 @@ Current DM is a <strong>standalone page</strong> that interrupts the <strong>con
           />
         </div>
 
+         <TwoCol gap="20px" title="Optimizing the Comment Panel Hierarchy">
+         <PText>
+         The comment panel was restructured to better align <strong>visual weight</strong> with user engagement. To reduce cognitive noise, we decreased the <strong>visual footprint</strong> of low-CTR secondary actions like avatars and usernames. Conversely, we increased the contrast of the high-engagement "Reply" action to improve <strong>discoverability</strong>. Finally, we optimized the "Like" button's layout to prevent it from consuming excessive horizontal space and <strong>truncating the comment text</strong>, ultimately prioritizing <strong>reading comfort</strong> and core content.
+         </PText>
+         </TwoCol>
+
       
 
         {/* Emoji Image Comparison */}
