@@ -2187,6 +2187,7 @@ const TiktokSearchContent = () => {
               }}
             >
               I replaced the mobile-first vertical layout with a <b>dual-column structure</b>. By repositioning images as <b>supplementary thumbnails</b> alongside the text, I eliminated the "scroll-to-visual" gap. This allows users to seamlessly cross-reference <b>textual insights</b> with visual proof at a glance, significantly reducing <b>cognitive switching costs</b> and preserving the reading flow.
+            
             </Text>
           ) : (
             <Text
@@ -2203,6 +2204,24 @@ const TiktokSearchContent = () => {
              To handle the <b>unpredictable nature of AI outputs</b>, I implemented a <b>dynamic max-width strategy</b> across multiple breakpoints. By setting specific <b>character-per-line (CPL)</b> constraints, I ensured that even in "text-only" scenarios, the layout remains <b>legible and structured</b> on large screens. This prevents the dreaded "wall of text" and maintains an <b>optimal reading rhythm</b> regardless of content density.
             </Text>
           )}
+        </TwoCol>
+
+          <TwoCol
+          title="Why this height？"
+        >
+          <Text
+            span
+            style={{
+              fontSize: "14px",
+              color: "var(--color-text-primary)",
+              lineHeight: 1.3,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+           A <b>210×280px</b> module serves as the foundational unit, syncing text height with the card container to establish a consistent <b>vertical rhythm</b>. This logic is optimized for the <b>1536px viewport</b>, ensuring the primary cards align perfectly with the grid below. 
+
+           By capping text width at <b>640px</b>—the gold standard for <b>readability</b>—the layout avoids visual fatigue. This constraint balances concise content with a compelling <b>teaser effect</b>, providing just enough information to drive engagement while maintaining a clean, symmetrical interface.
+          </Text>
         </TwoCol>
 
         <div style={{ width: "100%" }}>
@@ -2284,8 +2303,8 @@ const TiktokSearchContent = () => {
         </TwoCol>
 
         <TwoCol
-          subtitle="Results"
-          title="Early Signals (De-identified)"
+        
+          title="Some results"
         >
           <Text
             span
