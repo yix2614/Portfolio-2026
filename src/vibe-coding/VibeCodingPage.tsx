@@ -372,6 +372,16 @@ const slides = [
     link: 'https://long-video-bkc1.vercel.app/'
   },
   {
+    id: 8,
+    title: 'WebGL',
+    subtitle: 'Visual experiment',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/webgl.mp4',
+    date: 'Dec 28, 2025',
+    version: 'Concept V1.0',
+    type: 'video',
+    cursorTag: '',
+  },
+  {
     id: 2,
     title: 'TikTok.com',
     subtitle: 'On-boarding Experience',
