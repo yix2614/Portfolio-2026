@@ -382,6 +382,16 @@ const slides = [
     cursorTag: '',
   },
   {
+    id: 9,
+    title: 'TikTok Pro',
+    subtitle: 'Component',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260330-164535_1_nechjv.mp4',
+    date: 'Mar 30, 2026',
+    version: 'Concept V1.0',
+    type: 'video',
+    cursorTag: '',
+  },
+  {
     id: 2,
     title: 'TikTok.com',
     subtitle: 'On-boarding Experience',
