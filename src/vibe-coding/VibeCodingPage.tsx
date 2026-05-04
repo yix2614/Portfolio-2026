@@ -514,8 +514,7 @@ const VibeCodingPage = () => {
 
     const videoElements = assets.map(url => {
       const video = document.createElement('video');
-      // 如果是 Backblaze B2 的视频（且不需要 WebGL 像素读取），暂不加跨域限制，避免 ERR_FAILED
-      if (!url.includes('backblazeb2.com')) {
+      if (!url.includes('backblazeb2.com') && !url.includes('r2.dev')) {
         video.crossOrigin = 'anonymous';
       }
       video.preload = 'auto';
@@ -1229,7 +1228,7 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag, link }: { videoSrc: string
              <video
                 key={videoSrc}
                 src={videoSrc}
-                crossOrigin={videoSrc.includes('backblazeb2.com') ? undefined : "anonymous"}
+                crossOrigin={videoSrc.includes('backblazeb2.com') || videoSrc.includes('r2.dev') ? undefined : "anonymous"}
                 autoPlay
                 loop
                 muted
