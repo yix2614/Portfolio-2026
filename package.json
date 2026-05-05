@@ -24,7 +24,6 @@
     "@react-three/fiber": "^9.5.0",
     "@studio-freight/lenis": "^1.0.42",
     "@vercel/analytics": "^2.0.1",
-    "border-beam": "^1.0.1",
     "classnames": "^2.5.1",
     "cobe": "^0.6.5",
     "framer-motion": "^12.29.2",
