@@ -10,7 +10,9 @@ export const clockBoxStyles = {
     border: "none",
     borderRadius: "12px",
     position: "relative",
-    overflow: "hidden",
+    // overflow 必须保持 visible，否则 flip + translateZ 时
+    // 透视放大会让指针被矩形容器裁掉
+    overflow: "visible",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -21,6 +23,36 @@ export const clockBoxStyles = {
     width: "100%", // Enlarged from 80%
     aspectRatio: "1 / 1",
     position: "relative",
+  } as CSSProperties,
+
+  // 3D flip 舞台：给子级一个 perspective，让 rotateY 产生景深效果
+  flipScene: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    perspective: "1200px",
+  } as CSSProperties,
+
+  // flip 卡片：实际做 Y 轴翻转的容器
+  flipCard: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    transformStyle: "preserve-3d",
+    transition: "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+    willChange: "transform",
+  } as CSSProperties,
+
+  // flip 正反面：绝对定位 + 背面不可见 + 保留 3D，让内部 translateZ 生效
+  flipFace: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden",
+    transformStyle: "preserve-3d",
   } as CSSProperties,
 
   // The clock face SVG
@@ -39,6 +71,14 @@ export const clockBoxStyles = {
     position: "absolute",
     top: 0,
     left: 0,
+    transformStyle: "preserve-3d",
+  } as CSSProperties,
+
+  // 指针整体相对表盘抬高，flip 时呈现立体层次；背面隐藏避免 flip 到另一面时残留可见
+  handsLifted: {
+    transform: "translateZ(40px)",
+    backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden",
   } as CSSProperties,
 
   // Hour Hand Wrapper
