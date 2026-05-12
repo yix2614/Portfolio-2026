@@ -2096,7 +2096,7 @@ const TiktokSearchContent = () => {
                   borderRadius: "9999px",
                 }}
               >
-                Solution#1
+                Approach #1
               </Badge>
             </div>
             <div
@@ -2122,7 +2122,7 @@ const TiktokSearchContent = () => {
                   borderRadius: "9999px",
                 }}
               >
-                Solution#2
+                Approach #2
               </Badge>
             </div>
           </div>
