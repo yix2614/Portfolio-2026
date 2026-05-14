@@ -560,202 +560,1100 @@ const TypographyPlayground = ({
   </div>
 );
 
-const VisualDiscoveryGallery = ({
-  activeVisualTab,
-  setActiveVisualTab,
-}: {
-  activeVisualTab: number;
-  setActiveVisualTab: React.Dispatch<React.SetStateAction<number>>;
-}) => (
-  <div
-    style={{
-      width: "100%",
-      display: "flex",
-      flexDirection: "column",
-      gap: "0",
-      marginTop: "24px",
-    }}
-  >
-    {/* Navigation Tabs */}
-    <div style={{ display: "flex", gap: "0", paddingLeft: "4px" }}>
-      {["Image#1", "Image#2", "Image#3"].map((tab, idx) => (
-        <div
-          key={tab}
-          onClick={() => setActiveVisualTab(idx)}
-          style={{
-            width: "120px",
-            padding: "8px 0",
-            cursor: "pointer",
-            position: "relative",
-            color:
-              activeVisualTab === idx
-                ? "var(--color-text-primary)"
-                : "var(--color-text-muted)",
-            fontWeight: activeVisualTab === idx ? 600 : 400,
-            fontSize: "15px",
-            transition: "color 0.2s ease",
-            textAlign: "center",
-          }}
-        >
-          {tab}
-          {activeVisualTab === idx && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "2px",
-                backgroundColor: "var(--color-text-primary)",
-              }}
-            />
-          )}
-        </div>
-      ))}
-    </div>
+const SearchCard1 = () => {
+  const [activeVisualTab, setActiveVisualTab] = useState(0);
 
-    {/* Glow Line and Content Container */}
+  return (
     <div
       style={{
         width: "100%",
-        position: "relative",
-        paddingTop: "32px",
-        paddingBottom: "60px",
-        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0",
+        marginTop: "24px",
       }}
     >
-      {/* Top Glow Line */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "0",
-          right: "0",
-          height: "1px",
-          background: `linear-gradient(to right, transparent, ${VISUAL_IMAGES[activeVisualTab].line} 50%, transparent)`,
-          boxShadow: `0 2px 12px ${VISUAL_IMAGES[activeVisualTab].glow}`,
-        }}
-      />
-      {/* Gradient Glow Overlay */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "100%",
-          height: "140px",
-          background: `radial-gradient(50% 100% at 50% 0%, ${VISUAL_IMAGES[activeVisualTab].glow}, transparent)`,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Image Card Container */}
+      <style>{`
+        .searchcard2-list {
+          list-style-position: outside;
+        }
+        .searchcard2-list li {
+          display: list-item;
+          margin-bottom: 8px;
+        }
+        .searchcard2-list li:last-child {
+          margin-bottom: 0;
+        }
+        .searchcard2-list li::before,
+        .searchcard2-list li::after {
+          content: none !important;
+          display: none !important;
+        }
+      `}</style>
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-start",
-          padding: "0 4px",
+          gap: "0",
+          paddingLeft: "4px",
+        }}
+      >
+        {["Image#1", "Image#2", "Image#3"].map((tab, idx) => (
+          <div
+            key={tab}
+            onClick={() => setActiveVisualTab(idx)}
+            style={{
+              minWidth: "120px",
+              padding: "8px 16px",
+              cursor: "pointer",
+              position: "relative",
+              color:
+                activeVisualTab === idx
+                  ? "var(--color-text-primary)"
+                  : "var(--color-text-muted)",
+              fontWeight: activeVisualTab === idx ? 600 : 400,
+              fontSize: "15px",
+              transition: "color 0.2s ease",
+              textAlign: "center",
+            }}
+          >
+            {tab}
+            {activeVisualTab === idx && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  backgroundColor: "var(--color-text-primary)",
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          position: "relative",
+          paddingTop: "32px",
+          paddingBottom: "60px",
+          overflow: "hidden",
         }}
       >
         <div
           style={{
-            width: "32%",
-            aspectRatio: "3 / 4",
-            borderRadius: "16px",
-            overflow: "hidden",
-            backgroundColor: "var(--color-bg-secondary)",
-            border: "1px solid var(--color-border-default)",
-            boxShadow: "0 8px 16px rgba(0,0,0,0.08)",
-            position: "relative",
+            position: "absolute",
+            top: 0,
+            left: "0",
+            right: "0",
+            height: "1px",
+            background: `linear-gradient(to right, transparent, ${VISUAL_IMAGES[activeVisualTab].line} 50%, transparent)`,
+            boxShadow: `0 2px 12px ${VISUAL_IMAGES[activeVisualTab].glow}`,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%",
+            height: "140px",
+            background: `radial-gradient(50% 100% at 50% 0%, ${VISUAL_IMAGES[activeVisualTab].glow}, transparent)`,
+            pointerEvents: "none",
+          }}
+        />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            padding: "0 4px",
           }}
         >
-          <img
-            src={VISUAL_IMAGES[activeVisualTab].url}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-            alt={["Image#1", "Image#2", "Image#3"][activeVisualTab]}
-          />
-
-          {/* Slider Controls Overlay */}
           <div
             style={{
-              position: "absolute",
-              bottom: "20px",
-              left: "20px",
-              right: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              width: "32%",
+              aspectRatio: "3 / 4",
+              borderRadius: "16px",
+              overflow: "hidden",
+              backgroundColor: "var(--color-bg-secondary)",
+              border: "1px solid var(--color-border-default)",
+              boxShadow: "0 8px 16px rgba(0,0,0,0.08)",
+              position: "relative",
             }}
           >
-            {/* Left Arrow */}
-            <div
-              onClick={() => setActiveVisualTab((prev) => (prev === 0 ? VISUAL_IMAGES.length - 1 : prev - 1))}
+            <img
+              src={VISUAL_IMAGES[activeVisualTab].url}
               style={{
-                width: "36px",
-                height: "36px",
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                borderRadius: "50%",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+              alt={["Image#1", "Image#2", "Image#3"][activeVisualTab]}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                bottom: "20px",
+                left: "20px",
+                right: "20px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                color: "white",
-                backdropFilter: "blur(4px)",
+                justifyContent: "space-between",
               }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </div>
+              <div
+                onClick={() =>
+                  setActiveVisualTab((prev) =>
+                    prev === 0 ? VISUAL_IMAGES.length - 1 : prev - 1,
+                  )
+                }
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  backgroundColor: "rgba(0, 0, 0, 0.4)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  color: "white",
+                  backdropFilter: "blur(4px)",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </div>
 
-            {/* Pagination Dots */}
-            <div style={{ display: "flex", gap: "8px" }}>
-              {VISUAL_IMAGES.map((_, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setActiveVisualTab(idx)}
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    backgroundColor: activeVisualTab === idx ? "white" : "rgba(255, 255, 255, 0.4)",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                />
-              ))}
-            </div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                {VISUAL_IMAGES.map((_, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setActiveVisualTab(idx)}
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      borderRadius: "50%",
+                      backgroundColor: activeVisualTab === idx ? "white" : "rgba(255, 255, 255, 0.4)",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  />
+                ))}
+              </div>
 
-            {/* Right Arrow */}
-            <div
-              onClick={() => setActiveVisualTab((prev) => (prev === VISUAL_IMAGES.length - 1 ? 0 : prev + 1))}
-              style={{
-                width: "36px",
-                height: "36px",
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                color: "white",
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
+              <div
+                onClick={() =>
+                  setActiveVisualTab((prev) =>
+                    prev === VISUAL_IMAGES.length - 1 ? 0 : prev + 1,
+                  )
+                }
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  backgroundColor: "rgba(0, 0, 0, 0.4)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  color: "white",
+                  backdropFilter: "blur(4px)",
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+};
+
+const SearchCard2 = () => {
+  const getTheme = (): "light" | "dark" =>
+    document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+
+  const [activeVisualTab, setActiveVisualTab] = useState(0);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">(getTheme);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isReferencePopoverVisible, setIsReferencePopoverVisible] = useState(false);
+  const [isReferencePopoverCardHovered, setIsReferencePopoverCardHovered] = useState(false);
+
+  const bodyTextStyle: React.CSSProperties = {
+    fontFamily: "TikTok Sans, Inter, sans-serif",
+    fontSize: "16px",
+    fontWeight: 400,
+    lineHeight: 1.6,
+    color: "inherit",
+  };
+
+  const sectionTitleStyle: React.CSSProperties = {
+    fontFamily: "TikTok Sans, Inter, sans-serif",
+    fontSize: "16px",
+    fontWeight: 700,
+    lineHeight: 1.6,
+    color: "var(--color-text-primary)",
+  };
+
+  const listStyle: React.CSSProperties = {
+    margin: 0,
+    paddingLeft: "24px",
+    display: "flex",
+    flexDirection: "column",
+  };
+
+  const nestedListStyle: React.CSSProperties = {
+    ...listStyle,
+  };
+
+  useEffect(() => {
+    const onThemeChange = () => setTheme(getTheme());
+    window.addEventListener("themeChange", onThemeChange);
+    const observer = new MutationObserver(onThemeChange);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => {
+      window.removeEventListener("themeChange", onThemeChange);
+      observer.disconnect();
+    };
+  }, []);
+
+  const buttonBackgroundColor =
+    theme === "dark"
+      ? isButtonHovered
+        ? "rgba(255, 255, 255, 0.14)"
+        : "rgba(255, 255, 255, 0.08)"
+      : isButtonHovered
+        ? "rgba(0, 0, 0, 0.1)"
+        : "rgba(0, 0, 0, 0.05)";
+
+  const dividerColor =
+    theme === "dark" ? "rgba(255, 255, 255, 0.14)" : "rgba(0, 0, 0, 0.12)";
+
+  const buttonStyle: React.CSSProperties = {
+    height: "32px",
+    width: "fit-content",
+    borderRadius: "999px",
+    backgroundColor: buttonBackgroundColor,
+    padding: "8px 12px",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "4px",
+    cursor: "pointer",
+    transition: "background-color 0.2s ease",
+    color: "var(--color-text-primary)",
+  };
+
+  const overlayBackground =
+    theme === "dark"
+      ? "linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 16%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 1) 60%)"
+      : "linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.4) 16%, rgba(255, 255, 255, 0.8) 40%, rgba(255, 255, 255, 1) 60%)";
+
+  const stickyTabBackground = theme === "dark" ? "#0A0A0A" : "#FFFFFF";
+
+  const popoverBackgroundColor = theme === "dark" ? "#1F1F1F" : "#FFFFFF";
+  const popoverCardBackgroundColor = theme === "dark" ? "#1F1F1F" : "#FFFFFF";
+  const popoverCardHoverBackgroundColor =
+    theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.04)";
+  const popoverShadow =
+    theme === "dark"
+      ? "0 24px 120px 0 rgba(0, 0, 0, 0.48)"
+      : "0 24px 120px 0 rgba(0, 0, 0, 0.16)";
+  const popoverPrimaryTextColor = theme === "dark" ? "#FFFFFF" : "#000000";
+  const popoverMetaTextColor = theme === "dark" ? "rgba(255, 255, 255, 0.85)" : "#202020";
+  const popoverSecondaryTextColor =
+    theme === "dark" ? "rgba(255, 255, 255, 0.48)" : "rgba(0, 0, 0, 0.48)";
+  const popoverAvatarBorderColor =
+    theme === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.12)";
+  const popoverAvatarBackground =
+    theme === "dark"
+      ? "linear-gradient(135deg, #3A3A3A 0%, #232323 100%)"
+      : "linear-gradient(135deg, #D9D9D9 0%, #F5F5F5 100%)";
+  const isReferencePopoverActive =
+    isReferencePopoverVisible || isReferencePopoverCardHovered;
+
+  const popoverMetaTextStyle: React.CSSProperties = {
+    fontFamily: "TikTok Sans, Inter, sans-serif",
+    fontSize: "13px",
+    fontWeight: 400,
+    lineHeight: 1.3,
+  };
+
+  const popoverTitleStyle: React.CSSProperties = {
+    fontFamily: "TikTok Sans, Inter, sans-serif",
+    fontSize: "15px",
+    fontWeight: 600,
+    lineHeight: 1.3,
+    color: popoverPrimaryTextColor,
+  };
+
+  const visualTabs = ["Top", "User", "Videos"];
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0",
+        marginTop: "24px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: "0",
+          paddingLeft: "4px",
+          position: !isCollapsed ? "sticky" : "relative",
+          top: !isCollapsed ? 0 : undefined,
+          zIndex: 3,
+          backgroundColor: stickyTabBackground,
+        }}
+      >
+        {visualTabs.map((tab, idx) => (
+          <div
+            key={`${tab}-${idx}`}
+            onClick={() => setActiveVisualTab(idx)}
+            style={{
+              minWidth: "120px",
+              padding: "8px 16px",
+              cursor: "pointer",
+              position: "relative",
+              color:
+                activeVisualTab === idx
+                  ? "var(--color-text-primary)"
+                  : "var(--color-text-muted)",
+              fontWeight: activeVisualTab === idx ? 600 : 400,
+              fontSize: "15px",
+              transition: "color 0.2s ease",
+              textAlign: "center",
+            }}
+          >
+            {tab}
+            {activeVisualTab === idx && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "2px",
+                  backgroundColor: "var(--color-text-primary)",
+                }}
+              />
+            )}
+          </div>
+        ))}
+        <div
+          style={{
+            position: "absolute",
+            left: 4,
+            right: 0,
+            bottom: 0,
+            height: "0.5px",
+            backgroundColor: dividerColor,
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          width: "100%",
+          position: "relative",
+          paddingTop: "32px",
+          paddingBottom: "60px",
+          overflow: isCollapsed ? "hidden" : "visible",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            padding: "0 4px",
+            gap: "16px",
+            alignItems: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              width: "165px",
+              flex: "0 0 165px",
+              alignSelf: "flex-start",
+              position: !isCollapsed ? "sticky" : "relative",
+              top: !isCollapsed ? "72px" : undefined,
+            }}
+          >
+            <div
+              style={{
+                width: "100%",
+                height: "220px",
+                borderRadius: "8px",
+                overflow: "hidden",
+                backgroundColor: "var(--color-bg-secondary)",
+                border: "1px solid var(--color-border-default)",
+                boxShadow: "0 8px 16px rgba(0,0,0,0.08)",
+                position: "relative",
+              }}
+            >
+              <img
+                src={VISUAL_IMAGES[activeVisualTab].url}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+                alt={["Image#1", "Image#2", "Image#3"][activeVisualTab]}
+              />
+
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "20px",
+                  left: "20px",
+                  right: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div
+                  onClick={() =>
+                    setActiveVisualTab((prev) =>
+                      prev === 0 ? VISUAL_IMAGES.length - 1 : prev - 1,
+                    )
+                  }
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    backgroundColor: "rgba(0, 0, 0, 0.4)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    color: "white",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </div>
+
+                <div style={{ display: "flex", gap: "8px" }}>
+                  {VISUAL_IMAGES.map((_, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setActiveVisualTab(idx)}
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        backgroundColor:
+                          activeVisualTab === idx
+                            ? "white"
+                            : "rgba(255, 255, 255, 0.4)",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div
+                  onClick={() =>
+                    setActiveVisualTab((prev) =>
+                      prev === VISUAL_IMAGES.length - 1 ? 0 : prev + 1,
+                    )
+                  }
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    backgroundColor: "rgba(0, 0, 0, 0.4)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    color: "white",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              flex: 1,
+              minWidth: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              color: "var(--color-text-primary)",
+              height: isCollapsed ? "220px" : "auto",
+              overflow: isCollapsed ? "hidden" : "visible",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                minHeight: "25px",
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M8.74992 0.721842C9.52337 0.275294 10.4764 0.275355 11.2499 0.721842L13.4529 1.99382C13.359 2.01702 13.2641 2.03884 13.1693 2.06055C12.6529 2.17882 12.1346 2.29753 11.7358 2.66317C11.6772 2.71685 11.624 2.77422 11.5763 2.83447L10.4166 2.16512C10.1588 2.01638 9.84102 2.0163 9.58325 2.16512L3.42318 5.72184C3.1654 5.87071 3.00651 6.146 3.00651 6.44368V13.5567L3.00855 13.6125C3.02703 13.8884 3.18155 14.1391 3.42318 14.2786L9.58325 17.8353C9.84098 17.984 10.1588 17.984 10.4166 17.8353L16.5771 14.2786C16.8348 14.1297 16.9937 13.8544 16.9937 13.5567V8.54085C17.1179 8.46856 17.2339 8.37693 17.3363 8.26538C17.7016 7.86768 17.8208 7.35093 17.9394 6.83594C17.9992 6.57616 18.059 6.31683 18.1501 6.0734C18.2385 5.8375 18.3154 5.75207 18.5347 5.66447C18.6161 5.91253 18.6604 6.17487 18.6604 6.44368V13.5567C18.6603 14.4498 18.1838 15.2753 17.4104 15.7218L11.2499 19.2786C10.4765 19.725 9.52333 19.7251 8.74992 19.2786L2.58984 15.7218C1.81641 15.2753 1.33991 14.4498 1.33984 13.5567V6.44368C1.33985 5.55056 1.8164 4.72516 2.58984 4.27856L8.74992 0.721842Z" fill="currentColor" />
+                <path d="M12.4702 13.9583H10.5488L9.92871 11.7228H6.96403L6.34391 13.9583H4.42253L7.0446 5.43945H9.84814L12.4702 13.9583ZM7.3693 10.2608H9.52262L8.47038 6.46688H8.42196L7.3693 10.2608Z" fill="currentColor" />
+                <path d="M13.1681 5.43945C13.4278 5.49914 13.6872 5.55875 13.9306 5.64982C14.1795 5.74299 14.26 5.8232 14.3529 6.07218C14.4439 6.31587 14.5034 6.57554 14.5629 6.83553C14.6453 7.19591 14.7285 7.55686 14.8958 7.8776V13.9583H13.0472V5.43945H13.1681Z" fill="currentColor" />
+                <path d="M16.2503 0C16.4979 0 16.599 0.429793 16.724 0.959473C16.8571 1.52404 17.0174 2.20217 17.4096 2.5944C17.8013 2.98427 18.4773 3.14335 19.0404 3.27596C19.5703 3.40072 20.0003 3.50214 20.0003 3.75C20.0003 3.99754 19.5714 4.09911 19.0425 4.22404C18.4788 4.35717 17.8018 4.51707 17.4096 4.90926C17.0174 5.30145 16.8575 5.97851 16.7244 6.54215C16.5994 7.07105 16.4979 7.5 16.2503 7.5C16.0029 7.5 15.9023 7.07147 15.7783 6.54297C15.646 5.97922 15.487 5.30166 15.0947 4.90926C14.7025 4.51703 14.0244 4.35678 13.4598 4.22363C12.9301 4.09872 12.5003 3.99753 12.5003 3.75C12.5003 3.50216 12.9312 3.40071 13.4618 3.27596C14.026 3.14333 14.703 2.98439 15.0947 2.5944C15.4847 2.20266 15.6437 1.52565 15.7763 0.961507C15.901 0.430901 16.0025 0 16.2503 0Z" fill="currentColor" />
+              </svg>
+
+              <span
+                style={{
+                  fontFamily: "TikTok Sans, Inter, sans-serif",
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  lineHeight: 1.25,
+                  color: "var(--color-text-primary)",
+                  display: "block",
+                }}
+              >
+                Is this a search AI card?
+              </span>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                flexWrap: "wrap",
+              }}
+            >
+              <Text
+                span
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  lineHeight: 1.3,
+                  color: "var(--color-text-muted)",
+                }}
+              >
+                AI summarized from sources
+              </Text>
+              <img
+                src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Avatar%20Stack.png"
+                alt="Avatar Stack"
+                style={{
+                  height: "16px",
+                  width: "auto",
+                  display: "block",
+                  flexShrink: 0,
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                position: "relative",
+                marginTop: "8px",
+                flex: isCollapsed ? 1 : undefined,
+                minHeight: isCollapsed ? 0 : undefined,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                  maxHeight: isCollapsed ? "220px" : undefined,
+                  overflow: isCollapsed ? "hidden" : "visible",
+                  transition: "max-height 0.25s ease",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                    }}
+                  >
+                    <div style={sectionTitleStyle}>Locations of Penguin Habitats</div>
+                    <div style={bodyTextStyle}>
+                      Penguins live almost exclusively in the Southern Hemisphere. While many people associate them with Antarctica, penguins can be found on every continent in the Southern Hemisphere, including various islands and coastlines.
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "stretch",
+                      gap: "16px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "2px",
+                        flex: "0 0 2px",
+                        borderRadius: "999px",
+                        backgroundColor: "var(--color-border-default)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        ...bodyTextStyle,
+                        fontStyle: "italic",
+                      }}
+                    >
+                      “rem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                    }}
+                  >
+                    <div style={sectionTitleStyle}>Antarctica</div>
+                    <div style={bodyTextStyle}>
+                      This continent is home to the largest penguin populations, though only two species, the Emperor and Adélie penguins, live there year-round. Other species, like Chinstrap and Gentoo penguins, also breed on the Antarctic Peninsula and nearby islands.
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                    }}
+                  >
+                    <div style={sectionTitleStyle}>Australia and New Zealand</div>
+                    <div style={bodyTextStyle}>
+                      These countries are home to several species, including the Little Penguin (also known as the Fairy Penguin), the world's smallest
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <div style={sectionTitleStyle}>The standard Lorem</div>
+                  <ul
+                    className="searchcard2-list"
+                    style={{
+                      ...listStyle,
+                      listStyleType: "disc",
+                    }}
+                  >
+                    <li style={{ ...bodyTextStyle, color: "var(--color-text-primary)" }}>
+                      <span style={{ fontWeight: 600 }}>Dense Feathers:</span> Their feathers are tightly packed and waterproof, providing an effective barrier against wind and water. Penguins also have a layer of down feathers for added insulation.
+                      <ul
+                        className="searchcard2-list"
+                        style={{
+                          ...nestedListStyle,
+                          listStyleType: "circle",
+                        }}
+                      >
+                        <li style={{ ...bodyTextStyle, color: "var(--color-text-primary)" }}>
+                          cididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut alipidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                          <span
+                            onMouseEnter={() => setIsReferencePopoverVisible(true)}
+                            onMouseLeave={() => {
+                              if (!isReferencePopoverCardHovered) {
+                                setIsReferencePopoverVisible(false);
+                              }
+                            }}
+                            style={{
+                              position: "relative",
+                              display: "inline-flex",
+                              width: "24px",
+                              height: "19px",
+                              marginLeft: "4px",
+                              borderRadius: "100px",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              backgroundColor:
+                                theme === "dark"
+                                  ? "rgba(255, 255, 255, 0.08)"
+                                  : "rgba(0, 0, 0, 0.05)",
+                              verticalAlign: "middle",
+                              color: theme === "dark" ? "#FFFFFF" : "#000000",
+                            }}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ display: "block" }}>
+                              <path d="M0.408539 7.33331L1.78256 4.47491C1.50192 4.42324 1.23064 4.30027 0.996429 4.10382C0.274355 3.49813 0.17966 2.42234 0.785492 1.7005C1.39147 0.978634 2.46859 0.884822 3.19077 1.49054C3.81983 2.01839 3.97206 2.90345 3.59995 3.59991L3.59702 3.6048C3.58124 3.63407 3.56484 3.66316 3.54721 3.69171L1.4437 7.33331H0.408539ZM4.27573 7.33331L5.64877 4.47589C5.36819 4.42422 5.09681 4.3012 4.86264 4.1048C4.14063 3.49917 4.04682 2.4232 4.65268 1.70148C5.2586 0.979975 6.33501 0.885976 7.05698 1.49152C7.68567 2.01907 7.83763 2.9037 7.46616 3.59991L7.4603 3.61066C7.44622 3.63656 7.43189 3.66246 7.41635 3.68781L5.31088 7.33331H4.27573Z" fill="currentColor" fillOpacity="0.48" />
+                            </svg>
+                            <span
+                              style={{
+                                position: "absolute",
+                                top: "100%",
+                                left: "50%",
+                                transform: `translateX(-50%) ${isReferencePopoverActive ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.98)"}`,
+                                width: "48px",
+                                height: "12px",
+                                backgroundColor: "transparent",
+                                zIndex: 9998,
+                                opacity: isReferencePopoverActive ? 1 : 0,
+                                pointerEvents: isReferencePopoverActive ? "auto" : "none",
+                                transition:
+                                  "opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1), transform 0.26s cubic-bezier(0.22, 1, 0.36, 1)",
+                              }}
+                            />
+                            <span
+                              onMouseEnter={() => {
+                                setIsReferencePopoverVisible(true);
+                                setIsReferencePopoverCardHovered(true);
+                              }}
+                              onMouseLeave={() => {
+                                setIsReferencePopoverCardHovered(false);
+                                setIsReferencePopoverVisible(false);
+                              }}
+                              style={{
+                                position: "absolute",
+                                top: "calc(100% + 12px)",
+                                left: "50%",
+                                transform: `translateX(-50%) ${isReferencePopoverActive ? "translateY(0) scale(1)" : "translateY(-6px) scale(0.98)"}`,
+                                transformOrigin: "top center",
+                                width: "368px",
+                                height: "117px",
+                                boxSizing: "border-box",
+                                borderRadius: "12px",
+                                backgroundColor: popoverBackgroundColor,
+                                boxShadow: popoverShadow,
+                                zIndex: 9999,
+                                color: popoverPrimaryTextColor,
+                                padding: "8px",
+                                opacity: isReferencePopoverActive ? 1 : 0,
+                                pointerEvents: isReferencePopoverActive ? "auto" : "none",
+                                transition:
+                                  "opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1), transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, box-shadow 0.2s ease",
+                              }}
+                            >
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    top: "-6px",
+                                    left: "50%",
+                                    width: "12px",
+                                    height: "12px",
+                                    backgroundColor: popoverBackgroundColor,
+                                    transform: "translateX(-50%) rotate(45deg)",
+                                    borderRadius: "2px",
+                                  }}
+                                />
+                                <span
+                                  style={{
+                                    display: "flex",
+                                    width: "352px",
+                                    gap: "12px",
+                                    padding: "8px",
+                                    borderRadius: "8px",
+                                    alignItems: "flex-start",
+                                    cursor: "pointer",
+                                    backgroundColor: isReferencePopoverCardHovered
+                                      ? popoverCardHoverBackgroundColor
+                                      : popoverCardBackgroundColor,
+                                    transition: "background-color 0.2s ease",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      flex: 1,
+                                      minWidth: 0,
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      gap: "4px",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "6px",
+                                        minWidth: 0,
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          width: "20px",
+                                          height: "20px",
+                                          borderRadius: "999px",
+                                          border: `0.5px solid ${popoverAvatarBorderColor}`,
+                                          background: popoverAvatarBackground,
+                                          overflow: "hidden",
+                                          flexShrink: 0,
+                                        }}
+                                      >
+                                        <img
+                                          src="https://api.dicebear.com/9.x/notionists/svg?seed=Alexander"
+                                          alt="Alexander avatar"
+                                          style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "cover",
+                                            display: "block",
+                                          }}
+                                        />
+                                      </span>
+                                      <span
+                                        style={{
+                                          ...popoverMetaTextStyle,
+                                          color: popoverMetaTextColor,
+                                          minWidth: 0,
+                                          overflow: "hidden",
+                                          textOverflow: "ellipsis",
+                                          whiteSpace: "nowrap",
+                                        }}
+                                      >
+                                        Alexander
+                                      </span>
+                                    </span>
+                                    <span
+                                      style={{
+                                        ...popoverTitleStyle,
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                      }}
+                                    >
+                                      How can penguins stay warm in the freezing cold water?
+                                    </span>
+                                    <span
+                                      style={{
+                                        ...popoverMetaTextStyle,
+                                        color: popoverSecondaryTextColor,
+                                        overflow: "hidden",
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: "vertical",
+                                      }}
+                                    >
+                                      Aug 26, 2025 — Penguins stay warm in freezing cold water through a combination of physiological adaptations, behavioral strategies, and specialized feathers.
+                                    </span>
+                                  </span>
+                                  <span
+                                    style={{
+                                      position: "relative",
+                                      width: "64px",
+                                      height: "85px",
+                                      borderRadius: "6px",
+                                      overflow: "hidden",
+                                      flexShrink: 0,
+                                    }}
+                                  >
+                                    <img
+                                      src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/BG-1.jpg"
+                                      alt="Penguin source thumbnail"
+                                      style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                        display: "block",
+                                      }}
+                                    />
+                                    <span
+                                      style={{
+                                        position: "absolute",
+                                        left: "22px",
+                                        top: "33px",
+                                        width: "20px",
+                                        height: "20px",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                      }}
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 27" fill="none" style={{ display: "block" }}>
+                                        <g filter="url(#popoverPlayFilter)">
+                                          <path d="M19.8249 13.0831C20.0421 12.5965 20.0421 12.0405 19.8249 11.554C19.6713 11.2101 19.3911 10.9657 19.0962 10.7586C18.804 10.5534 18.4114 10.3282 17.9382 10.0568L8.9047 4.8749C8.43556 4.60577 8.04612 4.38237 7.72367 4.23475C7.39802 4.08567 7.04783 3.96796 6.67536 4.00785C6.14772 4.06435 5.66873 4.34179 5.35717 4.77136C5.13724 5.0746 5.0651 5.43694 5.03238 5.79359C4.99998 6.14675 4.99999 6.59569 5 7.13655L5 17.5005C4.99999 18.0414 4.99998 18.4903 5.03238 18.8435C5.0651 19.2001 5.13724 19.5625 5.35717 19.8657C5.66872 20.2953 6.14772 20.5727 6.67536 20.6292C7.04783 20.6691 7.39802 20.5514 7.72367 20.4023C8.04613 20.2547 8.43557 20.0313 8.90472 19.7621L17.9382 14.5803C18.4114 14.3088 18.804 14.0837 19.0962 13.8784C19.3911 13.6713 19.6713 13.4269 19.8249 13.0831Z" fill="white" />
+                                        </g>
+                                        <defs>
+                                          <filter id="popoverPlayFilter" x="-3.95898" y="-1.68164" width="30" height="30" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                                            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                            <feOffset dy="1" />
+                                            <feGaussianBlur stdDeviation="2.5" />
+                                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0" />
+                                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2203_35138" />
+                                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2203_35138" result="shape" />
+                                          </filter>
+                                        </defs>
+                                      </svg>
+                                    </span>
+                                  </span>
+                                </span>
+                              </span>
+                          </span>
+                        </li>
+                        <li style={{ ...bodyTextStyle, color: "var(--color-text-primary)" }}>
+                          it is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                  }}
+                >
+                  <div
+                    style={{
+                      ...sectionTitleStyle,
+                      fontSize: "17px",
+                      lineHeight: 1.6000000448787914,
+                    }}
+                  >
+                    Where can I get some
+                  </div>
+                  <ol
+                    className="searchcard2-list"
+                    style={{
+                      ...listStyle,
+                      listStyleType: "decimal",
+                    }}
+                  >
+                    <li style={{ ...bodyTextStyle, color: "var(--color-text-primary)" }}>
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum
+                    </li>
+                    <li style={{ ...bodyTextStyle, color: "var(--color-text-primary)" }}>
+                      le English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                    </li>
+                  </ol>
+                </div>
+
+                <div
+                  style={{
+                    fontFamily: "TikTok Sans, Inter, sans-serif",
+                    fontSize: "12px",
+                    fontWeight: 400,
+                    lineHeight: 1.3,
+                    color: "var(--color-text-muted)",
+                  }}
+                >
+                  Summarized by AI for reference only.
+                </div>
+              </div>
+
+              {isCollapsed && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    paddingTop: "54px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    background: overlayBackground,
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setIsButtonHovered(false);
+                      setIsCollapsed(false);
+                    }}
+                    onMouseEnter={() => setIsButtonHovered(true)}
+                    onMouseLeave={() => setIsButtonHovered(false)}
+                    style={buttonStyle}
+                  >
+                    <div
+                      style={{
+                        fontFamily: "TikTok Sans, Inter, sans-serif",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        lineHeight: 1.3,
+                        color: "inherit",
+                      }}
+                    >
+                      View more
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ display: "block", flexShrink: 0, transform: "rotate(180deg)" }}>
+                      <path d="M7.7645 4.48557C7.89468 4.3554 8.10601 4.3554 8.23618 4.48557L13.6405 9.88987C13.7702 10.0199 13.7702 10.2305 13.6405 10.3606L13.0272 10.9739C12.897 11.104 12.6857 11.104 12.5555 10.9739L7.99985 6.41819L3.44517 10.9739C3.31502 11.104 3.10367 11.1039 2.97349 10.9739L2.3602 10.3606C2.23052 10.2305 2.23052 10.0199 2.3602 9.88987L7.7645 4.48557Z" fill="currentColor" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+
+              {!isCollapsed && (
+                <div
+                  onClick={() => {
+                    setIsButtonHovered(false);
+                    setIsCollapsed(true);
+                  }}
+                  onMouseEnter={() => setIsButtonHovered(true)}
+                  onMouseLeave={() => setIsButtonHovered(false)}
+                  style={{
+                    ...buttonStyle,
+                    marginTop: "16px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "TikTok Sans, Inter, sans-serif",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      lineHeight: 1.3,
+                      color: "inherit",
+                    }}
+                  >
+                    View less
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ display: "block", flexShrink: 0 }}>
+                    <path d="M7.7645 4.48557C7.89468 4.3554 8.10601 4.3554 8.23618 4.48557L13.6405 9.88987C13.7702 10.0199 13.7702 10.2305 13.6405 10.3606L13.0272 10.9739C12.897 11.104 12.6857 11.104 12.5555 10.9739L7.99985 6.41819L3.44517 10.9739C3.31502 11.104 3.10367 11.1039 2.97349 10.9739L2.3602 10.3606C2.23052 10.2305 2.23052 10.0199 2.3602 9.88987L7.7645 4.48557Z" fill="currentColor" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const VisualDiscoveryGallery = () => (
+  <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "24px" }}>
+    <SearchCard1 />
   </div>
 );
 
@@ -1310,7 +2208,6 @@ const TiktokSearchContent = () => {
   const [activeSection, setActiveSection] = useState("");
   const [hoveredSection, setHoveredSection] = useState("");
   const [activeCoreVideo, setActiveCoreVideo] = useState("challenge1");
-  const [activeVisualTab, setActiveVisualTab] = useState(0);
 
   const [activeFeatureTab, setActiveFeatureTab] = useState("like");
   const [activeSolution, setActiveSolution] = useState("solution1");
@@ -1533,6 +2430,11 @@ const TiktokSearchContent = () => {
             flex-direction: column !important;
             gap: 16px !important;
           }
+        }
+
+        .animate-content b,
+        .animate-content strong {
+          font-weight: 600;
         }
       `}</style>
 
@@ -2186,7 +3088,7 @@ const TiktokSearchContent = () => {
                 minHeight: "60px",
               }}
             >
-              I replaced the mobile-first vertical layout with a <b>dual-column structure</b>. By repositioning images as <b>supplementary thumbnails</b> alongside the text, I eliminated the "scroll-to-visual" gap. This allows users to seamlessly cross-reference <b>textual insights</b> with visual proof at a glance, significantly reducing <b>cognitive switching costs</b> and preserving the reading flow.
+              I replaced the mobile-first vertical layout with a <b>dual-column structure</b>. By repositioning images as <b>supplementary thumbnails</b> alongside the text, I eliminated the "scroll-to-visual" gap. This helped establish a clearer hierarchy, making it immediately obvious that the visuals were there to support the written content rather than compete with it. The layout also felt less overwhelming, allowing users to focus more naturally between reading and visual reference without constantly shifting attention.
             
             </Text>
           ) : (
@@ -2591,6 +3493,7 @@ const TiktokSearchContent = () => {
             To handle the <b>unpredictable nature of AI-generated tables</b>, I engineered a <b>horizontal overflow strategy</b> that preserves data integrity without breaking the page grid. By enforcing specific constraints—a <b>Table Max Width of 720px</b>, and individual cells with a <b>Max Width of 240px</b> and a <b>Min Width of 100px</b>—I ensured that even the most complex datasets remain readable and navigable on desktop displays, supported by <b>contextual overlays</b> for a seamless scanning experience.
           </Text>
         </TwoCol>
+        <SearchCard2 />
        
        <SectionDivider id="Loading——Animation" />
 
@@ -2772,10 +3675,7 @@ const TiktokSearchContent = () => {
           titleWeight={400}
         />
 
-        <VisualDiscoveryGallery
-          activeVisualTab={activeVisualTab}
-          setActiveVisualTab={setActiveVisualTab}
-        />
+        <VisualDiscoveryGallery />
 
 
         <TwoCol

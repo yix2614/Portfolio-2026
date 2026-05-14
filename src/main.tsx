@@ -7,6 +7,7 @@ import App from './App'
 import VibeCodingPage from './vibe-coding/VibeCodingPage'
 import TiktokWebPage from './tiktokweb/TiktokWebPage'
 import TiktokSearchPage from './tiktokSearch/TiktokSearchPage'
+import NikeShoeFinder from './nikeshoefinder'
 import { applyTheme, getInitialTheme } from './utils/theme'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -49,6 +50,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/project" element={<App />} />
+        <Route path="/shoefinder" element={<NikeShoeFinder />} />
+        <Route path="/nikeshoefinder" element={<NikeShoeFinder />} />
         <Route path="/vibe-coding" element={<VibeCodingPage />} />
         <Route path="/tiktokweb" element={<TiktokWebPage />} />
         <Route path="/tiktokSearch" element={<TiktokSearchPage />} />

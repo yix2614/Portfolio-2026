@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none">
+  <circle cx="150" cy="150" r="30" fill="none" stroke="#E6E6E6" stroke-width="1" stroke-dasharray="3 3" />
+  <circle cx="150" cy="150" r="60" fill="none" stroke="#E6E6E6" stroke-width="1" stroke-dasharray="3 3" />
+  <circle cx="150" cy="150" r="90" fill="none" stroke="#E6E6E6" stroke-width="1" stroke-dasharray="3 3" />
+  <circle cx="150" cy="150" r="120" fill="none" stroke="#E6E6E6" stroke-width="1" stroke-dasharray="3 3" />
+  <circle cx="150" cy="150" r="150" fill="none" stroke="#E6E6E6" stroke-width="1" />
+  <line x1="150" y1="150" x2="150" y2="0" stroke="url(#axis-gradient-0)" stroke-width="1.5" />
+  <line x1="150" y1="150" x2="292.658477444273" y2="103.6474508437579" stroke="url(#axis-gradient-1)" stroke-width="1.5" />
+  <line x1="150" y1="150" x2="238.16778784387097" y2="271.3525491562421" stroke="url(#axis-gradient-2)" stroke-width="1.5" />
+  <line x1="150" y1="150" x2="61.832212156129046" y2="271.3525491562421" stroke="url(#axis-gradient-3)" stroke-width="1.5" />
+  <line x1="150" y1="150" x2="7.341522555726954" y2="103.64745084375791" stroke="url(#axis-gradient-4)" stroke-width="1.5" />
+  <defs>
+    <filter id="radar-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+    </filter>
+    <clipPath id="radar-clip">
+      <polygon points="150,45 278.3926296998457,108.28270575938211 227.58765330260644,256.79024325749305 75.05738033270968,253.1496667828058 21.60737030015426,108.28270575938211" />
+    </clipPath>
+    <linearGradient id="axis-gradient-0" gradientUnits="userSpaceOnUse" x1="150" y1="150" x2="150" y2="0">
+      <stop offset="0%" stop-color="#FF65F3" stop-opacity="0" />
+      <stop offset="100%" stop-color="#FF65F3" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="axis-gradient-1" gradientUnits="userSpaceOnUse" x1="150" y1="150" x2="292.658477444273" y2="103.6474508437579">
+      <stop offset="0%" stop-color="#A5B700" stop-opacity="0" />
+      <stop offset="100%" stop-color="#A5B700" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="axis-gradient-2" gradientUnits="userSpaceOnUse" x1="150" y1="150" x2="238.16778784387097" y2="271.3525491562421">
+      <stop offset="0%" stop-color="#00B245" stop-opacity="0" />
+      <stop offset="100%" stop-color="#00B245" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="axis-gradient-3" gradientUnits="userSpaceOnUse" x1="150" y1="150" x2="61.832212156129046" y2="271.3525491562421">
+      <stop offset="0%" stop-color="#327BE8" stop-opacity="0" />
+      <stop offset="100%" stop-color="#327BE8" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="axis-gradient-4" gradientUnits="userSpaceOnUse" x1="150" y1="150" x2="7.341522555726954" y2="103.64745084375791">
+      <stop offset="0%" stop-color="#FFAB69" stop-opacity="0" />
+      <stop offset="100%" stop-color="#FFAB69" stop-opacity="1" />
+    </linearGradient>
+    <linearGradient id="edge-gradient-0" gradientUnits="userSpaceOnUse" x1="150" y1="45" x2="278.3926296998457" y2="108.28270575938211">
+      <stop offset="0%" stop-color="#FF65F3" />
+      <stop offset="100%" stop-color="#A5B700" />
+    </linearGradient>
+    <linearGradient id="edge-gradient-1" gradientUnits="userSpaceOnUse" x1="278.3926296998457" y1="108.28270575938211" x2="227.58765330260644" y2="256.79024325749305">
+      <stop offset="0%" stop-color="#A5B700" />
+      <stop offset="100%" stop-color="#00B245" />
+    </linearGradient>
+    <linearGradient id="edge-gradient-2" gradientUnits="userSpaceOnUse" x1="227.58765330260644" y1="256.79024325749305" x2="75.05738033270968" y2="253.1496667828058">
+      <stop offset="0%" stop-color="#00B245" />
+      <stop offset="100%" stop-color="#327BE8" />
+    </linearGradient>
+    <linearGradient id="edge-gradient-3" gradientUnits="userSpaceOnUse" x1="75.05738033270968" y1="253.1496667828058" x2="21.60737030015426" y2="108.28270575938211">
+      <stop offset="0%" stop-color="#327BE8" />
+      <stop offset="100%" stop-color="#FFAB69" />
+    </linearGradient>
+    <linearGradient id="edge-gradient-4" gradientUnits="userSpaceOnUse" x1="21.60737030015426" y1="108.28270575938211" x2="150" y2="45">
+      <stop offset="0%" stop-color="#FFAB69" />
+      <stop offset="100%" stop-color="#FF65F3" />
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#radar-clip)">
+    <g filter="url(#radar-glow)" opacity="0.18">
+      <circle cx="150" cy="0" r="80" fill="#FF65F3" />
+      <circle cx="292.658477444273" cy="103.6474508437579" r="80" fill="#A5B700" />
+      <circle cx="238.16778784387097" cy="271.3525491562421" r="80" fill="#00B245" />
+      <circle cx="61.832212156129046" cy="271.3525491562421" r="80" fill="#327BE8" />
+      <circle cx="7.341522555726954" cy="103.64745084375791" r="80" fill="#FFAB69" />
+    </g>
+  </g>
+  <line x1="150" y1="45" x2="278.3926296998457" y2="108.28270575938211" stroke="url(#edge-gradient-0)" stroke-width="1.5" />
+  <line x1="278.3926296998457" y1="108.28270575938211" x2="227.58765330260644" y2="256.79024325749305" stroke="url(#edge-gradient-1)" stroke-width="1.5" />
+  <line x1="227.58765330260644" y1="256.79024325749305" x2="75.05738033270968" y2="253.1496667828058" stroke="url(#edge-gradient-2)" stroke-width="1.5" />
+  <line x1="75.05738033270968" y1="253.1496667828058" x2="21.60737030015426" y2="108.28270575938211" stroke="url(#edge-gradient-3)" stroke-width="1.5" />
+  <line x1="21.60737030015426" y1="108.28270575938211" x2="150" y2="45" stroke="url(#edge-gradient-4)" stroke-width="1.5" />
+  <circle cx="150" cy="45" r="4" fill="#FFFFFF" stroke="#FF65F3" stroke-width="1.5" />
+  <circle cx="278.3926296998457" cy="108.28270575938211" r="4" fill="#FFFFFF" stroke="#A5B700" stroke-width="1.5" />
+  <circle cx="227.58765330260644" cy="256.79024325749305" r="4" fill="#FFFFFF" stroke="#00B245" stroke-width="1.5" />
+  <circle cx="75.05738033270968" cy="253.1496667828058" r="4" fill="#FFFFFF" stroke="#327BE8" stroke-width="1.5" />
+  <circle cx="21.60737030015426" cy="108.28270575938211" r="4" fill="#FFFFFF" stroke="#FFAB69" stroke-width="1.5" />
+  <g>
+    <rect x="146" y="0" width="64" height="20" rx="10" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1" opacity="0.9" />
+    <text x="178" y="10" fill="#999999" font-size="10" font-family="TikTok Sans, Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">Research</text>
+  </g>
+  <g>
+    <rect x="230" y="97.35565477625727" width="70" height="20" rx="10" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1" opacity="0.9" />
+    <text x="265" y="107.35565477625727" fill="#999999" font-size="10" font-family="TikTok Sans, Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">Execution</text>
+  </g>
+  <g>
+    <rect x="227.11436481636127" y="251.64434522374273" width="64" height="20" rx="10" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1" opacity="0.9" />
+    <text x="259.1143648163613" y="261.64434522374273" fill="#999999" font-size="10" font-family="TikTok Sans, Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">Creative</text>
+  </g>
+  <g>
+    <rect x="0" y="251.64434522374273" width="112" height="20" rx="10" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1" opacity="0.9" />
+    <text x="56" y="261.64434522374273" fill="#999999" font-size="10" font-family="TikTok Sans, Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">Product-Thinking</text>
+  </g>
+  <g>
+    <rect x="0" y="97.35565477625727" width="76" height="20" rx="10" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1" opacity="0.9" />
+    <text x="38" y="107.35565477625727" fill="#999999" font-size="10" font-family="TikTok Sans, Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">Innovative</text>
+  </g>
+</svg>
