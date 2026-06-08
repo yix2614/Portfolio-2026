@@ -3,6 +3,7 @@ import './index.css'
 import './styles/theme.css'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { GlimmProvider } from 'glimm/react'
 import App from './App'
 import VibeCodingPage from './vibe-coding/VibeCodingPage'
 import TiktokWebPage from './tiktokweb/TiktokWebPage'
@@ -47,15 +48,28 @@ applyTheme(getInitialTheme());
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/project" element={<App />} />
-        <Route path="/shoefinder" element={<NikeShoeFinder />} />
-        <Route path="/nikeshoefinder" element={<NikeShoeFinder />} />
-        <Route path="/vibe-coding" element={<VibeCodingPage />} />
-        <Route path="/tiktokweb" element={<TiktokWebPage />} />
-        <Route path="/tiktokSearch" element={<TiktokSearchPage />} />
-      </Routes>
+      <GlimmProvider
+        palette="prism"
+        direction="ltr"
+        easing="easeOutQuart"
+        sweepMs={850}
+        outroMs={260}
+        midpoint={0.42}
+        bandTight={12}
+        waveAmount={1.15}
+        rippleAmount={1.05}
+        waveSpeed={1.1}
+      >
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/project" element={<App />} />
+          <Route path="/shoefinder" element={<NikeShoeFinder />} />
+          <Route path="/nikeshoefinder" element={<NikeShoeFinder />} />
+          <Route path="/vibe-coding" element={<VibeCodingPage />} />
+          <Route path="/tiktokweb" element={<TiktokWebPage />} />
+          <Route path="/tiktokSearch" element={<TiktokSearchPage />} />
+        </Routes>
+      </GlimmProvider>
     </BrowserRouter>
     <Analytics />
   </>

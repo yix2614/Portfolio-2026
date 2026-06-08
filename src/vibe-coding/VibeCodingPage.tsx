@@ -4,6 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Text, useVideoTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useControls, Leva } from 'leva';
+import { useGlimm } from 'glimm/react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import Dock2 from '../tiktokweb/Dock2';
 import { applyTheme, getInitialTheme } from '../utils/theme';
@@ -483,9 +484,27 @@ const VibeCodingPage = () => {
   const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const { sweep } = useGlimm();
   const wheelLockRef = useRef(0);
   const transitionTypeRef = useRef<null | 'hero' | 'slide'>(null);
   const pendingHeroRef = useRef(false);
+  const introSweepStartedRef = useRef(false);
+
+  const finishLoading = useCallback(() => {
+    if (introSweepStartedRef.current) return;
+    introSweepStartedRef.current = true;
+
+    sweep(() => {
+      setIsLoading(false);
+      window.scrollTo(0, 0);
+    }, {
+      direction: 'ltr',
+      sweepMs: 820,
+      outroMs: 240,
+      midpoint: 0.38,
+    });
+  }, [sweep]);
+
   useEffect(() => {
     applyTheme(getInitialTheme());
     if (!document.getElementById('instrument-font')) {
@@ -508,7 +527,7 @@ const VibeCodingPage = () => {
     const total = assets.length;
     if (total === 0) {
       setLoadingProgress(100);
-      setIsLoading(false);
+      finishLoading();
       return;
     }
 
@@ -560,7 +579,7 @@ const VibeCodingPage = () => {
       
       if (allReady) {
         setLoadingProgress(100);
-        setTimeout(() => setIsLoading(false), 300);
+        setTimeout(finishLoading, 300);
       }
     };
 
@@ -574,7 +593,7 @@ const VibeCodingPage = () => {
     // Fallback timeout in case videos take too long or get stuck
     const fallbackTimeout = setTimeout(() => {
       setLoadingProgress(100);
-      setIsLoading(false);
+      finishLoading();
     }, 8000); // 8 seconds max wait time
 
     return () => {
@@ -585,7 +604,7 @@ const VibeCodingPage = () => {
         video.removeEventListener('error', handleDone);
       });
     };
-  }, []);
+  }, [finishLoading]);
   const handleAspectRatio = useCallback((videoUrl: string, ratio: number) => {
     setAspectRatios((prev) => (prev[videoUrl] === ratio ? prev : { ...prev, [videoUrl]: ratio }));
   }, []);

@@ -455,3 +455,10 @@ body {
 .mode-switch-box {
   @apply w-full shrink-0;
 }
+
+/* Glimm softens the cross-axis edges of its shader. Extend the overlay a
+   little vertically so that fade happens outside the visible viewport. */
+#root > div[aria-hidden="true"][style*="position: fixed"] {
+  top: -4vh !important;
+  bottom: -4vh !important;
+}

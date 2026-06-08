@@ -1,5 +1,6 @@
 import React from "react";
 import { GeistProvider, CssBaseline, Button, Text } from "@geist-ui/core";
+import { useGlimm } from "glimm/react";
 import { tiktokSearchPageStyles } from "./TiktokSearchPage.styles";
 import TiktokSearchContent from "./TiktokSearchContent";
 import Dock2 from "../tiktokweb/Dock2";
@@ -126,6 +127,30 @@ const TiktokSearchPage = () => {
   const [isCardHidden, setIsCardHidden] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadingProgress, setLoadingProgress] = React.useState(0);
+  const { sweep } = useGlimm();
+  const introSweepStartedRef = React.useRef(false);
+
+  const finishLoading = React.useCallback(() => {
+    if (introSweepStartedRef.current) return;
+    introSweepStartedRef.current = true;
+
+    sweep(() => {
+      setIsLoading(false);
+      window.scrollTo(0, 0);
+    }, {
+      direction: "ltr",
+      sweepMs: 820,
+      outroMs: 240,
+      midpoint: 0.38,
+    });
+  }, [sweep]);
+
+  const criticalAssets = React.useMemo(
+    () => [
+      "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/BG-1.jpg",
+    ],
+    [],
+  );
 
   const tiktokAssets = React.useMemo(
     () => [
@@ -141,10 +166,10 @@ const TiktokSearchPage = () => {
   );
 
   React.useEffect(() => {
-    const total = tiktokAssets.length;
+    const total = criticalAssets.length + tiktokAssets.length;
     if (total === 0) {
       setLoadingProgress(100);
-      setIsLoading(false);
+      finishLoading();
       return;
     }
 
@@ -154,17 +179,42 @@ const TiktokSearchPage = () => {
       const nextProgress = Math.round((loaded / total) * 100);
       setLoadingProgress(nextProgress);
       if (loaded >= total) {
-        setTimeout(() => setIsLoading(false), 120);
+        setTimeout(finishLoading, 120);
       }
     };
 
-    tiktokAssets.forEach((url) => {
+    criticalAssets.forEach((url) => {
+      let settled = false;
       const img = new Image();
-      img.onload = handleDone;
-      img.onerror = handleDone;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        handleDone();
+      };
+      img.onload = done;
       img.src = url;
     });
-  }, [tiktokAssets]);
+
+    tiktokAssets.forEach((url) => {
+      let settled = false;
+      const img = new Image();
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        handleDone();
+      };
+      const timeoutId = window.setTimeout(done, 3000);
+      img.onload = () => {
+        window.clearTimeout(timeoutId);
+        done();
+      };
+      img.onerror = () => {
+        window.clearTimeout(timeoutId);
+        done();
+      };
+      img.src = url;
+    });
+  }, [criticalAssets, finishLoading, tiktokAssets]);
 
   React.useEffect(() => {
     const updateCardVisibility = () => {

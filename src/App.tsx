@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { useGlimm } from 'glimm/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BioProfile from './components/BioProfile'
 
@@ -35,6 +36,7 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const { sweep } = useGlimm();
   const lenisRef = useRef<Lenis | null>(null);
   const getTabFromPath = (pathname: string) =>
     pathname === "/project" ? "project" : "dashboard";
@@ -46,6 +48,33 @@ export default function App() {
     const nextTab = getTabFromPath(location.pathname);
     setActiveTab(nextTab);
   }, [location.pathname]);
+
+  const runTabTransition = (tab: "dashboard" | "project") => {
+    if (tab === activeTab) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousTouchAction = document.documentElement.style.touchAction;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.touchAction = 'none';
+
+    sweep(() => {
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+
+      setActiveTab(tab);
+      navigate(tab === "project" ? "/project" : "/");
+      window.scrollTo(0, 0);
+    }, {
+      direction: tab === "project" ? "ltr" : "rtl",
+      onComplete: () => {
+        document.body.style.overflow = previousOverflow;
+        document.documentElement.style.touchAction = previousTouchAction;
+      },
+    });
+  };
 
   useEffect(() => {
     if (activeTab !== "dashboard") {
@@ -98,28 +127,8 @@ export default function App() {
     };
 
     const triggerNavigation = () => {
-      // 1. Immediately destroy Lenis on the dashboard to kill any internal momentum loops entirely
-      if (lenisRef.current) {
-        lenisRef.current.destroy();
-        lenisRef.current = null;
-      }
-      
-      // Temporarily lock scrolling immediately upon triggering navigation
-      document.body.style.overflow = 'hidden';
-      // Force the scroll to top at the window level before doing anything else
-      window.scrollTo(0, 0);
-      // Lock touch-action to prevent native smooth scrolling rubber-banding
-      document.documentElement.style.touchAction = 'none';
-      
-      setActiveTab("project");
-      navigate("/project");
+      runTabTransition("project");
       resetAccumulator();
-
-      // Unlock scrolling after the animation/transition settles
-      setTimeout(() => {
-        document.body.style.overflow = '';
-        document.documentElement.style.touchAction = '';
-      }, 1200); // Extended timeout to outlast any trackpad momentum
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -188,7 +197,7 @@ export default function App() {
       window.removeEventListener('touchmove', handleTouchMove);
       clearTimeout(timeoutId);
     };
-  }, [activeTab, navigate]);
+  }, [activeTab, navigate, sweep]);
 
   useEffect(() => {
     // Generate a list of delays from 0 to 7 * 0.1s (e.g. 0s, 0.1s, 0.2s ... 0.7s)
@@ -358,8 +367,7 @@ export default function App() {
         onProjectClick={() => setIsOverlayOpen(true)}
         activeTab={activeTab}
         onTabChange={(tab) => {
-          setActiveTab(tab);
-          navigate(tab === "project" ? "/project" : "/");
+          runTabTransition(tab);
         }}
       />
     </div>
