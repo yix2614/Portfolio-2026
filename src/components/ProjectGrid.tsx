@@ -561,7 +561,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
             }}>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[1] || 0) + 0.1 }}>
                 <ProjectCard 
-                  imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover_f9qmat.jpg"
+                  imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover.jpg"
                   title="TikTok.com Product Iteration"
                   subtitle="Design Engineering / Full-Stack / Data Analysis"
                   onClick={() => window.location.href = '/tiktokweb'}
@@ -650,7 +650,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                 >
                   <ProjectCard 
                     isTall
-                    imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover_f9qmat.jpg"
+                    imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/ttcomcover.jpg"
                     title="TikTok.com Product Iteration"
                     subtitle="Design Engineering / Full-Stack / Data Analysis"
                     onClick={() => window.location.href = '/tiktokweb'}
