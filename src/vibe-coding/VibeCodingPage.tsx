@@ -362,6 +362,17 @@ const slides = [
     cursorTag: '',
   },
   {
+    id: 14,
+    title: 'Animation Gallery',
+    subtitle: 'Transition explorations',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/transition.mp4',
+    date: 'Dec 12, 2025',
+    version: 'Concept V1.0',
+    type: 'video',
+    cursorTag: 'View Project',
+    link: 'https://animation-gallery-xi.vercel.app/'
+  },
+  {
     id: 1,
     title: 'TikTok.com',
     subtitle: 'Long Video UI',
