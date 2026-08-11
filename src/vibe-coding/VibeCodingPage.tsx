@@ -376,7 +376,7 @@ const slides = [
     id: 1,
     title: 'TikTok.com',
     subtitle: 'Long Video UI',
-    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/long_1_vbip9e.mp4',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/long_1_vbip9e.mp4',
     date: 'Feb 1, 2026',
     version: 'Concept V1.0',
     type: 'video',
@@ -417,7 +417,7 @@ const slides = [
     id: 2,
     title: 'TikTok.com',
     subtitle: 'On-boarding Experience',
-    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20260208-230441_rcqqd1.mp4',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20260208-230441_rcqqd1.mp4',
     date: 'Jan 16, 2026',
     version: 'Concept V1.0',
     type: 'video',
@@ -478,7 +478,7 @@ const slides = [
     id: 3,
     title: 'UG hiring',
     subtitle: 'Hiring Journey',
-    videoUrl: 'https://f004.backblazeb2.com/file/xiangyi-assets/20251216-170912_qafqms.mp4',
+    videoUrl: 'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/20251216-170912_qafqms.mp4',
     date: 'Feb 9, 2026',
     version: 'Concept V1.0',
     type: 'video',
@@ -544,10 +544,7 @@ const VibeCodingPage = () => {
 
     const videoElements = assets.map(url => {
       const video = document.createElement('video');
-      // 如果是 Backblaze B2 的视频（且不需要 WebGL 像素读取），暂不加跨域限制，避免 ERR_FAILED
-      if (!url.includes('backblazeb2.com')) {
-        video.crossOrigin = 'anonymous';
-      }
+      video.crossOrigin = 'anonymous';
       video.preload = 'auto';
       video.muted = true;
       video.src = url;
@@ -1259,7 +1256,7 @@ const Card3D = ({ videoSrc, onAspectRatio, cursorTag, link }: { videoSrc: string
              <video
                 key={videoSrc}
                 src={videoSrc}
-                crossOrigin={videoSrc.includes('backblazeb2.com') ? undefined : "anonymous"}
+                crossOrigin="anonymous"
                 autoPlay
                 loop
                 muted
