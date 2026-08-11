@@ -593,7 +593,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[4] || 0) + 0.1 }}>
                 <ProjectCard 
-                  videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/nikesf.mp4"
+                  videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/nikesf.mp4"
                   title="Nike Shoe Finder"
                   subtitle="3D motion"
                   subtitleStyle={{ textAlign: "right", lineHeight: "19.2px" }}
@@ -614,7 +614,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[8] || 0) + 0.1 }}>
                 <ProjectCard 
-                  videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/kv_pc.mp4"
+                  videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/kv_pc.mp4"
                   title="Nike Shoe Chart"
                   subtitle="Creative UX / Web Design"
                   firstCursorTag="View website"
@@ -625,7 +625,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
               </motion.div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45, delay: (randomDelays[9] || 0) + 0.1 }}>
                 <ProjectCard 
-                  imageUrl="https://f004.backblazeb2.com/file/xiangyi-assets/google.jpg"
+                  imageUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/google.jpg"
                   title="Google I/O 2022 - 2023"
                   subtitle="Creative UX / O2O / Web Design"
                   firstCursorTag="View website"
@@ -683,7 +683,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                       transition={{ duration: 0.45, delay: (randomDelays[6] || 0) + 0.1 }}
                     >
                       <ProjectCard 
-                        videoUrl="https://f004.backblazeb2.com/file/xiangyi-assets/nav.mp4"
+                        videoUrl="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/nav.mp4"
                         title=""
                         subtitle="Nav & Panel"
                         subtitleStyle={{ textAlign: "left", lineHeight: "19.2px" }}
@@ -783,14 +783,14 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Creative"])
                   }}
                   tallCardProps={{
-                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD.jpg",
+                    imageUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/SFD.jpg",
                     title: "Nike Shoe Finder",
                     subtitle: "",
                     firstCursorTag: "Coming soon",
                     isDisabled: isCardDisabled(["Creative"])
                   }}
                   topSmallCardProps={{
-                    videoUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/nikesf.mp4",
+                    videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/nikesf.mp4",
                     title: "",
                     subtitle: "3D motion",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
@@ -798,7 +798,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Creative"])
                   }}
                   bottomSmallCardProps={{
-                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/SFD_cover.jpg",
+                    imageUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/SFD_cover.jpg",
                     title: "",
                     subtitle: "Gamification / Creative UX",
                     subtitleStyle: { textAlign: "left", lineHeight: "19.2px" },
@@ -817,7 +817,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     (randomDelays[17] || 0) + 0.1
                   ]}
                   leftCardProps={{
-                    videoUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/kv_pc.mp4",
+                    videoUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/kv_pc.mp4",
                     title: "Nike Shoe Chart",
                     subtitle: "Creative UX / Web Design",
                     firstCursorTag: "View website",
@@ -826,7 +826,7 @@ const ProjectGrid = ({ children, style }: { children?: React.ReactNode; style?: 
                     isDisabled: isCardDisabled(["Creative"])
                   }}
                   rightCardProps={{
-                    imageUrl: "https://f004.backblazeb2.com/file/xiangyi-assets/google.jpg",
+                    imageUrl: "https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/google.jpg",
                     title: "Google I/O 2022 - 2023",
                     subtitle: "Creative UX / O2O / Web Design",
                     firstCursorTag: "View website",

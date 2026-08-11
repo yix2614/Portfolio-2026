@@ -4,13 +4,13 @@ import { nameBoxStyles, nameBoxClasses } from "./NameBox.styles";
 export default function NameBox() {
 	// Simplified image handling
 	const imageSources = [
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-1.png",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-2.png",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-3.png",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-4.jpg",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-5.jpg",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-6.jpg",
-		"https://f004.backblazeb2.com/file/xiangyi-assets/512-7.jpg",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-1.png",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-2.png",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-3.png",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-4.jpg",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-5.jpg",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-6.jpg",
+		"https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/512-7.jpg",
 	];
 
 	const [currentImageIndex, setCurrentImageIndex] = React.useState(0);

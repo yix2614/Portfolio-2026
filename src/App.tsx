@@ -218,10 +218,10 @@ export default function App() {
     'https://framerusercontent.com/images/5PJkfNDMBpsvW2XCy0995E3ObA.gif',
     'https://framerusercontent.com/images/yplmdt0RqV17WOqq1Yn70eRbHQQ.png',
     'https://framerusercontent.com/images/tZQxzoPvKctSUy0zYRdJlQuemdQ.png',
-    'https://res.cloudinary.com/dkjokhb4w/image/upload/v1769813289/Googe_h9fkwg.png',
-    'https://res.cloudinary.com/dkjokhb4w/image/upload/v1769813289/Nike_tvmbjm.png',
-    'https://res.cloudinary.com/dkjokhb4w/image/upload/v1769813289/Shiseido_xgdiqm.png',
-    'https://res.cloudinary.com/dkjokhb4w/image/upload/v1769813288/AXA_eh4eve.png',
+    'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Googe_h9fkwg.png',
+    'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Nike_tvmbjm.png',
+    'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Shiseido_xgdiqm.png',
+    'https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/AXA_eh4eve.png',
     'https://framerusercontent.com/images/nVfg0wCczUhY25El2mKQ089ml4.png?scale-down-to=512'
   ], []);
 

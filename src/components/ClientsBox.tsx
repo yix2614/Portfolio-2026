@@ -10,13 +10,13 @@ const BackgroundShape = () => (
 
 const logos = [
   // Google
-  <img key="google" src="https://f004.backblazeb2.com/file/xiangyi-assets/Googe_h9fkwg.png" alt="Google" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
+  <img key="google" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Googe_h9fkwg.png" alt="Google" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
   // Nike
-  <img key="nike" className="clients-logo-nike" src="https://f004.backblazeb2.com/file/xiangyi-assets/Nike_tvmbjm.png" alt="Nike" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
+  <img key="nike" className="clients-logo-nike" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Nike_tvmbjm.png" alt="Nike" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
   // Shiseido
-  <img key="shiseido" src="https://f004.backblazeb2.com/file/xiangyi-assets/Shiseido_xgdiqm.png" alt="Shiseido" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
+  <img key="shiseido" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Shiseido_xgdiqm.png" alt="Shiseido" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
   // AXA
-  <img key="axa" src="https://f004.backblazeb2.com/file/xiangyi-assets/AXA_eh4eve.png" alt="AXA" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
+  <img key="axa" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/AXA_eh4eve.png" alt="AXA" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
 ];
 
 const LogoTicker = () => {
