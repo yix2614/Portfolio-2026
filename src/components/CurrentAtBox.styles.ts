@@ -24,6 +24,17 @@ export const currentAtBoxStyles = {
     alignItems: "center",
   } as CSSProperties,
 
+  energyBackground: {
+    position: "absolute",
+    left: "-45.8%",
+    top: "-30.75%",
+    width: "191.46%",
+    height: "161.45%",
+    transform: "scaleX(-1)",
+    color: "var(--color-bg-secondary, #F5F5F5)",
+    pointerEvents: "none",
+  } as CSSProperties,
+
   // Top Left "Currently at"
   headerText: {
     position: "absolute",
@@ -44,7 +55,7 @@ export const currentAtBoxStyles = {
     right: '12px',
     width: '16px',
     height: '16px',
-    opacity: 0.57,
+    color: "var(--color-text-disabled)",
     zIndex: 10
   },
 
@@ -64,7 +75,7 @@ export const currentAtBoxStyles = {
   roleText: {
     fontFamily: '"Helvetica Neue Regular", "Helvetica Neue Regular Placeholder", sans-serif',
     fontSize: "10px",
-    color: "rgb(187, 187, 187)",
+    color: "var(--color-text-muted, rgb(153, 153, 153))",
     textAlign: "right",
     margin: 0,
   } as CSSProperties,
@@ -72,7 +83,7 @@ export const currentAtBoxStyles = {
   companyText: {
     fontFamily: '"Helvetica Neue Regular", "Helvetica Neue Regular Placeholder", sans-serif',
     fontSize: "10px",
-    color: "rgb(187, 187, 187)",
+    color: "var(--color-text-muted, rgb(153, 153, 153))",
     textAlign: "right",
     margin: 0,
   } as CSSProperties,
@@ -131,7 +142,7 @@ export const currentAtBoxStyles = {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: "60%",
+    width: "30%",
     height: "auto",
     transform: "translate(-50%, -50%)",
     filter: "blur(14px)",

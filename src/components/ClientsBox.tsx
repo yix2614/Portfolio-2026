@@ -1,4 +1,5 @@
 import React from 'react';
+import tiktokLogo from '../../public/tiktok-client.svg?raw';
 import { motion } from 'framer-motion';
 import { clientsBoxStyles, clientsBoxClasses } from './ClientsBox.styles';
 
@@ -9,8 +10,8 @@ const BackgroundShape = () => (
 );
 
 const logos = [
-  // Google
-  <img key="google" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Googe_h9fkwg.png" alt="Google" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
+  // TikTok
+  <span key="tiktok" role="img" aria-label="TikTok" style={{ display: 'block', width: '146px', height: '60px', color: 'var(--color-text-inverse)', pointerEvents: 'none' }} dangerouslySetInnerHTML={{ __html: tiktokLogo }} />,
   // Nike
   <img key="nike" className="clients-logo-nike" src="https://pub-36c8115632e74d30a6c7c587fefccbe4.r2.dev/Nike_tvmbjm.png" alt="Nike" style={{ width: 'auto', height: '100px', pointerEvents: 'none' }} />,
   // Shiseido

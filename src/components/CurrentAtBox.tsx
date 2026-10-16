@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import googleEnergySvg from '../../public/google-energy.svg?raw';
 import { currentAtBoxStyles, currentAtBoxClasses } from './CurrentAtBox.styles';
 
 const TikTokAnimation = () => {
@@ -68,7 +69,7 @@ const TikTokAnimation = () => {
             />
 
             <motion.img 
-                src="https://framerusercontent.com/images/yplmdt0RqV17WOqq1Yn70eRbHQQ.png"
+                src="/google-g.png"
                 style={currentAtBoxStyles.tiktokText}
                 variants={textVariants}
                 animate={currentVariant}
@@ -80,24 +81,79 @@ const TikTokAnimation = () => {
 };
 
 export const CurrentAtBox = () => {
+    const reduceMotion = useReducedMotion();
+    const [logoLoaded, setLogoLoaded] = useState(false);
+    const [logoPhase, setLogoPhase] = useState<'play' | 'hidden'>('play');
+    const [logoCycle, setLogoCycle] = useState(0);
+
+    useEffect(() => {
+        if (!logoLoaded) return;
+        const hide = window.setTimeout(() => setLogoPhase('hidden'), 5500);
+        const restart = window.setTimeout(() => {
+            setLogoLoaded(false);
+            setLogoPhase('play');
+            setLogoCycle(cycle => cycle + 1);
+        }, 6000);
+        return () => { clearTimeout(hide); clearTimeout(restart); };
+    }, [logoLoaded, logoCycle]);
+
     return (
         <div style={currentAtBoxStyles.container}>
             <p className={currentAtBoxClasses.headerText} style={currentAtBoxStyles.headerText}>Currently at</p>
 
-            <img 
-                src="https://framerusercontent.com/images/tZQxzoPvKctSUy0zYRdJlQuemdQ.png" 
+            <svg
+                viewBox="0 0 512 512"
+                fill="currentColor"
+                role="img"
+                aria-label="Google"
                 className={currentAtBoxClasses.topRightIcon}
-                style={currentAtBoxStyles.topRightIcon} 
-                alt="icon"
+                style={currentAtBoxStyles.topRightIcon}
+            >
+                <path d="M473.16,221.48l-2.26-9.59H262.46v88.22H387c-12.93,61.4-72.93,93.72-121.94,93.72-35.66,0-73.25-15-98.13-39.11a140.08,140.08,0,0,1-41.8-98.88c0-37.16,16.7-74.33,41-98.78s61-38.13,97.49-38.13c41.79,0,71.74,22.19,82.94,32.31l62.69-62.36C390.86,72.72,340.34,32,261.6,32h0c-60.75,0-119,23.27-161.58,65.71C58,139.5,36.25,199.93,36.25,256S56.83,369.48,97.55,411.6C141.06,456.52,202.68,480,266.13,480c57.73,0,112.45-22.62,151.45-63.66,38.34-40.4,58.17-96.3,58.17-154.9C475.75,236.77,473.27,222.12,473.16,221.48Z" />
+            </svg>
+
+            <motion.div
+                key={logoCycle}
+                aria-hidden="true"
+                style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+                initial={false}
+                animate={!logoLoaded
+                    ? { opacity: 0.2, y: '14%', filter: 'blur(12px)' }
+                    : reduceMotion
+                    ? { opacity: 1, y: '0%', filter: 'blur(0px)' }
+                    : { opacity: [0.2, 1, 1, 0.2], y: ['14%', '0%', '0%', '14%'], filter: ['blur(12px)', 'blur(0px)', 'blur(0px)', 'blur(12px)'] }}
+                transition={reduceMotion
+                    ? { duration: 0 }
+                    : { duration: 6, times: [0, 0.2917, 0.9167, 1], repeat: Infinity, ease: 'easeInOut' }}
+            >
+            <svg
+                aria-hidden="true"
+                viewBox="0 0 718 1311"
+                preserveAspectRatio="none"
+                style={currentAtBoxStyles.energyBackground}
+                dangerouslySetInnerHTML={{ __html: googleEnergySvg }}
+            />
+            </motion.div>
+
+            <motion.img
+                key={`logo-${logoCycle}`}
+                src={`/google-a-paused.gif?cycle=${logoCycle}`}
+                animate={{ opacity: logoPhase === 'hidden' ? 0 : 1 }}
+                transition={{ duration: 0.3 }}
+                alt="Google"
+                onLoad={() => setLogoLoaded(true)}
+                style={{ position: 'absolute', top: '50%', left: '50%', width: '50%', height: 'auto', transform: 'translate(-50%, -50%)', zIndex: 1, pointerEvents: 'none' }}
             />
 
+            {/* Temporarily disabled: GIF, glass animation, and logo.
             <div style={currentAtBoxStyles.animationContainer}>
                 <TikTokAnimation />
             </div>
+            */}
 
             <div className={currentAtBoxClasses.bottomTextContainer} style={currentAtBoxStyles.bottomTextContainer}>
-                <p className={currentAtBoxClasses.roleText} style={currentAtBoxStyles.roleText}>Sr. Product D.</p>
-                <p className={currentAtBoxClasses.companyText} style={currentAtBoxStyles.companyText}>TikTok User Growth</p>
+                <p className={currentAtBoxClasses.roleText} style={currentAtBoxStyles.roleText}>Sr. UX Designer</p>
+                <p className={currentAtBoxClasses.companyText} style={currentAtBoxStyles.companyText}>Google Search AI Mode</p>
             </div>
         </div>
     );
