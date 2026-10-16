@@ -83,13 +83,23 @@ const TikTokAnimation = () => {
 export const CurrentAtBox = () => {
     const reduceMotion = useReducedMotion();
     const [logoLoaded, setLogoLoaded] = useState(false);
+    const [showLogo, setShowLogo] = useState(false);
+    const [auroraStarted, setAuroraStarted] = useState(false);
     const [logoPhase, setLogoPhase] = useState<'play' | 'hidden'>('play');
     const [logoCycle, setLogoCycle] = useState(0);
+
+    useEffect(() => {
+        const start = window.setTimeout(() => setAuroraStarted(true), 500);
+        const reveal = window.setTimeout(() => setShowLogo(true), 1500);
+        return () => { clearTimeout(start); clearTimeout(reveal); };
+    }, [logoCycle]);
 
     useEffect(() => {
         if (!logoLoaded) return;
         const hide = window.setTimeout(() => setLogoPhase('hidden'), 5500);
         const restart = window.setTimeout(() => {
+            setAuroraStarted(false);
+            setShowLogo(false);
             setLogoLoaded(false);
             setLogoPhase('play');
             setLogoCycle(cycle => cycle + 1);
@@ -117,14 +127,14 @@ export const CurrentAtBox = () => {
                 aria-hidden="true"
                 style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
                 initial={false}
-                animate={!logoLoaded
+                animate={!auroraStarted
                     ? { opacity: 0.2, y: '14%', filter: 'blur(12px)' }
                     : reduceMotion
                     ? { opacity: 1, y: '0%', filter: 'blur(0px)' }
                     : { opacity: [0.2, 1, 1, 0.2], y: ['14%', '0%', '0%', '14%'], filter: ['blur(12px)', 'blur(0px)', 'blur(0px)', 'blur(12px)'] }}
                 transition={reduceMotion
                     ? { duration: 0 }
-                    : { duration: 6, times: [0, 0.2917, 0.9167, 1], repeat: Infinity, ease: 'easeInOut' }}
+                    : { duration: 7, times: [0, 0.25, 0.9286, 1], ease: 'easeInOut' }}
             >
             <svg
                 aria-hidden="true"
@@ -135,7 +145,7 @@ export const CurrentAtBox = () => {
             />
             </motion.div>
 
-            <motion.img
+            {showLogo && <motion.img
                 key={`logo-${logoCycle}`}
                 src={`/google-a-paused.gif?cycle=${logoCycle}`}
                 animate={{ opacity: logoPhase === 'hidden' ? 0 : 1 }}
@@ -143,7 +153,7 @@ export const CurrentAtBox = () => {
                 alt="Google"
                 onLoad={() => setLogoLoaded(true)}
                 style={{ position: 'absolute', top: '50%', left: '50%', width: '50%', height: 'auto', transform: 'translate(-50%, -50%)', zIndex: 1, pointerEvents: 'none' }}
-            />
+            />}
 
             {/* Temporarily disabled: GIF, glass animation, and logo.
             <div style={currentAtBoxStyles.animationContainer}>
